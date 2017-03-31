@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <title>SoundSphere </title>
+
+  <script src="../js/controlcolor.js"></script>
+  <script src="../js/display/painel.js"></script>
+  <script src="../js/display/controlPainel.js"></script>
+  <script src="../js/display/ItemMixPanel.js"></script>
+  <script src="../js/display/controlSoundIcon.js"></script>
+  <script src="../js/display/controlTouch.js"></script>
+  <script src="../js/recordjs/recorder.js"></script>
+  <script src="../js/recordjs/recorderWorker.js"></script>
+  <script src="../js/ItemMix.js"></script>
+  <script src="../js/ItemBuffer.js"></script>
+  <script src="../js/semantic/jquery.min.js"></script>
+  <script src="../js/fileApi.js"></script>
+  <script src="../js/semantic/semantic.min.js"></script>
+  <script src="../js/semantic/popup.js"></script>
+  <script src="../js/sequenciador.js"></script>
+
+  <!-- Semantic -->
+  <link rel="stylesheet" type="text/css" href="../css/semantic/reset.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/site.css">
+
+  <link rel="stylesheet" type="text/css" href="../css/semantic/container.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/grid.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/header.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/image.css">
+  <link rel="stylesheet" type="text /css" href="../css/semantic/menu.css">
+
+  <link rel="stylesheet" type="text/css" href="../css/semantic/divider.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/dropdown.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/segment.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/button.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/list.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/icon.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/sidebar.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/transition.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/grid.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/popup.min.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/simpleTheme.css">
+  <link rel="stylesheet" type="text/css" href="../css/semantic/loader.min.css">
+  <script>
+    var painel;
+    var canvas;
+    var contextCanvas
+    var controlPainel;
+    var progress = 50;
+    var sequenciador = new Sequenciador();
+    $(document)
+      .ready(function() {
+        var  a = "p10";
+        console.log("a[0]: "+a[0]);
+        console.log("a[0] size: "+a.length);
+
+
+        if(a[0] == 'p'){
+          var newA = a.replace("p","");
+          console.log("new a: "+newA.length);
+        }
+
+        console.log("progress: " + progress);
+        $('#volume').progress({
+          percent: progress
+        });
+        var cars = ["Saab", "Volvo", "BMW"];
+        console.log("cars: " + cars);
+        var car2 = cars[1];
+        console.log("car2: " + car2);
+        console.log("car[2]: " + cars[1]);
+        car2 = "Volvo 2";
+        console.log("car2 = Volvo2")
+        console.log("car2: " + car2);
+        console.log("car[2]: " + cars[1]);
+
+        canvas = document.getElementById("canvas2");
+        contextCanvas = canvas.getContext("2d");
+
+
+        painel = new Painel(contextCanvas, canvas);
+        controlPainel = new ControlPainel(contextCanvas, canvas, painel);
+
+        $('.musicicon').popup();
+        $('.ui.button').popup();
+
+        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+      });
+
+
+
+    console.log("teste");
+
+
+    function plus() {
+      if (progress < 100) {
+        $('#volume').progress({
+          percent: progress + 5
+        });
+
+
+        progress = progress + 5;
+      }
+    }
+
+    function minus() {
+      if (progress > 0) {
+        $('#volume').progress({
+          percent: progress - 5
+        });
+
+        progress = progress - 5;
+      }
+    }
+
+    function ativa() {
+      console.log("ativa");
+
+      $('#checkSoloMute').checkbox('uncheck');
+    }
+
+    function desativa() {
+      console.log("desativa");
+      $('#checkSoloMute').checkbox('check');
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+  </script>
+  <style>
+    .conteudo {}
+
+    .center {
+      width: 800px;
+      margin: 0 auto;
+    }
+
+    .canvas {
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+  </style>
+</head>
+
+<body id="sink">
+  <br>
+
+  <div id="divLoading" class="ui inverted dimmer">
+    <div class="ui text loader">Por favor aguarde...</div>
+  </div>
+  <br>
+  <div id="content" class="simpleTheme container ">
+    <br>
+    <h2 class="ui header centered">
+      <div id="titulo">
+        SoundSphere 1.2.2
+      </div>
+    </h2>
+    <canvas class="canvas" width="600" height="300" id="canvas2">
+
+    </canvas>
+
+    <br>
+    <br>
+    <!--
+<div class="center">
+<label>Quantidade de Trilhas:
+<input type="number" onchange="painel.changeTrail(value)" value='12' >
+</label>
+<label>Minutos:
+<input type="number" onchange="painel.changeTime(value)" value='3' name="shoe-size">
+</label>
+
+</div>
+-->
+    <div class="ui alternate stripe vertical segment">
+      <div class="ui stackable center aligned page grid">
+        <div class="fourteen wide column">
+          <div class="ui icon buttons">
+
+            <div id="buttonLoop" data-content="Loop" onclick="sequenciador.changeLoop()" class="ui button primary">
+              <i class="refresh icon"></i>
+            </div>
+
+            <div id="buttonPlay" data-content="Play" onclick="sequenciador.play()" class="ui button primary">
+              <i class="play icon"></i>
+            </div>
+            <div id="buttonPause" data-content="Pause" onclick="sequenciador.pause()" class="ui button primary">
+              <i class="pause icon"></i>
+            </div>
+            <div id="buttonStop" data-content="Stop" onclick="sequenciador.stop()" class="ui button primary active">
+              <i class="stop icon"></i>
+            </div>
+            <div id="buttonOptions" data-content="Ativar opções" onclick="controlPainel.releaseOptions()" class="ui button primary">
+              <i class="options icon"></i>
+            </div>
+            <div data-content="Recomeçar" class="ui button primary" onclick="controlPainel.restart()">
+              <i class="file outlin icon"></i>
+            </div>
+            <div data-content="Upload" class="ui button primary" onclick="files.click()">
+              <i class="upload icon"></i>
+            </div>
+            <div id="download" data-content="Mix" onclick="sequenciador.startDownload()" class="ui button primary">
+              <i class="download icon"></i>
+            </div>
+
+          </div>
+
+          <input style="display: none" type="file" id="files" name="files[]" multiple />
+        </div>
+      </div>
+    </div>
+    <div>
+      <br>
+      <h3 class="ui header centered">Amostras de Áudio</h3>
+
+      <div id="containerSoundIcons" class="ui five column grid"></div>
+
+    </div>
+
+
+  </div>
+
+
+
+
+  </div>
+  <!-- Modal de opções-->
+  <div id="modalOptions">
+    <div class="header">Opções/Options:</div>
+    <div class="content" id="corpoModal">
+      <div class="column">
+
+        <h4>Geral</h4>
+        <div id="checkSoloMute" class="ui toggle checkbox checked">
+          <input type="checkbox" checked="checked" name="public">
+          <label id="solo">Ativo/Solo <i class="alarm icon"></i>
+          </label>
+
+        </div>
+        <h4>Volume</h4>
+        <div id="volume" class="ui indicating progress success" data-percent="81">
+          <div class="bar" style="transition-duration: 300ms; width: 81%;">
+            <div class="progress">81%</div>
+          </div>
+          <div class="label">
+            <div class="ui icon buttons ">
+              <button onclick="minus()" class="ui basic button">
+                <i class="icon minus red"></i>
+              </button>
+              <button onclick="plus()" class="ui basic button">
+                <i class="icon plus green"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div onclick="controlPainel.removeItemMix()" class="ui negative right labeled icon button">
+        Delete
+        <i class="trash icon"></i>
+      </div>
+
+      <div onclick="desativa()" class="ui neutral right labeled icon button">Cancel</div>
+      <div onclick="ativa()" class="ui positive right labeled icon button">Ok</div>
+    </div>
+  </div>
+  <!-- Modal para informar o que nao foi carregado -->
+  <div id="modalInvalidFiles" class="ui modal">
+    <div class="header">Arquivos não suportados/Unsupported files:</div>
+    <div id="contentInvalidNames" class="content">
+    </div>
+    <div class="actions">
+      <div class="ui approve button">Ok</div>
+    </div>
+  </div>
+</body>
+
+</html>

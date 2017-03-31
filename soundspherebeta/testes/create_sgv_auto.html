@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <script  src="../js/display/ControlMusicIcon.js"></script>
+  <script type="text/javascript">
+  var xmlns = "http://www.w3.org/2000/svg";
+      var controlMusicIcon = new ControlMusicIcon();
+    function chamar() {
+      console.log("Teste dd d: "+controlMusicIcon.xmlns);
+
+      ControlMusicIcon.create(1,'red',document.body)
+
+    }
+    function removCircle(){
+ControlMusicIcon.deselect(1);
+      }
+    function addCircle(){
+      ControlMusicIcon.select(1);
+    }
+  </script>
+  <button name="test" onclick="chamar()">Criar</button>
+  <button name="test" onclick="addCircle()">Inserir Circulo</button>
+  <button name="test" onclick="removCircle()">Remover Circulo</button>
+
+</body>
+
+</html>

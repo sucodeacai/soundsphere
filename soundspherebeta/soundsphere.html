@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Language" content="pt-br">
+  <title>SoundSphere </title>
+
+  <script src="js/display/controlcolor.js"></script>
+  <script src="js/display/painel.js"></script>
+  <script src="js/display/controlPainel.js"></script>
+  <script src="js/display/ItemMixPanel.js"></script>
+  <script src="js/display/controlSoundIcon.js"></script>
+  <script src="js/display/controlTouch.js"></script>
+  <script src="js/recordjs/recorder.js"></script>
+  <script src="js/recordjs/recorderWorker.js"></script>
+  <script src="js/semantic/jquery.min.js"></script>
+  <script src="js/semantic/semantic.min.js"></script>
+  <script src="js/semantic/popup.js"></script>
+  <script src="js/sequencer/sequenciador.js"></script>
+  <script src="js/sequencer/fileApi.js"></script>
+  <script src="js/sequencer/ItemBuffer.js"></script>
+  <script src="js/storage/storage.js"></script>
+  <script src="js/storage/allData.js"></script>
+
+  <script src="js/start.js"></script>
+  <!-- Semantic -->
+  <link rel="stylesheet" type="text/css" href="css/semantic/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/site.css">
+
+  <link rel="stylesheet" type="text/css" href="css/semantic/container.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/grid.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/header.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/image.css">
+  <link rel="stylesheet" type="text /css" href="css/semantic/menu.css">
+
+  <link rel="stylesheet" type="text/css" href="css/semantic/divider.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/dropdown.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/segment.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/button.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/list.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/icon.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/sidebar.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/transition.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/grid.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/popup.min.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/simpleTheme.css">
+  <link rel="stylesheet" type="text/css" href="css/semantic/loader.min.css">
+  <style>
+    .conteudo {}
+
+    .center {
+      width: 800px;
+      margin: 0 auto;
+    }
+
+    .canvas {
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+  </style>
+</head>
+
+<body id="sink">
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-XXXXX-XX', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <!-- Google Analytics -->
+  <br>
+
+  <div id="divLoading" class="ui inverted dimmer">
+    <div class="ui text loader">Por favor aguarde...</div>
+  </div>
+  <br>
+  <div id="content" class="simpleTheme container ">
+    <br>
+    <h2 class="ui header centered red">
+      <div  id="titulo">
+        SoundSphere 1.3 - BETA
+      </div>
+    </h2>
+    <canvas class="canvas" width="600" height="300" id="canvas2">
+
+    </canvas>
+
+    <br>
+    <br>
+    <!--
+<div class="center">
+<label>Quantidade de Trilhas:
+<input type="number" onchange="painel.changeTrail(value)" value='12' >
+</label>
+<label>Minutos:
+<input type="number" onchange="painel.changeTime(value)" value='3' name="shoe-size">
+</label>
+
+</div>
+-->
+    <div class="ui alternate stripe vertical segment">
+      <div class="ui stackable center aligned page grid">
+        <div class="fourteen wide column">
+          <div class="ui icon buttons">
+
+            <div id="buttonLoop" data-content="Loop" onclick="sequenciador.changeLoop()" class="ui button primary">
+              <i class="refresh icon"></i>
+            </div>
+
+            <div id="buttonPlay" data-content="Play" onclick="sequenciador.play()" class="ui button primary">
+              <i class="play icon"></i>
+            </div>
+            <div id="buttonPause" data-content="Pause" onclick="sequenciador.pause()" class="ui button primary">
+              <i class="pause icon"></i>
+            </div>
+            <div id="buttonStop" data-content="Stop" onclick="sequenciador.stop()" class="ui button primary active">
+              <i class="stop icon"></i>
+            </div>
+            <div id="buttonOptions" data-content="Ativar opções" onclick="controlPainel.releaseOptions()" class="ui button primary">
+              <i class="options icon"></i>
+            </div>
+            <div data-content="Recomeçar" class="ui button primary" onclick="controlPainel.showModalRestart()">
+              <i class="file outlin icon"></i>
+            </div>
+            <div data-content="Upload" class="ui button primary" onclick="files.click()">
+              <i class="upload icon"></i>
+            </div>
+            <!-->onclick="sequenciador.startDownload()"<!-->
+            <div id="download" data-content="Mix" onclick="showOptionsDownload()"  class="ui button primary">
+              <i class="download icon"></i>
+            </div>
+
+          </div>
+
+          <input style="display: none" type="file" id="files" name="files[]" multiple />
+          <input style="display: none" type="file" id="fileJSON" />
+          <input style="display: none" type="file" id="filesLS" multiple />
+          <input style="display: none" type="file" id="filesAudioToJson" multiple />
+        </div>
+      </div>
+    </div>
+    <div>
+      <br>
+      <h3 class="ui header centered">Amostras de Áudio</h3>
+
+      <div id="containerSoundIcons" class="ui five column grid"></div>
+
+    </div>
+
+
+  </div>
+
+
+
+
+  </div>
+  <!-- Modal de opções bck-->
+  <div id="modalOptions" class="ui modal">
+    <div class="header">Options/Opções:</div>
+
+    <div class="content" id="corpoModal">
+
+      <form onsubmit="return false;" class="ui form" novalidate id="formOptions">
+
+        <div class="column">
+          <div class="ui error message"></div>
+          <div class="ui grid">
+            <div class="sixteen wide mobile six wide tablet four wide computer column">
+              <h4 class="ui left aligned header">Geral</h4>
+              <div class="ui labeled input field">
+                <div id="checkSoloMute" class="ui toggle checkbox checked">
+                  <input type="checkbox" checked="checked" name="public">
+                  <label id="solo">Ativo/Solo <i class="alarm icon"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="sixteen wide mobile six wide tablet twelve wide computer column">
+              <h4 class="ui left aligned header">Tempo de:</h3>
+                <div class="two fields">
+                  <div id="divStartTime" class="ui labeled input field">
+                    <div class="ui label green">
+                      Start/Inicío
+                    </div>
+                    <input id="startTime" type="number">
+                  </div>
+                  <div id="divEndTime" class="ui labeled input field">
+                    <div class="ui label red">
+                      End/Fim
+                    </div>
+                    <input id="endTime" type="number">
+                  </div>
+                </div>
+            </div>
+          </div>
+          <h4 class="ui left aligned header">Volume</h4>
+          <div id="volume" class="ui indicating progress success" data-percent="81">
+            <div class="bar" style="transition-duration: 300ms; width: 81%;">
+              <div class="progress"></div>
+            </div>
+            <div class="label">
+              <div class="ui icon buttons ">
+                <button id="buttonMinus" class="ui basic button">
+                  <i class="icon minus red"></i>
+                </button>
+                <button id="buttonPlus" class="ui basic button">
+                  <i class="icon plus green"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div onclick="controlPainel.removeItemMix()" class="ui negative right labeled icon button">
+        Delete
+        <i class="trash icon"></i>
+      </div>
+
+      <div onclick="controlPainel.discartOptions()" class="ui neutral right labeled icon button">Cancel</div>
+      <div onclick="controlPainel.saveOptions()" class="ui positive right labeled icon button">Ok</div>
+
+    </div>
+  </div>
+  <!-- Modal para informar o que nao foi carregado -->
+  <div id="modalInvalidFiles" class="ui modal">
+    <div class="header">Error!</div>
+    <div id="contentInvalidNames" class="content">
+    </div>
+    <div class="actions">
+      <div class="ui approve button">Ok</div>
+    </div>
+  </div>
+  <!-- Modal confirmar reinicio -->
+  <div id="modalRestart" class="ui modal">
+    <div class="header">Atenção!</div>
+    <div class="content">
+      <p>Você tem certeza que deseja recomeçar a mixagem?</p>
+    </div>
+    <div class="actions">
+      <div onclick="controlPainel.cancelRestart()" class="ui neutral right labeled icon button">Cancel</div>
+
+      <div onclick="controlPainel.restart()" class="ui positive right labeled icon button">>Ok</div>
+    </div>
+  </div>
+  <!-- Modal boas vindas-->
+  <div id="modalWelcome" class="ui small first coupled modal transition">
+    <div class="header">
+      Bem vindo!
+    </div>
+    <div id="mensagem" class="content">
+      <div class="feature alternate ui stripe vertical segment">
+        <div class="ui three column center aligned divided relaxed stackable grid container">
+          <div class="row">
+            <div class="column">
+              <h2 class="ui icon header">
+                <i class="upload outline icon"></i> Abrir
+              </h2>
+              <p>Já utilizei o
+                <em>SoundSphere</em> e quero continuar a partir de um arquivo JSON.</p>
+              <div class="ui green large button">Enviar</div>
+            </div>
+            <div class="column">
+              <h2 class="ui icon header">
+                <i class="write outline icon"></i> Novo
+              </h2>
+              <p>Desejo iniciar um novo projeto.</p>
+              <div onclick="closeModalWelcome()" class="ui primary view-ui large button">Iniciar</div>
+            </div>
+            <div class="column">
+              <h2 class="ui icon header">
+                <i class="cloud download outline icon"></i> Continuar
+              </h2>
+              <p>
+              Vou continuar do que foi salvo autmático.
+              </p>
+              <div id="buttonContinueLocal" class="ui orange large button">Continuar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalContinue" class="ui small second coupled modal transition">
+    <div class="header">Enviar Arquivos</div>
+    <div class="content">
+      <div id="messageErrorModalContinue"> </div>
+      <p id="fileName">Você optou por continuar sua composição a partir de informações salvas no navegador, para continuar envie somente os seguintes arquivos:</p>
+      <div id="mensagemLS" class="ui two column grid"></div>
+      <div class="ui bulleted list" id="mensagemLS"></div>
+    </div>
+    <div class="actions">
+      <div onclick="closeModalContinue()" class="ui red button">Cancelar</div>
+      <div  onclick="filesLS.click()" class="ui green button">Enviar Arquivos</div>
+    </div>
+  </div>
+  <div id="modalOkLS" class="ui small third coupled modal transition">
+    <div class="header">Ok!</div>
+    <div class="content">
+
+      <p id="fileName">Os arquivos da lista foram carregados com sucesso, agora você pode continuar sua composição.</p>
+
+      <div id="messageAttentionModalOkLS"> </div>
+    </div>
+    <div class="actions">
+      <div onclick="closeModalOKLS()" class="ui green button">Continuar</div>
+    </div>
+  </div>
+  <div id="modalStep1JSON" class="ui small third coupled modal transition">
+    <div class="ui ordered top attached steps">
+      <div class="active step">
+        <div class="content">
+          <div class="title">JSON</div>
+        </div>
+      </div>
+      <div class=" step">
+        <div class="content">
+          <div class="title">Amostras</div>
+        </div>
+      </div>
+      <div class=" step">
+        <div class="content">
+          <div class="title">Informações</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div id="mensageStep1JSON"></div>
+      <div> Selecione o arquivo JSON gerado pelo SoundSphere que você deseja dar continuidade.</div>
+    </div>
+    <div class="actions">
+
+      <div class="ui red button">Cancelar</div>
+      <div onclick="fileJSON.click()" class="ui green button">Selecionar</div>
+    </div>
+  </div>
+  <div id="modalStep2JSON" class="ui small third coupled modal transition">
+    <div class="ui ordered top attached steps">
+      <div class="completed step">
+        <div class="content">
+          <div class="title">JSON</div>
+        </div>
+      </div>
+      <div class="active step">
+        <div class="content">
+          <div class="title">Amostras</div>
+        </div>
+      </div>
+      <div class=" step">
+        <div class="content">
+          <div class="title">Informações</div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div id="mensageStep2JSON"> </div>
+      <p id="fileName">Você deve enviar as seguintes amostras de audio: </p>
+      <div id="filesRequireJSON" class="ui two column grid"></div>
+
+    </div>
+    <div class="actions">
+
+      <div class="ui red button">Cancelar</div>
+      <div onclick="filesAudioToJson.click()" class="ui green button">Selecionar</div>
+    </div>
+  </div>
+  <!-- Modal boas vindas-->
+  <div id="optionsDownload" class="ui small coupled modal transition">
+    <div class="header">
+      Opções de Download
+    </div>
+    <div class="content">
+      <div class="feature alternate ui stripe vertical segment">
+        <div class="ui three column center aligned divided relaxed stackable grid container">
+          <div class="row">
+            <div class="column">
+              <h2 class="ui icon header">
+                JSON
+              </h2>
+
+              <div onclick="downloadJson(); closeOptionsDownload();" class="ui green large button">download</div>
+            </div>
+            <div class="column">
+              <h2 class="ui icon header">
+                JSON + WAV
+              </h2>
+
+              <div onclick="downloadJson(); sequenciador.startDownload(); closeOptionsDownload();" class="ui primary view-ui large button">download</div>
+            </div>
+            <div id="WavDownload" class="column">
+              <h2 class="ui icon header">
+                WAV
+              </h2>
+
+              <div onclick="sequenciador.startDownload(); closeOptionsDownload();" class="ui orange large button">download</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+/*******************************
+Global
+*******************************/
+
+/*--------------
+simpleTheme
+---------------*/
+
+#sink {
+   
+     background-image: url('fundo.png');
+
+    background-color: #cccccc;
+}
+
+#sink .simpleTheme.container {
+        background-color: #FFFFFF;
+    width: 700px;
+    border: 1px solid #DDDDDD;
+    padding: 0 10px;
+    margin: 0px auto;
+    box-shadow: 0 0 .25em #CCC;
+    moz-box-shadow: 0 0 .25em #CCC; /* Implementação Mozilla */
+    webkit-box-shadow: 0 0 .25em #CCC; /* Implementação para browsers que renderizam via webkit */
+    behavior: url(PIE.htc); /* Comportamento adicionado para renderização das propriedades acima no IE 7 e IE 8 */
+
+}
+
+
+
+#sink .simpleTheme h4 {
+    font-size: 1.5em;
+    margin: 2em 0em 1em;
+}
+#sink .simpleTheme.container .button.simpleTheme > .buttons,
+#sink .simpleTheme.container .button.simpleTheme > .button,
+#sink .simpleTheme.container .button.simpleTheme > .segment > .button {
+    margin-bottom: 0.5em;
+}
+#sink .simpleTheme.container h4:first-child {
+    font-weight: bold !important;
+    margin: 0em 0em 1em !important;
+}
+#sink .simpleTheme.container .example:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+#sink .simpleTheme.container .segment.example {
+    z-index: 1;
+}
+#sink .simpleTheme.container .ui.label:not(.empty) {
+    margin-bottom: 1em;
+}
+#sink .simpleTheme.container .segment .ui.label {
+    margin-bottom: 0em;
+}

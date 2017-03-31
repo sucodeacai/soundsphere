@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <script type="text/javascript">
+    var xmlns = "http://www.w3.org/2000/svg";
+    var path;
+
+    function chamar() {
+
+      var xmlns = "http://www.w3.org/2000/svg";
+      console.log("teste");
+      var drawing =
+        "M54 47l0 40c-1,0 0,0 -1,0 -1,0 0,0 -1,-1 -13,-5 -27,14 -18,23 6,7 17,2 21,-5 2,-3 3,-6 3,-10 0,-11 0,-23 0,-34l37 -10c1,0 4,-1 5,-2l0 30c-2,0 -2,-2 -7,-2 -4,0 -9,3 -11,5 -1,1 -3,3 -3,5 -5,9 1,17 7,17 6,0 10,-1 14,-6 3,-3 5,-7 5,-12l0 -52c-2,0 -23,6 -25,7l-25 7z"
+      var svg = document.createElementNS(xmlns, 'svg');
+      svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      svg.setAttribute("xml:space", "preserve");
+      svg.setAttribute("height", "50px");
+      svg.setAttribute("width", "50px");
+      svg.setAttribute("version", "1.1");
+      svg.setAttribute("viewBox", "0 0 150 150");
+      svg.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+      var g = document.createElementNS(xmlns, 'g');
+      svg.appendChild(g);
+
+
+
+
+      var animation1 = document.createElementNS(xmlns, 'animateTransform');
+      animation1.setAttribute("id", "idAnimate");
+      animation1.setAttribute("attributeName", "transform");
+      animation1.setAttribute("type", "scale");
+      animation1.setAttribute("from", "1 1");
+      animation1.setAttribute("to", "0.5 0.5");
+      animation1.setAttribute("begin", "indefinite");
+
+      var esquerda = document.createElementNS(xmlns, 'animateTransform');
+      esquerda.setAttribute("attributeName", "transform");
+      esquerda.setAttribute("id", "esquerda");
+      esquerda.setAttribute("type", "translate");
+      esquerda.setAttribute("to", "0 0");
+
+      var aumentarMov = document.createElementNS(xmlns, 'animateTransform');
+      aumentarMov.setAttribute("attributeName", "transform");
+      aumentarMov.setAttribute("id", "esquerda");
+      aumentarMov.setAttribute("type", "translate");
+      aumentarMov.setAttribute("to", "0 0");
+      animation1.setAttribute("begin", "indefinite");
+      animation1.setAttribute("fill", "freeze");
+
+      var animation2 = document.createElementNS(xmlns, 'animateTransform');
+      animation2.setAttribute("id", "animateAumentar");
+      animation2.setAttribute("attributeName", "transform");
+      animation2.setAttribute("type", "scale");
+      animation2.setAttribute("from", "0.5 0.5");
+      animation2.setAttribute("to", "1 1");
+      animation2.setAttribute("begin", "indefinite");
+
+      animation2.setAttribute("begin", "indefinite");
+      animation2.setAttribute("fill", "freeze");
+
+
+
+
+
+
+
+      svg.setAttribute("id", "1");
+      path = document.createElementNS(xmlns, 'path');
+      path.setAttribute("d", drawing);
+      path.setAttribute("style", "fill:blue");
+
+      g.appendChild(path);
+      path.appendChild(animation1);
+      path.appendChild(animation2);
+      g.appendChild(esquerda);
+      document.body.appendChild(svg);
+
+
+    }
+
+    function animate5() {
+      var animatate = document.getElementById('idAnimate');
+      //setting duration (it's got somewhere before)
+      animatate.setAttribute('dur', '1s');
+      animatate.beginElement();
+          mover();
+
+    }
+    function mover() {
+      console.log('mover')
+      var esquerda = document.getElementById('esquerda');
+      //setting duration (it's got somewhere before)
+      esquerda.setAttribute('dur', '1s');
+      esquerda.beginElement();
+
+    }
+    function aumentar() {
+      var animatate = document.getElementById('animateAumentar');
+      //setting duration (it's got somewhere before)
+      animatate.setAttribute('dur', '1s');
+      animatate.beginElement();
+
+    }
+    function removCircle() {
+
+      var g = document.getElementById('1');
+      var circle = document.getElementById('circle');
+      g.removeChild(circle);
+    }
+
+    function addCircle() {
+
+      var circle = document.createElementNS(xmlns, 'circle');
+
+      circle.setAttribute("style", "stroke:black; stroke-width:6; fill:none");
+      circle.setAttribute("transform", "matrix(0.988396 -0.151897 0.151897 0.988396 74.0517 74.0517)");
+      circle.setAttribute("r", "71");
+      circle.setAttribute("id", "circle");
+
+      var g = document.getElementById('1');
+      g.appendChild(circle);
+    }
+  </script>
+  <button name="test" onclick="chamar()">Criar</button>
+  <button name="test" onclick="addCircle()">Inserir Circulo</button>
+  <button name="test" onclick="removCircle()">Remover Circulo</button>
+  <button name="test" onclick="animate5()">Diminuir</button>
+  <button name="test" onclick="aumentar()">aumentar</button>
+  <button name="test" onclick="mover()">mover</button>
+
+
+</body>
+
+</html>
