@@ -1,0 +1,254 @@
+/*******************************
+Global
+*******************************/
+
+/*--------------
+simpleTheme
+---------------*/
+body, html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.default {cursor: default;}
+.shadowLeft{
+    box-shadow: -5px 0 5px -5px #333;
+
+}
+.shadowLeftBottom{
+    box-shadow: -5px 5px 5px -5px #333;
+}
+.shadowRight{
+    box-shadow: 5px 0 5px -5px #333;
+}
+.shadowTop{
+    box-shadow: 0 -5px 5px -5px #333;
+}
+.shadowRightTop{
+    box-shadow: 5px -5px 5px -5px #333;
+}
+.shadowLeftTop{
+    box-shadow: -5px -5px 5px -5px #333;
+}
+
+
+.shadowBottom{
+    box-shadow: 0 5px 5px -5px #333;
+}
+.shadowRightBottom{
+    box-shadow: 5px 5px 5px -5px #333;
+}
+.cursorDenied {
+    cursor: url(data:image/png;base64,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), auto;
+  }
+.cursorUp {
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA90lEQVRIS+2UOw7CMBBEX0RHD4fgU8EFgAYhjosQFVwAKj53AHo6BBrJRsFxWAcpXVzau/N2x2tn1LyymvWpAugAG1fQHLinFJcKkPgWGDjRIzBLgaQAQnFf+AmYWhAL0HWV94EL0HPqElc3JuQXIBSfAFcH8GeCnAGdRe+kDBATvwEvB1CerNsB6k4Q2aWYrxUDSFyJskO2qDqfmAdIyITEAHtgFBGXYAjQXr7bAzDOtxACWoBG8AEsIi3HAB6yBtrAEHh6SKwDQT4BgaVlAB9WyLXGNLwzC1B43A3A/O8aixqLCg6s3M7S9Cb37abG/hVXdUwrQ96qozoZJvi1pQAAAABJRU5ErkJggg==), auto;
+  }
+.cursorDown {
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA70lEQVRIS+2UOw7CQAxEX0RHD9yBTwUXABqEOC5CVHABqPgcAno6BLK0kYzZxBukNChbRut5Y0/WGTWfrGZ9qgLWwdAq1VhVwCsIJ9clXwzCDcCNrhnRn4yoBTwLevFC/qq1D00unIAHsARuBlQE6AIboA2MtMHYSz4AY+ACzAwkBhDxPdAHjsBEm4oBdIFApsC9YFXYu9ZQ4TaVwh0wAM6hE4HoDlxxMVW27GKQPJOeGovt8iM2b5tqiIQvAcq5hpnr7qI/ngeQok4Y19AoCHCu8vkZEIMkiXsZWEfSyTZ8XHjO8+KUEbkLquxC7YA3W1M6GRI7g5kAAAAASUVORK5CYII=), auto;
+  }
+.cursorDownLeft {
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABJklEQVRIie3UvyvFURjH8ReuHzdZKMl0SxkUi5BNyl1kUUr5E+SfMBqtNquFSSEjG4OZQckiBnRRXMM537pd9+LLvTHcTz2d832+n5535zlPh4b+Wi1V8itow2U9oL0o4hkz9QDAWoQ8YLJekI0IucXwF94uzKE1DaAZWxFyjYFPvKvRt1ipSDW9YQl76MMB+qt4k3xnGgC8YB7HyGEfPRV82bg+pQXAI2ZxhiHsCj0vVUdcCz8BwB3yOMcYdtBe8j85wQdAWuVwJVzoNjIxfxhzU78FENp0EwtuoglH8XuiFgAYx30suo7TuB+pFQCmhakp4jWug+WmTHmiTMtYiIUKFeJEeEqSYUl9yUlvvxvdaU+Qx6gwhllh3rNlkeQuhHeroX+md30/RqInJW54AAAAAElFTkSuQmCC), auto;
+  }
+.cursorDownRight {
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABKElEQVRIie3Uvy5EQRTH8Q+Wanc71ESjI7QSiUJCopJodPsAKgmdDg2JR9BIFCrxp1CoFBKthAdQ242CCIqZm8i6u3svK9vsL5mcuefOfM85mTNDV51WXxsYPdjEOO7awPuhPXzi4T/g6xH+irmsmwqYFEpvplV8xLGSJ6utmNVCkzXzeIvr1vLA4aDFxmnU4prdVrDeFF812nLKvzGcoYhDbPwmQC3aUp1/GJcYxAUqQhW5A6RVUMI5RnGLZby3gjcKkFSQBBjAidBZj1jESxZ4Iy0JpZ8KrXoUv58w8hdwotkIvMZ+nD9joh1wmIrQpM9z3dJ6FVJ8ySH3R3uDGeHilYUDT0YRx9jJE3RIyDzruGoGa/TebAsHWhW66rutn9/L2LJddUZf7SlJ7ASNEagAAAAASUVORK5CYII=), auto;
+  }
+.cursorUpRight{
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABIklEQVRIie3Uvy4EURQG8N9afwoZHbWgUlBoJSIhkvUEaLyACF5ALVQegcQTCI1EYjsqtWyn0O5WtthR3Fusyf6Z2ZUo+JLJ3Mx37vedc8+cyz9+G6U+/AQOkKCBets7u66jWTSBdaQ5nxYOswKjfQyesI/ZWEWCqbZ1giWUhdNYLFpBL5Rw4XsV59mgkQHFx3GNY+HcX+L3+k8YJLjFrtDkCqqRawxrMINHbOADa3gQ+tLRoF+T27GAe8zjDVuoRS7pZpAXK0LGKZ4xneHvIlcZRHwzZpYKFUx2iKlGfrWo+J7wl6S4wliXuNcYs1xE/ESYzhRnel8rtRg3l0e4fYBaOMqx51KY+nIeg9Mo/omdPBt6odMcNPGObdwMa/CPP4Av+htJgPCcNqAAAAAASUVORK5CYII=), auto;
+  }
+.cursorUpLeft{
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABHklEQVRIie3Tu0oDURCA4S+aFIFAMGAhYiNBsLGxsvDWWIhPID6GT2RtJeINxEthZyOoCCKIihe0E1QSicXuwhrWxM0FG384zDCw8zM75/DPX5NJqPViAnlkkauL8fwVq3hPI11GLcVZatQsm1Dri+U1bOENFVTrzgs20gqqsTyDTyzio1Gjn+hJqFXCuI5nLGBNsJOOCKIJzjCDR8xhE4VOCKIJsjjFNO7CuINiu4JoglwYLzCFa8H13UWpE4L4BbjCJC4xjj30tyqI/6I4N4JJzjGGAwy0IkiaIOJesPgTjOIQQ2kFzZ79E2ZxjHIoGW7yzTdKWBEstBFFHAle+y1G0kh+SwH7oeQBg92Q5LEdSua7ISDYZblbzf9pjy/IJ0PgVEapoAAAAABJRU5ErkJggg==), auto;
+  }
+.cursorLeft{
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAA1ElEQVRIS82VOw7CMBBEX0RHD4eA0CAuALRcF8pwAio+h4AzIKGVYmllOTj22ojUyZud9XjSUPlpKvP5K4EJ8E51PMbBHDgBU2CVKhITEPgZWAAXYFPSgcA7YAncgR3wLCXgw7fAKxUu74dWNOvXIpPf+smz4CEBDb8C+9zJnVvtQOCy8xYoAvcdSErWOXsOfHMEDj8X0Ct6AJKc5Fj6bvwUFReJxdTsZKgqdFxNIt+6SN/mbJExZef6qHjZuUBUrWudumo/HNPljp2BCT5U12aoBnwAnG4sGXtrOyIAAAAASUVORK5CYII=), auto;
+  }
+.cursorRight{
+    cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAy0lEQVRIS82VPQ7CMAyFv4ozwCGgGycANrguM70AYgEuUXY2JGQpSGnpj3Fi1MzR+/LsZ6fA+RTO+kwWMANeGvcWByJ+BZ7AHqiHQBaA6J2BNXAHtkMQK2ABVMAyQDbAo8uJFSBaKkgKoA25hXI1nKQCRiE5AG2IJGz36UkMOAIHTbYVdy4hZY1JdgcoHtZ7ZQ6cgDIMYWeJrIBY/CtJqU2WWZCXr4DsMR0Vl5JYHcTiso+yr4p42fWKWx38ZV27fjg/xdnaZDXEHfAGtwowGRkNSBkAAAAASUVORK5CYII=), auto;
+  }
+#sink {
+   
+    background-image: url('../img/fundo.png');
+
+   background-color: #cccccc;
+}
+#toast-container {
+    width: 200x;
+  
+}
+ 
+#sink .simpleTheme.container {
+   background-color: #FFFFFF;
+   width: 700px;
+   border: 1px solid #DDDDDD;
+   padding: 0 10px;
+   margin: 0px auto;
+   box-shadow: 0 0 .25em #CCC;
+   moz-box-shadow: 0 0 .25em #CCC; /* Implementação Mozilla */
+   webkit-box-shadow: 0 0 .25em #CCC; /* Implementação para browsers que renderizam via webkit */
+   behavior: url(PIE.htc); /* Comportamento adicionado para renderização das propriedades acima no IE 7 e IE 8 */
+
+}
+#sink .simpleTheme.container.admin {
+    width: 1000px;
+} 
+/* Fim css Site */
+
+
+
+#sink .simpleTheme h4 {
+   font-size: 1.5em;
+   margin: 2em 0em 1em;
+}
+#sink .simpleTheme.container .button.simpleTheme > .buttons,
+#sink .simpleTheme.container .button.simpleTheme > .button,
+#sink .simpleTheme.container .button.simpleTheme > .segment > .button {
+   margin-bottom: 0.5em;
+}
+#sink .simpleTheme.container h4:first-child {
+   font-weight: bold !important;
+   margin: 0em 0em 1em !important;
+}
+#sink .simpleTheme.container .example:first-child {
+   margin-top: 0;
+   padding-top: 0;
+}
+#sink .simpleTheme.container .segment.example {
+   z-index: 1;
+}
+#sink .simpleTheme.container .ui.label:not(.empty) {
+   margin-bottom: 1em;
+}
+#sink .simpleTheme.container .segment .ui.label {
+   margin-bottom: 0em;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Classes utilizadas pelo Modal Filter para fazer o movimento de subir e descer */
+.span1Line {
+    color:red;
+    text-decoration: line-through
+}
+.span2Line {
+    color:black;
+   
+}
+.subir.comando{
+    z-index: 1000000;
+}
+.subir {
+   
+    position: relative;
+    animation: animationSubir .5s;
+    animation-fill-mode: forwards;
+}
+@keyframes animationSubir {
+    100% {
+        transform: translateY(-110%);
+        background-color:white;
+    }
+}
+.descer.comando{
+    z-index: 1000000;
+}
+.descer {
+
+    position: relative;
+    animation: animationDescer .5s;
+    animation-fill-mode: forwards;
+
+    -webkit-animation: animationDescer .8s;
+    -webkit-animation-fill-mode: forwards; 
+   
+  
+}
+@keyframes animationDescer {
+    100% {
+        transform: translateY(110%);
+        background-color:white;
+    }
+}
+.desativaFilter{
+    background: #cccccc;
+}
+/* fim */
+/* codigo usado para exibir mensagens */
+
+#mensagens {
+    position: fixed;
+    margin: 130px 20px;
+    font-family: inherit;
+    z-index: 30000000000000000000;
+}
+
+.modalClass {
+    background: wheat;
+    width: 200px;
+    padding: 20px;
+    display: block;
+    margin-bottom: 10px;
+    animation-name: aparecer;
+    animation-duration: 1s;
+}
+
+.remover {
+    animation: desaparecer .4s;
+    animation-fill-mode: forwards;
+
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0
+    }
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes desaparecer {
+    50% {
+        transform: translateX(5%);
+    }
+    100% {
+        transform: translateX(-200%);
+    }
+}
+
+
+.removed {
+  
+    -webkit-animation: disapear .8s;
+    -webkit-animation-fill-mode: forwards; 
+    animation: disapear .8s;
+    animation-fill-mode: forwards;
+  }
+  
+  @-webkit-keyframes disapear{
+    
+    50% {
+      
+      -webkit-transform: translateX(-5%);
+      transform: translateX(-5%);
+    }
+    
+    100% {
+      -webkit-transform: translateX(200%);
+      transform: translateX(200%); 
+    }    
+  }
+  
+  
+  
+/* fim */
