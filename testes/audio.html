@@ -1,0 +1,80 @@
+<div id="modalOptions" class="ui modal">
+  <div class="header">Options/Opções:</div>
+  <div class="content" id="corpoModal">
+    <form onsubmit="return false;" class="ui form" novalidate id="formOptions">
+      <div class="column">
+        <div class="ui error message"></div>
+        <div class="ui grid">
+
+          <div class="sixteen wide mobile six wide tablet four wide computer column">
+            <h4 class="ui left aligned header">Geral</h4>
+
+            <div class="ui labeled input field">
+              <div id="checkSoloMute" class="ui toggle checkbox checked">
+                <input type="checkbox" checked="checked" name="public">
+                <label id="solo">Ativo/Solo
+                  <i class="alarm icon"></i>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="sixteen wide mobile six wide tablet four wide computer column">
+            <h4 class="ui left aligned header">Descritor</h4>
+
+            <div class="ui labeled input field">
+              <div id="selectDescritor"></div>
+            </div>
+          </div>
+          <div class="sixteen wide mobile six wide tablet twelve wide computer column">
+            <h4 class="ui left aligned header">Tempo de:</h3>
+              <div class="two fields">
+                <div id="divStartTime" class="ui labeled input field">
+                  <div class="ui label green">
+                    Start/Inicío
+                  </div>
+                  <input id="startTime" type="number">
+                </div>
+                <div id="divEndTime" class="ui labeled input field">
+                  <div class="ui label red">
+                    End/Fim
+                  </div>
+                  <input id="endTime" type="number">
+                </div>
+              </div>
+          </div>
+        </div>
+        <h4 class="ui left aligned header">Volume</h4>
+        <div id="volume" class="ui indicating progress success" data-percent="81">
+          <div class="bar" style="transition-duration: 300ms; width: 81%;">
+            <div class="progress"></div>
+          </div>
+          <div class="label">
+            <div class="ui icon buttons ">
+              <button id="buttonMinus" class="ui basic button">
+                <i class="icon minus red"></i>
+              </button>
+              <button id="buttonPlus" class="ui basic button">
+                <i class="icon plus green"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+  <div class="actions">
+    <div id="playAudioOptions" class="ui blue right  icon button">
+      Com Filtro
+    </div>
+    <div id="playAudioSemFiltro" class="ui blue right  icon button">
+      Sem Filtro
+    </div>
+    <div onclick="controlPainel.removeItemMix()" class="ui negative right labeled icon button">
+      Delete
+      <i class="trash icon"></i>
+    </div>
+    <div onclick="controlPainel.discartOptions()" class="ui neutral right labeled icon button">Cancel</div>
+    <div onclick="controlPainel.saveOptions()" class="ui positive right labeled icon button">Ok</div>
+  </div>
+</div>

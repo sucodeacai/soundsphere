@@ -1,0 +1,22 @@
+{
+  "name": "soundsphere1.3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/jquery": "^3.3.6",
+    "@types/materialize-css": "^1.0.4",
+    "@types/semantic-ui": "^2.2.6",
+    "@types/webaudioapi": "0.0.27",
+    "@types/webspeechapi": "0.0.29",
+    "ts-promise": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.9.4"
+  }
+}
