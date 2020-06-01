@@ -13,7 +13,8 @@ class Painel {
 
   flagDrawMaker: boolean = false;
   anterior: any;
-  pixelPerSecond = 20;
+  pixelPerSecond:number=0;
+  numberOfTrails: number = 0;
   totalTime = 0;
   sizeTrail = 40;
   halfPainelX: number;
@@ -67,7 +68,8 @@ class Painel {
   maxDisplacingXAxis: number;
   maxDisplacingYAxis: number;
   canvas: any;
-  constructor(daoHome: DAOHome, ctxCanvas: any, canvas: any, pageSoundSphereHome: PageSoundSphereHome, tooltip: Tooltip) {
+  constructor(daoHome: DAOHome, ctxCanvas: any, canvas: any, pageSoundSphereHome: PageSoundSphereHome, tooltip: Tooltip, pixelPerSecond: number) {
+    this.pixelPerSecond = pixelPerSecond;
     this.DAOHome = daoHome;
     this.tooltip = tooltip;
     //console.log("DAO HOME")
@@ -94,7 +96,7 @@ class Painel {
     //console.log("actionMouseDown")
     this.mouseDown = true;
     //console.log(" this.mouseDown ->" + this.move)
-    this.mouseDownX = (event.offsetX );
+    this.mouseDownX = (event.offsetX);
     //console.log(" this.mouseDownX ->" + this.mouseDownX)
     this.mouseDownY = (event.offsetY - 1);
     //console.log(" this.mouseDownY ->" + this.mouseDownY)
@@ -185,7 +187,7 @@ class Painel {
           if (this.moved) {
             //Velocidade
             let velocidade = 1;
-            const diferenceX = (evt.offsetX ) - this.firstPositionX;
+            const diferenceX = (evt.offsetX) - this.firstPositionX;
 
             if (diferenceX > -5 && diferenceX < 5) {
               this.deltaX = 0
@@ -215,7 +217,7 @@ class Painel {
           }
           if (!this.moved) {
 
-            this.firstPositionX = (evt.offsetX );
+            this.firstPositionX = (evt.offsetX);
             this.firstPositionY = (evt.offsetY - 1);
             this.moveAction(e)
           }
@@ -235,17 +237,22 @@ class Painel {
             //Tempo no painel indicação de tempo do painel
             //Verifica limite do painel para que a indicação do tempo do painel 
             //não passe do painel
-            let tamanhoTexto=60;
-            console.log("this.displacingXAxis: "+this.displacingXAxis);
-            if((e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)){
-              this.ctxCanvas.fillText(this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis)),
-               (e.offsetX ) + this.displacingXAxis, (e.offsetY) + this.displacingYAxis);
-            
-            }else{
-              this.ctxCanvas.fillText(this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis)),
-              (this.widthPainel - tamanhoTexto), (e.offsetY) + this.displacingYAxis);
-         
+            let tamanhoTexto = 60;
+            // console.log("this.displacingXAxis: " + this.displacingXAxis);
+            // console.log("(e.offsetY) + this.displacingYAxis : " + (e.offsetY) + this.displacingYAxis);
+            // console.log("(e.offsetY)  : " + (e.offsetY));
+            if ((e.offsetY) + this.displacingYAxis > 20) {
+              if ((e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
+                this.ctxCanvas.fillText(this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis)),
+                  (e.offsetX) + this.displacingXAxis, (e.offsetY) + this.displacingYAxis);
+
+              } else {
+                this.ctxCanvas.fillText(this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis)),
+                  (this.widthPainel - tamanhoTexto), (e.offsetY) + this.displacingYAxis);
+
+              }
             }
+
             this.ctxCanvas.stroke();
           }
 
@@ -616,7 +623,7 @@ class Painel {
   //FUnção para desenhar/criar o painel
   //Definir parametros de criação do painel
   make(): void {
-    this.setTimePanel(5);
+    this.setTimePanel(60);
     this.setTrailPanel(80);
     this.reDrawAllItemMixPanel();
     this.drawTrails();
@@ -633,7 +640,7 @@ class Painel {
   };
   //Alterar o numero de trilhas para mixagem
   setTrailPanel(val: number): void {
-
+    this.numberOfTrails = val;
     this.heightPainel = val * this.sizeTrail;
     // var i;
     // for (i = 0; i < val; i = i + 1) {
@@ -887,8 +894,8 @@ class Painel {
     itemMixPanel.x = this.getPositionX(event) + this.displacingXAxis;
     itemMixPanel.y = this.getMiddleHeigtTrail(this.getPositionY(event) + this.displacingYAxis);
     // }
-    console.log(this.lastX);
-    console.log(this.lastY);
+    // console.log(this.lastX);
+    // console.log(this.lastY);
     let listColisoes = this.checkItemMixPanel(itemMixPanel);
     //Se ele colidir apenas com um ele joga para o lado
     //Se não houver nova colisão ele altera o itemMixPanel
@@ -896,9 +903,9 @@ class Painel {
     //se houver alguma colisão mesmo depois de mover ele adota o comportamento padrão
     //que é jogar para baixo 
     if (this.lastX != itemMixPanel.x || this.lastY != itemMixPanel.y) {
-      console.log("~E diferente: " + listColisoes.length)
+      // console.log("~E diferente: " + listColisoes.length)
       if (listColisoes.length === 1) {
-        console.log("~tem colisao")
+        // console.log("~tem colisao")
         if (itemMixPanel.x >= listColisoes[0].x && itemMixPanel.x <= listColisoes[0].x + listColisoes[0].width) {
           let newItem = new ItemMixPanel();
           newItem.x = listColisoes[0].x + listColisoes[0].width;
@@ -928,11 +935,9 @@ class Painel {
 
       this.tooltip.showMessage("Item inserido em: " + this.sec2time(itemMixPanel.startTime));
       this.DAOHome.pushItemMixPanel(itemMixPanel);
-      if (this.displacingInsertY > 0) {
+      if (this.displacingInsertY > 0 && this.getNumberTrailByHeight(itemMixPanel.y) - 2 > this.numberOfTrails) {
         this.ctxCanvas.translate(0, -this.displacingInsertY);
         this.displacingYAxis += this.displacingInsertY;
-
-
         //Se moveu ele move o ultimo X e Y tbm para nao acontecer de ele tentar joogar
         //para o lado
         this.lastY += this.displacingInsertY;
@@ -1046,7 +1051,7 @@ class Painel {
     //   var offset = this.touchFunctions.getOffset(this.canvas);
     //   x = event.touches[0].pageX - offset.left;
     // } else {
-    x = ((event.offsetX ) !== undefined) ? (event.offsetX) : (event.layerX - event.target.offsetLeft);
+    x = ((event.offsetX) !== undefined) ? (event.offsetX) : (event.layerX - event.target.offsetLeft);
 
     // }
     return x;

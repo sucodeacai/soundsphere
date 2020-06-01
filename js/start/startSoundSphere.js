@@ -17,4 +17,26 @@ $(document).ready(function () {
     let fileMenuBar = new FileMenuBar(sequenciador, daoHome, tooltip, pageSoundSphereHome);
     let fileHomeJson = new FileHomeJson(sequenciador, daoHome, tooltip, pageSoundSphereHome);
     let fileHomeWav = new FileHomeWav(sequenciador, daoHome, tooltip, pageSoundSphereHome);
+    //pega parametros
+    var query = location.search.slice(1);
+    var partes = query.split('&');
+    var data = {};
+    partes.forEach(function (parte) {
+        var chaveValor = parte.split('=');
+        var chave = chaveValor[0];
+        var valor = chaveValor[1];
+        data[chave] = valor;
+    });
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxDados passados");
+    console.log(data.pixelpersecond);
+    let pixelpersecond = data.pixelpersecond != undefined ? +data.pixelpersecond : 20;
+    //Criação painel
+    let canvas = document.getElementById("canvas2");
+    let contextCanvas = canvas.getContext("2d");
+    let painel = new Painel(daoHome, contextCanvas, canvas, pageSoundSphereHome, tooltip, pixelpersecond);
+    sequenciador.painel = painel;
+    pageSoundSphereHome.painel = painel;
+    if (daoHome.listItemBuffer.length > 0) {
+        painel.reMake();
+    }
 });

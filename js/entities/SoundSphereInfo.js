@@ -35,7 +35,8 @@ class SoundSphereInfo {
             "1.4.17 - Correção bug comando de voz, Correçao do BUG que ao clicar em recomeçar se perdia o histórico, correção do reset vertical, inclusão do nome do autor.",
             "1.4.18 - Correção da mensagem comando de voz quando o microfone está desabilitado.",
             "1.4.19 - Mensagem com o tempo de inserção do item de mixage, exibição do tempo de acordo com a posição do cursor no painel e  uma mudança do calculo da posição do mouse em relação ao painel (offSet).  ",
-            "1.4.20 - Alteração da velocidade de movimento do painel, exibição do tempo relativo ao curso no final do painel e posição de inserção de item de.  "
+            "1.4.20 - Alteração da velocidade de movimento do painel, exibição do tempo relativo ao curso no final do painel e posição de inserção de item.  ",
+            "1.4.21 - Implementação da passagem do parâmetro pixel por segundo via url, correção de inserção de item na trilha 79 e 80, melhorias na exibição de tempo relativo ao cursor.  "
         ];
         this.JSONFileStructureVersion = "1.4.7";
         this.beta = true;

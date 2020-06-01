@@ -364,7 +364,7 @@ class PageSoundSphereHome extends SimplePage {
   //itemOptionEnabled = true - OPções liberada
   //itemOptionEnabled = false - Inserir amostras
   generateActionsAlbum() {
-    console.log("genarate actions albun")
+    // console.log("genarate actions albun")
     $('.ui.segment.contentIconWav').on('click', (e: JQueryEventObject) => {
       if (this.idSelectedIcomAlbum == $(e.target).data("id")) {
         this.idSelectedIcomAlbum = undefined;
@@ -443,7 +443,7 @@ class PageSoundSphereHome extends SimplePage {
     this.generateContentOfTheModals();
     this.setSettingsActions();
     this.setSettingsAttributes();
-    this.cretePainel();
+    //this.cretePainel();
 
   }
   reloadAlbum() {
@@ -484,16 +484,16 @@ class PageSoundSphereHome extends SimplePage {
     $("#valuetitulo").html(`${this.soundSphereInfo.getFullName()} ${this.sessionControl.getLastEventNameValid() != undefined ? " - " + this.sessionControl.getLastEventNameValid() : ""}`);
 
   }
-  cretePainel() {
-    let canvas: any = document.getElementById("canvas2");
-    let contextCanvas = canvas.getContext("2d");
-    let painel = new Painel(this.dao, contextCanvas, canvas, this, this.tooltip);
-    this.sequenciador.painel = painel;
-    this.painel = painel;
-    if (this.dao.listItemBuffer.length > 0) {
-      this.painel.reMake();
-    }
-  }
+  // cretePainel() {
+  //   let canvas: any = document.getElementById("canvas2");
+  //   let contextCanvas = canvas.getContext("2d");
+  //   let painel = new Painel(this.dao, contextCanvas, canvas, this, this.tooltip,1000);
+  //   this.sequenciador.painel = painel;
+  //   this.painel = painel;
+  //   if (this.dao.listItemBuffer.length > 0) {
+  //     this.painel.reMake();
+  //   }
+  // }
 
   generateContentOfTheModals() {
     this.genrateContentofModalRestartPanel()
@@ -971,7 +971,7 @@ class PageSoundSphereHome extends SimplePage {
   }
 
   genrateContentofModalJson3() {
-    console.log("genrateContentofModalJson3 ")
+    // console.log("genrateContentofModalJson3 ")
     let conteudoHTML = `
     <div class="ui ordered top attached steps">
     <div class="completed step">
@@ -1002,7 +1002,7 @@ class PageSoundSphereHome extends SimplePage {
     $('#modalJson3').html(conteudoHTML);
   }
   genrateContentofModalJson4() {
-    console.log("genrateContentofModalJson3 ")
+    // console.log("genrateContentofModalJson3 ")
     let conteudoHTML = `
     <div class="ui ordered top attached steps">
     <div class="completed step">

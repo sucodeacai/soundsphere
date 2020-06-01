@@ -14,8 +14,8 @@ class SessionControl {
         this.listEventSession[this.listEventSession.length - 1].author = author;
     }
     getLastEventNameValid(): string | undefined {
-        console.log("this.listEventSession: ")
-        console.log(this.listEventSession);
+        // console.log("this.listEventSession: ")
+        // console.log(this.listEventSession);
         if (this.listEventSession[this.listEventSession.length - 1].name) {
             return this.listEventSession[this.listEventSession.length - 1].name;
         } else if (this.listEventSession[this.listEventSession.length - 2]) {
@@ -25,8 +25,8 @@ class SessionControl {
         }
     }
     getLastAuthorValid(): string | undefined {
-        console.log("this.listEventSession: ")
-        console.log(this.listEventSession);
+        // console.log("this.listEventSession: ")
+        // console.log(this.listEventSession);
         if (this.listEventSession[this.listEventSession.length - 1].author) {
             return this.listEventSession[this.listEventSession.length - 1].author;
         } else if (this.listEventSession[this.listEventSession.length - 2]) {
