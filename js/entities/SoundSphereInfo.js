@@ -2,7 +2,7 @@
 class SoundSphereInfo {
     constructor() {
         this.name = "SoundSphere";
-        this.version = "1.4.20";
+        this.version = "1.4.22";
         this.change = [
             "1.4.1 -  Aplicação  de alteração visual aos Itens de mixagem de acordo com o descritor semantico. Ajuste do translatte 0.5",
             "1.4.2 - Mudança das cores das amostras e Criação do campo JSONFileStructureVersion.",
@@ -36,9 +36,10 @@ class SoundSphereInfo {
             "1.4.18 - Correção da mensagem comando de voz quando o microfone está desabilitado.",
             "1.4.19 - Mensagem com o tempo de inserção do item de mixage, exibição do tempo de acordo com a posição do cursor no painel e  uma mudança do calculo da posição do mouse em relação ao painel (offSet).  ",
             "1.4.20 - Alteração da velocidade de movimento do painel, exibição do tempo relativo ao curso no final do painel e posição de inserção de item.  ",
-            "1.4.21 - Implementação da passagem do parâmetro pixel por segundo via url, correção de inserção de item na trilha 79 e 80, melhorias na exibição de tempo relativo ao cursor.  "
+            "1.4.21 - Implementação da passagem do parâmetro pixel por segundo via url, correção de inserção de item na trilha 79 e 80, melhorias na exibição de tempo relativo ao cursor.  ",
+            "1.4.22 - BUG: alterar um item de mixagem, alterava também as propriedades do evento de log de inserção (corrigido), Aumento da largura do container, implementação de ícones descritivos e alteração da versão de exportação JSON.  "
         ];
-        this.JSONFileStructureVersion = "1.4.7";
+        this.JSONFileStructureVersion = "1.4.8";
         this.beta = true;
     }
     getVersion() {

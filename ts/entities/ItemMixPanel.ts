@@ -24,6 +24,7 @@ class ItemMixPanel {
   //  colorGray: string[] = ["rgb(0,0,0)", "rgb(112,128,144)", "	rgb(105,105,105)", "rgb(128,128,128)",
   //    "rgb(169,169,169)", "rgb(192,192,192)", "rgb(211,211,211)", "rgb(220,220,220)", "rgb(240,240,240)"]
   private volume: number
+  descriptiveIcon: string | undefined = '0';
   private idSemanticDescriptor: number | undefined = undefined
   private codeSemanticDescriptor: string | undefined = undefined
   seconds: number
@@ -43,6 +44,9 @@ class ItemMixPanel {
     this.height = 2;
     this.size = 0;
     this.style = 'black';
+  
+   
+
   }
 
 
@@ -87,13 +91,10 @@ class ItemMixPanel {
       painel.ctxCanvas.fillStyle = "#C0C0C0";
     }
     painel.ctxCanvas.fillRect(this.x, y, this.width, height);
-    // console.log("this.idSemanticDescriptor")
-    // console.log(this.idSemanticDescriptor)
-    // console.log(this.codeSemanticDescriptor)
+    let verticalSpacing = 12;
     if (this.idSemanticDescriptor != undefined) {
-
       if (painel.drawDescritor) {
-        let verticalSpacing = 12;
+
         for (var i = 0; i < 3; i++) {
           if (this.codeSemanticDescriptor![i] != undefined) {
             painel.ctxCanvas.save();
@@ -117,10 +118,13 @@ class ItemMixPanel {
         }
       }
     }
+    if (this.descriptiveIcon != '0' ) {
 
-
-
-
+        painel.ctxCanvas.drawImage(painel.pageSoundSphereHome.listIcons[this.descriptiveIcon!], this.x + 20,  this.y-15 ,30,30);
+     
+ 
+     
+    }
   }
 
   getRandomIntInclusive(min: number, max: number) {
@@ -322,6 +326,8 @@ class ItemMixPanel {
     // console.log(this.style)
     // console.log(other.style)
     return this.x === other.x &&
+      this.y === other.y &&
+      this.descriptiveIcon === other.descriptiveIcon &&
       this.y === other.y &&
       this.standardValue === other.standardValue &&
       this.solo === other.solo &&

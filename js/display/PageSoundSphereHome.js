@@ -5,6 +5,7 @@ class PageSoundSphereHome extends SimplePage {
     constructor(containerElement, titulo, soundSphereInfo, dao, sequenciador, tooltip, sessionControl) {
         super(containerElement, titulo, soundSphereInfo, dao, sequenciador);
         this.canvas = [];
+        this.descriptiveIcon = '0';
         this.contextCanvas = [];
         this.stopActived = true;
         //pauseActived = false
@@ -14,6 +15,7 @@ class PageSoundSphereHome extends SimplePage {
         this.idSelectedIcomAlbum = undefined;
         this.mouseInsideIconAlbum = undefined;
         this.mouseOutIconAlbum = true;
+        this.listIcons = [];
         // this.canvas = canvas;
         // this.contextCanvas = contextCanvas;
         this.tooltip = tooltip;
@@ -21,6 +23,33 @@ class PageSoundSphereHome extends SimplePage {
         this.startTemplate();
         this.generateHTML();
         this.showModalInitial();
+        this.loadIcons();
+    }
+    loadIcons() {
+        this.listIcons['agua'] = document.createElement("img");
+        this.listIcons['agua'].src = "img/icons/agua.png";
+        this.listIcons['agua_vazio'] = document.createElement("img");
+        this.listIcons['agua_vazio'].src = "img/icons/agua_vazio.png";
+        this.listIcons['cafe'] = document.createElement("img");
+        this.listIcons['cafe'].src = "img/icons/cafe.png";
+        this.listIcons['cafe_vazio'] = document.createElement("img");
+        this.listIcons['cafe_vazio'].src = "img/icons/cafe_vazio.png";
+        this.listIcons['laranja'] = document.createElement("img");
+        this.listIcons['laranja'].src = "img/icons/laranja.png";
+        this.listIcons['laranja_vazio'] = document.createElement("img");
+        this.listIcons['laranja_vazio'].src = "img/icons/laranja_vazio.png";
+        this.listIcons['limao'] = document.createElement("img");
+        this.listIcons['limao'].src = "img/icons/limao.png";
+        this.listIcons['limao_vazio'] = document.createElement("img");
+        this.listIcons['limao_vazio'].src = "img/icons/limao_vazio.png";
+        this.listIcons['maca'] = document.createElement("img");
+        this.listIcons['maca'].src = "img/icons/maca.png";
+        this.listIcons['maca_vazio'] = document.createElement("img");
+        this.listIcons['maca_vazio'].src = "img/icons/maca_vazio.png";
+        this.listIcons['tomate'] = document.createElement("img");
+        this.listIcons['tomate'].src = "img/icons/tomate.png";
+        this.listIcons['tomate_vazio'] = document.createElement("img");
+        this.listIcons['tomate_vazio'].src = "img/icons/tomate_vazio.png";
     }
     getNameClass() {
         return "PageSoundSphereHome";
@@ -39,50 +68,111 @@ class PageSoundSphereHome extends SimplePage {
         let conteudo;
         conteudo = `
     <div class="ui alternate stripe vertical segment">
-  <div class="ui stackable  aligned grid " style="margin-bottom: 5px;"  >
-    <div style="margin:0 auto !important; ">
-      <div class="ui  menu inverted" >
-        <a id="buttonVoiceComand" data-content="Comando de Voz" class="item">
-          <i class="microphone icon"></i>
-        </a>
-        <a id="buttonLoop" data-content="Loop" class="item">
-          <i class="refresh icon"></i>
-        </a>
-        <a id="buttonPlay" data-content="Play" class="item">
-          <i class="play icon"></i>
-        </a>
-        <a id="buttonPause" data-content="Pause" class="item">
-          <i class="pause icon"></i>
-        </a>
-        <a id="buttonStop" data-content="Stop" class="item active">
-          <i class="stop icon "></i>
-        </a>
-        <a id="restartPanel" data-content="Recomeçar" class="item">
-          <i class="file outlin icon"></i>
-        </a>
-        <a id="buttonUploadWav" data-content="Upload" class="item">
-          <i class="upload icon"></i>
-        </a>
-        <a id="buttonDownload" data-content="download" class="item">
-          <i class="download icon"></i>
-        </a>
-        <div class="right menu">
-    <div id="dropdownCamadas" class="ui dropdown item">
-      Camadas <i class="dropdown icon"></i>
-      <div class="menu">
-        <a data-value="0" class="item active">Descritor + Amplitude</a>
-        <a data-value="1" class="item ">Descritor</a>
-        <a data-value="2" class="item">Amplitude</a>
-      </div>
-    </div>
+        <div class="ui stackable  aligned grid " style="margin-bottom: 5px;">
+            <div style="margin:0 auto !important; ">
+                <div class="ui  menu inverted">
+                    <a id="buttonVoiceComand" data-content="Comando de Voz" class="item">
+                        <i class="microphone icon"></i>
+                    </a>
+                    <a id="buttonLoop" data-content="Loop" class="item">
+                        <i class="refresh icon"></i>
+                    </a>
+                    <a id="buttonPlay" data-content="Play" class="item">
+                        <i class="play icon"></i>
+                    </a>
+                    <a id="buttonPause" data-content="Pause" class="item">
+                        <i class="pause icon"></i>
+                    </a>
+                    <a id="buttonStop" data-content="Stop" class="item active">
+                        <i class="stop icon "></i>
+                    </a>
+                    <a id="restartPanel" data-content="Recomeçar" class="item">
+                        <i class="file outlin icon"></i>
+                    </a>
+                    <a id="buttonUploadWav" data-content="Upload" class="item">
+                        <i class="upload icon"></i>
+                    </a>
+                    <a id="buttonDownload" data-content="download" class="item">
+                        <i class="download icon"></i>
+                    </a>
+                    <div class="right menu">
+                        <div id="dropdownCamadas" class="ui dropdown item">
+                            Camadas <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a data-value="0" class="item active">Descritor + Amplitude</a>
+                                <a data-value="1" class="item ">Descritor</a>
+                                <a data-value="2" class="item">Amplitude</a>
+                            </div>
+                        </div>
+                        <div id="dropdownIcons" class="ui dropdown item">
+                            <input type="hidden" name="bebida">
+                            <div class="default text">Nenhuma bebida</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item" data-value="0">
+                                    Nenhuma bebida
+                                </div>
+                                <div class="item" data-value="agua">
+                                    <img class="ui mini avatar image" src="img/icons/agua.png">
+                                    Água 
+                                </div>
+                                <div class="item" data-value="agua_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/agua_vazio.png">
+                                    Água vazio
+                                </div>
+                                <div class="item" data-value="cafe">
+                                    <img class="ui mini avatar image" src="img/icons/cafe.png">
+                                    Café cheio
+                                </div>
+                                <div class="item" data-value="cafe_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/cafe_vazio.png">
+                                    Café vazio
+                                </div>
+                                <div class="item" data-value="limao">
+                                    <img class="ui mini avatar image" src="img/icons/limao.png">
+                                    Limão
+                                </div>
+                                <div class="item" data-value="limao_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/limao_vazio.png">
+                                    Limão vazio
+                                </div>
+                                <div class="item" data-value="maca">
+                                    <img class="ui mini avatar image" src="img/icons/maca.png">
+                                    Maçã
+                                </div>
+                                <div class="item" data-value="maca_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/maca_vazio.png">
+                                    Maçã vazio
+                                </div>
+                                <div class="item" data-value="laranja">
+                                    <img class="ui mini avatar image" src="img/icons/laranja.png">
+                                    Laranja
+                                </div>
+                                <div class="item" data-value="laranja_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/laranja_vazio.png">
+                                    Laranja vazio
+                                </div>
+                                <div class="item" data-value="tomate">
+                                    <img class="ui mini avatar image" src="img/icons/tomate.png">
+                                    Tomate
+                                </div>
+                                <div class="item" data-value="tomate_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/tomate_vazio.png">
+                                    Tomate vazio
+                                </div>
 
-  </div>
-      </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-      
-        `;
+    
+
+    `;
         return conteudo;
     }
     generatePainel() {
@@ -144,22 +234,22 @@ class PageSoundSphereHome extends SimplePage {
                     this.painel.drawDescritor = true;
                     this.painel.drawGradient = true;
                 }
-                if (value == 1) {
+                else if (value == 1) {
                     this.painel.drawDescritor = true;
                     this.painel.drawGradient = false;
                 }
-                if (value == 2) {
+                else {
                     this.painel.drawDescritor = false;
                     this.painel.drawGradient = true;
                 }
                 this.painel.reMake();
-                //console.log(" this.painel.drawGradient");
-                //console.log(this.painel.drawGradient);
-                //console.log("  this.painel.drawDescritor");
-                //console.log(this.painel.drawDescritor);
             }
         });
-        $("#dropdownCamadas").on('change', () => {
+        $('#dropdownIcons')
+            .dropdown({
+            onChange: (value) => {
+                this.descriptiveIcon = value;
+            }
         });
         this.voiceCommandMenuBar = new VoiceMenuBar(this.tooltip, this);
         this.voiceCommandModalOptions = new VoiceModalOptions(this.tooltip, this);

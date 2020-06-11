@@ -44,6 +44,7 @@ class PageLeitor {
           itemMixPanel.solo = Boolean(this.dao.listItemMixPanel[i][j].solo);
           itemMixPanel.setVolume(this.dao.listItemMixPanel[i][j].getVolume());
           itemMixPanel.color = this.dao.listItemMixPanel[i][j].color;
+          itemMixPanel.descriptiveIcon = this.dao.listItemMixPanel[i][j].descriptiveIcon == "0" ? "0" : this.dao.listItemMixPanel[i][j].descriptiveIcon;
           itemMixPanel.linha = this.dao.listItemMixPanel[i][j].linha + 1;
           if (this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()) {
             itemMixPanel.nameDescritor = (this.dao.getNameSemanticDescriptor(this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()));
@@ -96,6 +97,7 @@ class PageLeitor {
       <th>Solo/Mute</th>
       <th>Excluida</th>
       <th>Volume</th>
+      <th>Ícone descritivo</th>
       <th>Linha</th>
       <th>Cor</th>
       <th>Descritor</th>
@@ -157,6 +159,7 @@ class PageLeitor {
         <th>Solo/Mute</th>
         <th>Excluida</th>
         <th>Volume</th>
+        <th>Ícone Descritivo</th>
         <th>Linha</th>
         <th>Cor</th>
         <th>Descritor</th>
@@ -218,53 +221,53 @@ class PageLeitor {
     });
 
     const array1 = [1, 2, 3, 4];
-   
-    const reducerAtivos = (accumulator, element) =>{
-      if(!element.excluded){
-        accumulator = accumulator+1;
+
+    const reducerAtivos = (accumulator, element) => {
+      if (!element.excluded) {
+        accumulator = accumulator + 1;
       }
       return accumulator;
-    } 
+    }
     //Se o elemento nao for excluido  verifica o seu tempo final
     //par se seja pego o tempo total da mixagem
-    const reducerTempoTotal = (accumulator, element) =>{
-      if(element.endTime>accumulator && !element.excluded){
+    const reducerTempoTotal = (accumulator, element) => {
+      if (element.endTime > accumulator && !element.excluded) {
         accumulator = element.endTime;
       }
       return accumulator;
-    } 
+    }
     let listaEventItemMixPanel = this.dao.sessionControl.getAllEventItemMixPanel();
     //Conta quantos itens foram inseridos
-    const reducerInseridos = (accumulator, element) =>{
-      if(element.eventCrud ==0){
-        accumulator = accumulator+1;
+    const reducerInseridos = (accumulator, element) => {
+      if (element.eventCrud == 0) {
+        accumulator = accumulator + 1;
       }
       return accumulator;
-    } 
-        //Conta quantos itens foram alterados
-    const reducerAlterados = (accumulator, element) =>{
-      if(element.eventCrud ==2){
-        accumulator = accumulator+1;
+    }
+    //Conta quantos itens foram alterados
+    const reducerAlterados = (accumulator, element) => {
+      if (element.eventCrud == 2) {
+        accumulator = accumulator + 1;
       }
       return accumulator;
-    } 
-        //Conta quantos itens foram excluidos
-    const reducerExcluidos = (accumulator, element) =>{
-      if(element.eventCrud ==1){
-        accumulator = accumulator+1;
+    }
+    //Conta quantos itens foram excluidos
+    const reducerExcluidos = (accumulator, element) => {
+      if (element.eventCrud == 1) {
+        accumulator = accumulator + 1;
       }
       return accumulator;
-    } 
+    }
     //this.dao.sessionControl.listEventSession.reduce(reducerInseridos,0)
     dadosMixagem += `
       <tr>
       <td>${this.dao.listItemBuffer.length}</td>
       <td>${amostrasUtilizadas.length}</td>
-      <td>${listaOrdenada.reduce(reducerTempoTotal,0)}</td>
-      <td>${listaOrdenada.reduce(reducerAtivos,0)}</td>
-      <td>${listaEventItemMixPanel.reduce(reducerInseridos,0)}</td>
-      <td>${listaEventItemMixPanel.reduce(reducerAlterados,0)}</td>
-      <td>${listaEventItemMixPanel.reduce(reducerExcluidos,0)}</td>
+      <td>${listaOrdenada.reduce(reducerTempoTotal, 0)}</td>
+      <td>${listaOrdenada.reduce(reducerAtivos, 0)}</td>
+      <td>${listaEventItemMixPanel.reduce(reducerInseridos, 0)}</td>
+      <td>${listaEventItemMixPanel.reduce(reducerAlterados, 0)}</td>
+      <td>${listaEventItemMixPanel.reduce(reducerExcluidos, 0)}</td>
     
       
   
@@ -283,6 +286,7 @@ class PageLeitor {
         <td>${element.solo ? `Solo` : `Mute`}</td>
         <td>${element.excluded ? `sim` : `não`}</td>
         <td>${element.getVolume()}</td>
+        <td>${element.descriptiveIcon}</td>
         <td>${element.linha}</td>
         <td style="color:${element.color}">${element.color}</td>
         <td>${element.nameDescritor}</td>
@@ -323,6 +327,7 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
+        <td>${element2.itemMixPanel.descriptiveIcon == "0" ? element2.itemMixPanel.descriptiveIcon : "nenhum"}</td>
         <td>${element2.itemMixPanel.linha}</td>
         <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
       

@@ -38,6 +38,7 @@ class PageLeitor {
                     itemMixPanel.solo = Boolean(this.dao.listItemMixPanel[i][j].solo);
                     itemMixPanel.setVolume(this.dao.listItemMixPanel[i][j].getVolume());
                     itemMixPanel.color = this.dao.listItemMixPanel[i][j].color;
+                    itemMixPanel.descriptiveIcon = this.dao.listItemMixPanel[i][j].descriptiveIcon == "0" ? "0" : this.dao.listItemMixPanel[i][j].descriptiveIcon;
                     itemMixPanel.linha = this.dao.listItemMixPanel[i][j].linha + 1;
                     if (this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()) {
                         itemMixPanel.nameDescritor = (this.dao.getNameSemanticDescriptor(this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()));
@@ -88,6 +89,7 @@ class PageLeitor {
       <th>Solo/Mute</th>
       <th>Excluida</th>
       <th>Volume</th>
+      <th>Ícone descritivo</th>
       <th>Linha</th>
       <th>Cor</th>
       <th>Descritor</th>
@@ -149,6 +151,7 @@ class PageLeitor {
         <th>Solo/Mute</th>
         <th>Excluida</th>
         <th>Volume</th>
+        <th>Ícone Descritivo</th>
         <th>Linha</th>
         <th>Cor</th>
         <th>Descritor</th>
@@ -262,6 +265,7 @@ class PageLeitor {
         <td>${element.solo ? `Solo` : `Mute`}</td>
         <td>${element.excluded ? `sim` : `não`}</td>
         <td>${element.getVolume()}</td>
+        <td>${element.descriptiveIcon}</td>
         <td>${element.linha}</td>
         <td style="color:${element.color}">${element.color}</td>
         <td>${element.nameDescritor}</td>
@@ -298,6 +302,7 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
+        <td>${element2.itemMixPanel.descriptiveIcon == "0" ? element2.itemMixPanel.descriptiveIcon : "nenhum"}</td>
         <td>${element2.itemMixPanel.linha}</td>
         <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
       

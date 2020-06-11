@@ -1,6 +1,7 @@
+
 class PageSoundSphereHome extends SimplePage {
   canvas: any = [];
-
+  descriptiveIcon:string = '0';
   contextCanvas: any = [];
   stopActived = true;
   //pauseActived = false
@@ -15,6 +16,7 @@ class PageSoundSphereHome extends SimplePage {
   tooltip: Tooltip
   painel!: Painel
   sessionControl: SessionControl;
+  listIcons:any =[];
   //itemOptionitemOptionEnabled: boolean = true;
   // constructor(containerElement: JQuery, titulo: string, soundSphereInfo: SoundSphereInfo, dao: DAO, sequenciador: any, canvas: any, contextCanvas: any) {
   constructor(containerElement: JQuery, titulo: string, soundSphereInfo: SoundSphereInfo, dao: DAO, sequenciador: Sequenciador, tooltip: Tooltip, sessionControl: SessionControl) {
@@ -26,6 +28,33 @@ class PageSoundSphereHome extends SimplePage {
     this.startTemplate()
     this.generateHTML()
     this.showModalInitial()
+    this.loadIcons();
+  }
+  loadIcons(){
+    this.listIcons['agua'] = document.createElement("img");
+    this.listIcons['agua'].src = "img/icons/agua.png";
+    this.listIcons['agua_vazio'] = document.createElement("img");
+    this.listIcons['agua_vazio'].src = "img/icons/agua_vazio.png";
+    this.listIcons['cafe'] = document.createElement("img");
+    this.listIcons['cafe'].src = "img/icons/cafe.png";
+    this.listIcons['cafe_vazio'] = document.createElement("img");
+    this.listIcons['cafe_vazio'].src = "img/icons/cafe_vazio.png";
+    this.listIcons['laranja'] = document.createElement("img");
+    this.listIcons['laranja'].src = "img/icons/laranja.png";
+    this.listIcons['laranja_vazio'] = document.createElement("img");
+    this.listIcons['laranja_vazio'].src = "img/icons/laranja_vazio.png";
+    this.listIcons['limao'] = document.createElement("img");
+    this.listIcons['limao'].src = "img/icons/limao.png";
+    this.listIcons['limao_vazio'] = document.createElement("img");
+    this.listIcons['limao_vazio'].src = "img/icons/limao_vazio.png";
+    this.listIcons['maca'] = document.createElement("img");
+    this.listIcons['maca'].src = "img/icons/maca.png";
+    this.listIcons['maca_vazio'] = document.createElement("img");
+    this.listIcons['maca_vazio'].src = "img/icons/maca_vazio.png";
+    this.listIcons['tomate'] = document.createElement("img");
+    this.listIcons['tomate'].src = "img/icons/tomate.png";
+    this.listIcons['tomate_vazio'] = document.createElement("img");
+    this.listIcons['tomate_vazio'].src = "img/icons/tomate_vazio.png";
   }
   getNameClass(): string {
     return "PageSoundSphereHome"
@@ -47,50 +76,111 @@ class PageSoundSphereHome extends SimplePage {
     let conteudo;
     conteudo = `
     <div class="ui alternate stripe vertical segment">
-  <div class="ui stackable  aligned grid " style="margin-bottom: 5px;"  >
-    <div style="margin:0 auto !important; ">
-      <div class="ui  menu inverted" >
-        <a id="buttonVoiceComand" data-content="Comando de Voz" class="item">
-          <i class="microphone icon"></i>
-        </a>
-        <a id="buttonLoop" data-content="Loop" class="item">
-          <i class="refresh icon"></i>
-        </a>
-        <a id="buttonPlay" data-content="Play" class="item">
-          <i class="play icon"></i>
-        </a>
-        <a id="buttonPause" data-content="Pause" class="item">
-          <i class="pause icon"></i>
-        </a>
-        <a id="buttonStop" data-content="Stop" class="item active">
-          <i class="stop icon "></i>
-        </a>
-        <a id="restartPanel" data-content="Recomeçar" class="item">
-          <i class="file outlin icon"></i>
-        </a>
-        <a id="buttonUploadWav" data-content="Upload" class="item">
-          <i class="upload icon"></i>
-        </a>
-        <a id="buttonDownload" data-content="download" class="item">
-          <i class="download icon"></i>
-        </a>
-        <div class="right menu">
-    <div id="dropdownCamadas" class="ui dropdown item">
-      Camadas <i class="dropdown icon"></i>
-      <div class="menu">
-        <a data-value="0" class="item active">Descritor + Amplitude</a>
-        <a data-value="1" class="item ">Descritor</a>
-        <a data-value="2" class="item">Amplitude</a>
-      </div>
-    </div>
+        <div class="ui stackable  aligned grid " style="margin-bottom: 5px;">
+            <div style="margin:0 auto !important; ">
+                <div class="ui  menu inverted">
+                    <a id="buttonVoiceComand" data-content="Comando de Voz" class="item">
+                        <i class="microphone icon"></i>
+                    </a>
+                    <a id="buttonLoop" data-content="Loop" class="item">
+                        <i class="refresh icon"></i>
+                    </a>
+                    <a id="buttonPlay" data-content="Play" class="item">
+                        <i class="play icon"></i>
+                    </a>
+                    <a id="buttonPause" data-content="Pause" class="item">
+                        <i class="pause icon"></i>
+                    </a>
+                    <a id="buttonStop" data-content="Stop" class="item active">
+                        <i class="stop icon "></i>
+                    </a>
+                    <a id="restartPanel" data-content="Recomeçar" class="item">
+                        <i class="file outlin icon"></i>
+                    </a>
+                    <a id="buttonUploadWav" data-content="Upload" class="item">
+                        <i class="upload icon"></i>
+                    </a>
+                    <a id="buttonDownload" data-content="download" class="item">
+                        <i class="download icon"></i>
+                    </a>
+                    <div class="right menu">
+                        <div id="dropdownCamadas" class="ui dropdown item">
+                            Camadas <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a data-value="0" class="item active">Descritor + Amplitude</a>
+                                <a data-value="1" class="item ">Descritor</a>
+                                <a data-value="2" class="item">Amplitude</a>
+                            </div>
+                        </div>
+                        <div id="dropdownIcons" class="ui dropdown item">
+                            <input type="hidden" name="bebida">
+                            <div class="default text">Nenhuma bebida</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item" data-value="0">
+                                    Nenhuma bebida
+                                </div>
+                                <div class="item" data-value="agua">
+                                    <img class="ui mini avatar image" src="img/icons/agua.png">
+                                    Água 
+                                </div>
+                                <div class="item" data-value="agua_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/agua_vazio.png">
+                                    Água vazio
+                                </div>
+                                <div class="item" data-value="cafe">
+                                    <img class="ui mini avatar image" src="img/icons/cafe.png">
+                                    Café cheio
+                                </div>
+                                <div class="item" data-value="cafe_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/cafe_vazio.png">
+                                    Café vazio
+                                </div>
+                                <div class="item" data-value="limao">
+                                    <img class="ui mini avatar image" src="img/icons/limao.png">
+                                    Limão
+                                </div>
+                                <div class="item" data-value="limao_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/limao_vazio.png">
+                                    Limão vazio
+                                </div>
+                                <div class="item" data-value="maca">
+                                    <img class="ui mini avatar image" src="img/icons/maca.png">
+                                    Maçã
+                                </div>
+                                <div class="item" data-value="maca_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/maca_vazio.png">
+                                    Maçã vazio
+                                </div>
+                                <div class="item" data-value="laranja">
+                                    <img class="ui mini avatar image" src="img/icons/laranja.png">
+                                    Laranja
+                                </div>
+                                <div class="item" data-value="laranja_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/laranja_vazio.png">
+                                    Laranja vazio
+                                </div>
+                                <div class="item" data-value="tomate">
+                                    <img class="ui mini avatar image" src="img/icons/tomate.png">
+                                    Tomate
+                                </div>
+                                <div class="item" data-value="tomate_vazio">
+                                    <img class="ui mini avatar image" src="img/icons/tomate_vazio.png">
+                                    Tomate vazio
+                                </div>
 
-  </div>
-      </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-      
-        `;
+    
+
+    `;
     return conteudo;
 
   }
@@ -154,28 +244,28 @@ class PageSoundSphereHome extends SimplePage {
           if (value == 0) {
             this.painel.drawDescritor = true;
             this.painel.drawGradient = true;
-          }
+          }else
           if (value == 1) {
             this.painel.drawDescritor = true;
             this.painel.drawGradient = false;
-          }
-          if (value == 2) {
+          }else
+         {
             this.painel.drawDescritor = false;
             this.painel.drawGradient = true;
           }
           this.painel.reMake();
-    //console.log(" this.painel.drawGradient");
-    //console.log(this.painel.drawGradient);
-    //console.log("  this.painel.drawDescritor");
-    //console.log(this.painel.drawDescritor);
-
+        }
+      })
+      ;
+    $('#dropdownIcons')
+      .dropdown({
+        onChange: (value: any) => {
+          this.descriptiveIcon = value;
         }
       })
       ;
 
-    $("#dropdownCamadas").on('change', () => {
-
-    });
+   
 
     this.voiceCommandMenuBar = new VoiceMenuBar(this.tooltip, this);
     this.voiceCommandModalOptions = new VoiceModalOptions(this.tooltip, this);
@@ -223,13 +313,13 @@ class PageSoundSphereHome extends SimplePage {
       this.closeModalDownload()
     });
     $('#buttonDownloadJson').on('click', () => {
-      this.dao.downloadJSON($("#nameFile").val(),$("#nameAuthor").val());
+      this.dao.downloadJSON($("#nameFile").val(), $("#nameAuthor").val());
       this.closeModalDownload();
       // this.generateHTML();
       this.atualizaTitulo();
     });
     $('#buttonDownloadJsonWav').on('click', () => {
-      this.dao.downloadJSON($("#nameFile").val(),$("#nameAuthor").val());
+      this.dao.downloadJSON($("#nameFile").val(), $("#nameAuthor").val());
       this.sequenciador.startDownload(this.closeModalDownload, $("#nameFile").val())
       // this.generateHTML();
       this.atualizaTitulo();
@@ -323,7 +413,7 @@ class PageSoundSphereHome extends SimplePage {
       // this.pauseActived = false;
     },
       () => {
-  //console.log("Terminou de executar")
+        //console.log("Terminou de executar")
         $('#buttonPlay').removeClass("active");
         if (this.stopActived) {
           $('#buttonStop').addClass("active");
@@ -337,7 +427,7 @@ class PageSoundSphereHome extends SimplePage {
   pauseMixagem() {
     this.panelReleased = true
     this.sequenciador.pause(() => {
-//console.log("chamou  o cakkbacj do pause")
+      //console.log("chamou  o cakkbacj do pause")
       $('#buttonPause').addClass("active");
       $('#buttonStop').removeClass("active");
       //this.pauseActived = true
@@ -378,7 +468,7 @@ class PageSoundSphereHome extends SimplePage {
       this.renderAlbum();
     });
     $('.ui.segment.contentIconWav').on('mouseleave', () => {
-//console.log("mouse leave");
+      //console.log("mouse leave");
       this.sequenciador.stopOneSound()
       this.mouseInsideIconAlbum = undefined;
       this.mouseOutIconAlbum = true;
@@ -447,25 +537,25 @@ class PageSoundSphereHome extends SimplePage {
 
   }
   reloadAlbum() {
-//     let conoteudoHTML = `<br>
-//     <h2 class="ui header centered">
-//       <div style=" user-select: none;"  unselectable="on" id="titulo">
-//         <font color="${this.soundSphereInfo.getColorTitle()}">
-//         <p id="valuetitulo"  style="-moz-user-select:none;  user-select: none;" unselectable="on">
-//           ${this.soundSphereInfo.getFullName()}`;
-//     conoteudoHTML += this.sessionControl.getLastEventNameValid() != undefined ? " - " + this.sessionControl.getLastEventNameValid() : ""
-//     conoteudoHTML += `</p>
-//       </div>
-//     </h2>
-// `+ this.generateAttributes() + `
-// <br/>
-// `+ this.generateActions() + `<br/>` +
-//       `<div id="contentAlbum">` +
-//       this.generateAlbum() +
-//       `</div">`
-//     this.containerElement.html(conoteudoHTML);
-    $("#divActions").html(  this.generateActions()  );
-    $("#contentAlbum").html(  this.generateAlbum() );
+    //     let conoteudoHTML = `<br>
+    //     <h2 class="ui header centered">
+    //       <div style=" user-select: none;"  unselectable="on" id="titulo">
+    //         <font color="${this.soundSphereInfo.getColorTitle()}">
+    //         <p id="valuetitulo"  style="-moz-user-select:none;  user-select: none;" unselectable="on">
+    //           ${this.soundSphereInfo.getFullName()}`;
+    //     conoteudoHTML += this.sessionControl.getLastEventNameValid() != undefined ? " - " + this.sessionControl.getLastEventNameValid() : ""
+    //     conoteudoHTML += `</p>
+    //       </div>
+    //     </h2>
+    // `+ this.generateAttributes() + `
+    // <br/>
+    // `+ this.generateActions() + `<br/>` +
+    //       `<div id="contentAlbum">` +
+    //       this.generateAlbum() +
+    //       `</div">`
+    //     this.containerElement.html(conoteudoHTML);
+    $("#divActions").html(this.generateActions());
+    $("#contentAlbum").html(this.generateAlbum());
     // this.divModal.modal('setting', {
     //   autofocus: false,
     //   closable: false
@@ -473,7 +563,7 @@ class PageSoundSphereHome extends SimplePage {
     this.generateContentOfTheModals();
     this.setSettingsActions();
     this.setSettingsAttributes();
-   // this.cretePainel();
+    // this.cretePainel();
 
 
   }
@@ -653,7 +743,7 @@ class PageSoundSphereHome extends SimplePage {
       this.sequenciador.playOneSound(this.itemMixOption!.idBuffer, (function () { }))
     });
     $('#playAudioComOptions').on('mouseout', () => {
-//console.log("mouse out")
+      //console.log("mouse out")
       this.sequenciador.stopOneSound()
     });
 
@@ -711,7 +801,7 @@ class PageSoundSphereHome extends SimplePage {
       this.itemMixOption!.startTime = parseFloat(String($('#startTime').val()));
       this.itemMixOption!.endTime = this.itemMixOption!.startTime + this.itemMixOption!.seconds;
       $('#endTime').val(this.itemMixOption!.startTime + this.itemMixOption!.seconds);
-//console.log("startTime time p/: " + this.itemMixOption!.startTime);
+      //console.log("startTime time p/: " + this.itemMixOption!.startTime);
       $('#formOptions').form('validate form');
     });
     //Evento ao alterar o fim
@@ -719,7 +809,7 @@ class PageSoundSphereHome extends SimplePage {
       this.itemMixOption!.endTime = parseFloat(String($('#endTime').val()));
       this.itemMixOption!.startTime = this.itemMixOption!.endTime - this.itemMixOption!.seconds;
       $('#startTime').val(this.itemMixOption!.endTime - this.itemMixOption!.seconds);
-//console.log("end time p/: " + this.itemMixOption!.endTime);
+      //console.log("end time p/: " + this.itemMixOption!.endTime);
       $('#formOptions').form('validate form');
     });
 
@@ -734,12 +824,12 @@ class PageSoundSphereHome extends SimplePage {
 
     $('#buttonOkModal').on('click', () => {
       if ($('#formOptions').form('is valid')) {
-  //console.log("Pode fechar");
+        //console.log("Pode fechar");
         this.painel.updateItemMixPanel(this.itemMixOption!);
         this.closeModalOptions();
         //painel.updateItem(this.itemMixOption);
       } else {
-  //console.log(" n Pode fechar");
+        //console.log(" n Pode fechar");
         $('#formOptions').form('validate form');
       }
     });
@@ -756,7 +846,7 @@ class PageSoundSphereHome extends SimplePage {
       if (this.itemMixOption!.getVolume() > 0) {
         $('#barVolume').progress('set duration', 0).progress('decrement', 10);
         this.itemMixOption!.setVolume(this.itemMixOption!.getVolume() - 10);
-  //console.log("Minus this.itemMixOption!.getVolume(): " + this.itemMixOption!.getVolume());
+        //console.log("Minus this.itemMixOption!.getVolume(): " + this.itemMixOption!.getVolume());
       }
       $('#buttonMinus').prop("disabled", false);
       $('#buttonPlus').prop("disabled", false);
@@ -770,7 +860,7 @@ class PageSoundSphereHome extends SimplePage {
       if (this.itemMixOption!.getVolume() < 200) {
         $('#barVolume').progress('set duration', 0).progress('increment', 10);
         this.itemMixOption!.setVolume(this.itemMixOption!.getVolume() + 10);
-  //console.log("Plus this.itemMixOption!.getVolume(): " + this.itemMixOption!.getVolume());
+        //console.log("Plus this.itemMixOption!.getVolume(): " + this.itemMixOption!.getVolume());
       }
       $('#buttonPlus').prop("disabled", false);
       $('#buttonMinus').prop("disabled", false);

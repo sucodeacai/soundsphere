@@ -3,7 +3,26 @@ class DAOHome extends DAO {
         return new SoundSphereBD(listItemBuffer, listItemMixPanel, this.listSemanticDescriptors, this.soundSphereInfo, this.sessionControl);
     }
     pushItemMixPanel(itemMixPanel: ItemMixPanel) {
-        this.sessionControl.addEventItemMixPanel(new EventItemMixPanel(itemMixPanel, EventsCRUD.INSERT));
+       let newItem = new ItemMixPanel();
+       newItem.x = itemMixPanel.x;
+       newItem.y = itemMixPanel.y;
+       newItem.width = itemMixPanel.width;
+       newItem.height = itemMixPanel.height;
+       newItem.startTime = itemMixPanel.startTime;
+       newItem.endTime = itemMixPanel.endTime;
+       newItem.color = itemMixPanel.color;
+       newItem.seconds = itemMixPanel.seconds;
+       newItem.setVolume(itemMixPanel.getVolume())
+       newItem.solo = itemMixPanel.solo;
+       newItem.linha = itemMixPanel.linha;
+       newItem.setIdSemanticDescriptor(itemMixPanel.getidSemanticDescriptor())
+       newItem.setCodeSemanticDescriptor(itemMixPanel.getCodeSemanticDescriptor())
+       newItem.id = itemMixPanel.id;
+       newItem.descriptiveIcon = itemMixPanel.descriptiveIcon;
+       newItem.idBuffer = itemMixPanel.idBuffer;
+    
+        this.sessionControl.addEventItemMixPanel(new EventItemMixPanel(newItem, EventsCRUD.INSERT));
+        
         if (this.listItemMixPanel[itemMixPanel.linha] == undefined) {
             this.listItemMixPanel[itemMixPanel.linha] = new Array();
             this.listItemMixPanel[itemMixPanel.linha].push(itemMixPanel);
@@ -38,6 +57,8 @@ class DAOHome extends DAO {
         }
     }
     updateItemMixPane(itemMixPanel: ItemMixPanel, linha: number, newLinha: number, sizeTrail: number) {
+        console.log("LINHA: "+linha+" new linha: "+newLinha);
+        console.log("Description:: "+itemMixPanel.descriptiveIcon);
         let alteração = false;
         if (linha == newLinha) {
             for (let index = 0; index < this.listItemMixPanel[linha].length; index++) {
@@ -45,6 +66,8 @@ class DAOHome extends DAO {
                 if (this.listItemMixPanel[linha][index].id == itemMixPanel.id) {
                     //Se teve alguma alteração no item ele faz a alteração e retorna true iformando que teve alterações
                     //se nao ele retorna false
+                    console.log("Entrou no  id == id");
+                    console.log("this.listItemMixPanel[linha][index].descriptiveIcon: "+this.listItemMixPanel[linha][index].descriptiveIcon);
                     if (!this.listItemMixPanel[linha][index].equals(itemMixPanel)) {
 
                         alteração = true;
@@ -57,6 +80,8 @@ class DAOHome extends DAO {
                         this.listItemMixPanel[linha][index].x = itemMixPanel.x;
                         this.listItemMixPanel[linha][index].endTime = itemMixPanel.endTime;
                         this.listItemMixPanel[linha][index].solo = itemMixPanel.solo;
+                        console.log("xxxitemMixPanel.descriptiveIcon: "+itemMixPanel.descriptiveIcon);
+                        this.listItemMixPanel[linha][index].descriptiveIcon = itemMixPanel.descriptiveIcon;
                         this.listItemMixPanel[linha][index].changeStardValues();
                     }
                 }
@@ -84,6 +109,7 @@ class DAOHome extends DAO {
             }
         }
         if (alteração) {
+            console.log("TEVE ALTERAÇão");
             this.sessionControl.addEventItemMixPanel(new EventItemMixPanel(itemMixPanel, EventsCRUD.UPDATE));
             return alteração;
         } else {

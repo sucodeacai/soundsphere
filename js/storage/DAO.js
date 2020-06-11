@@ -268,6 +268,7 @@ class DAO {
                 itemMixPanel.size = element.itemMixPanel.size;
                 itemMixPanel.linha = element.itemMixPanel.linha;
                 itemMixPanel.style = element.itemMixPanel.style;
+                itemMixPanel.descriptiveIcon = element.itemMixPanel.descriptiveIcon;
                 itemMixPanel.changeStardValues();
                 itemMixPanel.setIdSemanticDescriptor(element.itemMixPanel.idSemanticDescriptor);
                 console.log("Syncronize: " + element.itemMixPanel.codeSemanticDescriptor);
@@ -325,6 +326,7 @@ class DAO {
                     itemMixPanel.size = listItemMixPanel[i][j].size;
                     itemMixPanel.linha = listItemMixPanel[i][j].linha;
                     itemMixPanel.style = listItemMixPanel[i][j].style;
+                    itemMixPanel.descriptiveIcon = listItemMixPanel[i][j].descriptiveIcon;
                     itemMixPanel.changeStardValues();
                     itemMixPanel.setIdSemanticDescriptor(listItemMixPanel[i][j].idSemanticDescriptor);
                     itemMixPanel.setCodeSemanticDescriptor(listItemMixPanel[i][j].codeSemanticDescriptor);

@@ -64,7 +64,7 @@ class Painel {
   firstPositionY: number = 0;
   moved: boolean = false;
 
-
+  
   maxDisplacingXAxis: number;
   maxDisplacingYAxis: number;
   canvas: any;
@@ -117,32 +117,20 @@ class Painel {
     if (this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
       //Se as opções do painel tiverem ativada ele pega o item que esta sobre o mouse e
       //abre o modal
-      if (!this.moved && (this.pageSoundSphereHome.itemOptionEnabled)) {
-        //console.log("actionMouseUp Não moveu");
-        var itemMixTemp = this.getItemMix();
-        //console.log("Item Mix TEmpo")
-        //console.log(itemMixTemp)
-        //console.log("Item Mix TEmpo")
-        //console.log("dao Item Mix TEmpo")
-        //console.log(this.DAOHome.listItemMixPanel)
-        //console.log("dao Item Mix TEmpo")
+      if(this.pageSoundSphereHome.descriptiveIcon != '0'){
+        let itemMixTemp = this.getItemMix();
+        if(itemMixTemp){
+          this.setItemMixTemp(itemMixTemp);
+          this.pageSoundSphereHome.itemMixOption!.descriptiveIcon = this.pageSoundSphereHome.descriptiveIcon;
+          this.DAOHome.updateItemMixPane(this.pageSoundSphereHome.itemMixOption!, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.sizeTrail)
+          console.log("ALTEROU O descriptive icon: "+itemMixTemp.descriptiveIcon);
+        }else{
+          this.tooltip.showMessage("O icone descritivo só pode ser inserido sobre um item de mixagem.");
+        }
+      }else if (!this.moved && (this.pageSoundSphereHome.itemOptionEnabled)) {
+        let itemMixTemp = this.getItemMix();
         if (itemMixTemp) {
-          this.pageSoundSphereHome.itemMixOption = new ItemMixPanel();
-          this.pageSoundSphereHome.itemMixOption.x = itemMixTemp.x;
-          this.pageSoundSphereHome.itemMixOption.y = itemMixTemp.y;
-          this.pageSoundSphereHome.itemMixOption.width = itemMixTemp.width;
-          this.pageSoundSphereHome.itemMixOption.height = itemMixTemp.height;
-          this.pageSoundSphereHome.itemMixOption.startTime = itemMixTemp.startTime;
-          this.pageSoundSphereHome.itemMixOption.endTime = itemMixTemp.endTime;
-          this.pageSoundSphereHome.itemMixOption.color = itemMixTemp.color;
-          this.pageSoundSphereHome.itemMixOption.seconds = itemMixTemp.seconds;
-          this.pageSoundSphereHome.itemMixOption.setVolume(itemMixTemp.getVolume())
-          this.pageSoundSphereHome.itemMixOption.solo = itemMixTemp.solo;
-          this.pageSoundSphereHome.itemMixOption.linha = itemMixTemp.linha;
-          this.pageSoundSphereHome.itemMixOption.setIdSemanticDescriptor(itemMixTemp.getidSemanticDescriptor())
-          this.pageSoundSphereHome.itemMixOption.setCodeSemanticDescriptor(itemMixTemp.getCodeSemanticDescriptor())
-          this.pageSoundSphereHome.itemMixOption.id = itemMixTemp.id;
-          this.pageSoundSphereHome.itemMixOption.idBuffer = itemMixTemp.idBuffer;
+          this.setItemMixTemp(itemMixTemp);
           this.pageSoundSphereHome.showModalOptions();
         }
       } else if (!this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum != undefined && (!this.pageSoundSphereHome.itemOptionEnabled)) {
@@ -172,6 +160,27 @@ class Painel {
     }
     this.endMove();
   };
+  //Função para setar um item mix temporario
+  setItemMixTemp(itemMixTemp:any){
+    this.pageSoundSphereHome.itemMixOption = new ItemMixPanel();
+    this.pageSoundSphereHome.itemMixOption.x = itemMixTemp.x;
+    this.pageSoundSphereHome.itemMixOption.y = itemMixTemp.y;
+    this.pageSoundSphereHome.itemMixOption.width = itemMixTemp.width;
+    this.pageSoundSphereHome.itemMixOption.height = itemMixTemp.height;
+    this.pageSoundSphereHome.itemMixOption.startTime = itemMixTemp.startTime;
+    this.pageSoundSphereHome.itemMixOption.endTime = itemMixTemp.endTime;
+    this.pageSoundSphereHome.itemMixOption.color = itemMixTemp.color;
+    this.pageSoundSphereHome.itemMixOption.seconds = itemMixTemp.seconds;
+    this.pageSoundSphereHome.itemMixOption.setVolume(itemMixTemp.getVolume())
+    this.pageSoundSphereHome.itemMixOption.solo = itemMixTemp.solo;
+    this.pageSoundSphereHome.itemMixOption.linha = itemMixTemp.linha;
+    this.pageSoundSphereHome.itemMixOption.setIdSemanticDescriptor(itemMixTemp.getidSemanticDescriptor())
+    this.pageSoundSphereHome.itemMixOption.setCodeSemanticDescriptor(itemMixTemp.getCodeSemanticDescriptor())
+    this.pageSoundSphereHome.itemMixOption.id = itemMixTemp.id;
+    this.pageSoundSphereHome.itemMixOption.descriptiveIcon = itemMixTemp.descriptiveIcon;
+    this.pageSoundSphereHome.itemMixOption.idBuffer = itemMixTemp.idBuffer;
+
+  }
   //FUnção que gerencia o movimento do painel caso a opção move seja verdadeira
   //de modo que se o usuário estiver clicando e arrastando ele movimenta o painel
   actionMouseMove(e: any) {
@@ -233,7 +242,8 @@ class Painel {
 
 
             var evt = e || event;
-            this.reMake();
+           // requestAnimationFrame(() => { this.reMake() });
+           this.reMake();
             //Tempo no painel indicação de tempo do painel
             //Verifica limite do painel para que a indicação do tempo do painel 
             //não passe do painel
@@ -252,7 +262,7 @@ class Painel {
 
               }
             }
-
+            
             this.ctxCanvas.stroke();
           }
 
