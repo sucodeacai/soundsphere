@@ -6,7 +6,7 @@ class SoundSphereInfo {
     beta: boolean
     constructor(){
         this.name = "SoundSphere"
-        this.version = "1.4.22"
+        this.version = "1.4.24"
         this.change = [
             "1.4.1 -  Aplicação  de alteração visual aos Itens de mixagem de acordo com o descritor semantico. Ajuste do translatte 0.5"
             ,"1.4.2 - Mudança das cores das amostras e Criação do campo JSONFileStructureVersion."
@@ -42,6 +42,9 @@ class SoundSphereInfo {
             ,"1.4.20 - Alteração da velocidade de movimento do painel, exibição do tempo relativo ao curso no final do painel e posição de inserção de item.  "
             ,"1.4.21 - Implementação da passagem do parâmetro pixel por segundo via url, correção de inserção de item na trilha 79 e 80, melhorias na exibição de tempo relativo ao cursor.  "
             ,"1.4.22 - BUG: alterar um item de mixagem, alterava também as propriedades do evento de log de inserção (corrigido), Aumento da largura do container, implementação de ícones descritivos e alteração da versão de exportação JSON.  "
+            ,"1.4.23 - Menu de icones descritivos apenás com ícones, mudança no mecanismo de inserção de ícone descritivo no painel e amostras de aúdio agrupadas em um menu horizontal."
+            ,"1.4.24 - BUGs: erro ao continuar a partir e um arquivo JSON no SoundSphere e erro ao exibir ícone descritivo no leitor JSON (corrigidos), implementação da lista de amostras disponíveis com barra de rolagem."
+        
           
           ]
         this.JSONFileStructureVersion = "1.4.8"

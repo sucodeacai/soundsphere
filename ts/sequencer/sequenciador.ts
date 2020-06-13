@@ -591,6 +591,7 @@ class Sequenciador {
                 //console.log("callback activecurrentAudio")
                 //console.log(this.activecurrentAudio)
                //console.log("acabou playOneSound")
+               callBack();
                 this.activecurrentAudio = false;
             };
             this.currentAudio.start(0);

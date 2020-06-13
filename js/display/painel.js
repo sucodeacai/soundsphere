@@ -54,6 +54,7 @@ class Painel {
         this.firstPositionY = 0;
         this.moved = false;
         this.pixelPerSecond = pixelPerSecond;
+        console.log("CONSTRUTOR PAINEL: " + pixelPerSecond);
         this.DAOHome = daoHome;
         this.tooltip = tooltip;
         //console.log("DAO HOME")
@@ -96,13 +97,13 @@ class Painel {
         if (this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
             //Se as opções do painel tiverem ativada ele pega o item que esta sobre o mouse e
             //abre o modal
-            if (this.pageSoundSphereHome.descriptiveIcon != '0') {
+            if (this.pageSoundSphereHome.descriptiveIcon != '0' && !this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum == undefined) {
+                console.log("xxxxxxxxxxxxxxx");
                 let itemMixTemp = this.getItemMix();
                 if (itemMixTemp) {
                     this.setItemMixTemp(itemMixTemp);
                     this.pageSoundSphereHome.itemMixOption.descriptiveIcon = this.pageSoundSphereHome.descriptiveIcon;
                     this.DAOHome.updateItemMixPane(this.pageSoundSphereHome.itemMixOption, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.sizeTrail);
-                    console.log("ALTEROU O descriptive icon: " + itemMixTemp.descriptiveIcon);
                 }
                 else {
                     this.tooltip.showMessage("O icone descritivo só pode ser inserido sobre um item de mixagem.");
@@ -1205,7 +1206,7 @@ class Painel {
     }
     sec2time(timeInSeconds) {
         let time = parseFloat(timeInSeconds).toFixed(3);
-        let hours = Math.floor(time / 60 / 60);
+        let hours = Math.floor((time / 60) / 60);
         let minutes = Math.floor(time / 60) % 60;
         let seconds = Math.floor(time - minutes * 60);
         let milliseconds = time.slice(-3);

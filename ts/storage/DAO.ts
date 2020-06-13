@@ -82,7 +82,7 @@ abstract class DAO {
         if (this.sessionControl.getLastAuthorValid()) {
             return this.sessionControl.getLastAuthorValid();
         } else {
-       
+
             return "Não informado";
         }
 
@@ -110,7 +110,7 @@ abstract class DAO {
         }
         return false;
     }
-  
+
     getListNameOfBuffers() {
         let listName = [];
         for (let index = 0; index < this.listItemBuffer.length; index++) {
@@ -187,9 +187,9 @@ abstract class DAO {
             for (let index3 = 0; index3 < this.listItemBufferProv.length; index3++) {
                 if (this.listaNamesOk[index2] == this.listItemBufferProv[index3].name) {
                     //console.log("Inserindo na lista de buffers OK: " + this.listItemBufferProv[index3].name)
-                    if(this.listItemBufferProv[index3].color==''){
+                    if (this.listItemBufferProv[index3].color == '') {
                         this.listItemBufferProv[index3].color = this.controlFiles.getColor(this.listItemBuffer.length);
-                   
+
                     }
                     this.listItemBuffer.push(this.listItemBufferProv[index3]);
                     break;
@@ -242,7 +242,7 @@ abstract class DAO {
      */
     downloadJSON(nameFileUser: string, authorUser: string) {
         let a = document.createElement('a');
-        console.log("-------- NAME AUTHOR: "+authorUser);
+        console.log("-------- NAME AUTHOR: " + authorUser);
         this.sessionControl.putName(nameFileUser ? nameFileUser : this.getDefaultName());
         this.sessionControl.putAuthor(authorUser ? authorUser : this.getDefaultAuthor());
         // this.sessionControl.putAuthor("teste put autor");

@@ -1,10 +1,10 @@
 class FileMenuBar extends FileWav {
     simplePage: PageSoundSphereHome;
-    simplapage2:PageSoundSphereHome;
+    // simplapage2:PageSoundSphereHome;
 
     constructor(sequenciador: any, dao: DAO, tooltip: Tooltip, simplePage: PageSoundSphereHome) {
         super(sequenciador, dao)
-        this.simplapage2 = simplePage;
+        // this.simplapage2 = simplePage;
         this.simplePage = simplePage;
         $('#filesWav').on('change', (evt: any) => {
             "use strict";
@@ -80,13 +80,15 @@ class FileMenuBar extends FileWav {
             $('#closeModalMessage').on('click', (e: JQueryEventObject) => {
                 $('.ui.modal').modal('hide');
          
-                this.simplePage.generateHTML();
+                // this.simplePage.generateHTML();
+                this.simplePage.generateContentOfTheModals();
+                this.simplePage.reloadAlbum();
             });
 
         } else {
             console.log("Verificando buffes disponiveis")
             //         console.log(this.dao.listItembuffer)
-            this.simplapage2.reloadAlbum();
+            this.simplePage.reloadAlbum();
 
         }
     }

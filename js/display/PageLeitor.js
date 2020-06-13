@@ -302,7 +302,7 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
-        <td>${element2.itemMixPanel.descriptiveIcon == "0" ? element2.itemMixPanel.descriptiveIcon : "nenhum"}</td>
+        <td>${element2.itemMixPanel.descriptiveIcon != "0" ? element2.itemMixPanel.descriptiveIcon : "nenhum"}</td>
         <td>${element2.itemMixPanel.linha}</td>
         <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
       
