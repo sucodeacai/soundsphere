@@ -13,12 +13,18 @@ class Tooltip {
         }
     }
     showMessageFixed(mensagem) {
-        $("#mensagens").append(`<div id="messageAdmin1" class="modalClass">${mensagem}</div>`);
+        $("#mensagens").append(`<div  id="messageAdmin1" class="modalClass">${mensagem}</div>`);
     }
     removeMessageFixed() {
-        // console.log("chamou removeMessageFixed ")
         $(`#messageAdmin1`).addClass("remover");
         $(`#messageAdmin1`).remove();
+    }
+    showMessageFixedId(mensagem, id) {
+        $("#mensagens").append(`<div id="messageAdmin${id}" class="modalClass">${mensagem}</div>`);
+    }
+    removeMessageFixedId(id) {
+        $(`#messageAdmin${id}`).addClass("remover");
+        $(`#messageAdmin${id}`).remove();
     }
     showMessage(mensagem) {
         $("#mensagens").append(`<div id="messageAdmin1" class="modalClass">${mensagem}</div>`);

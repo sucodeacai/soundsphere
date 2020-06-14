@@ -24,7 +24,7 @@ class ItemMixPanel {
   //  colorGray: string[] = ["rgb(0,0,0)", "rgb(112,128,144)", "	rgb(105,105,105)", "rgb(128,128,128)",
   //    "rgb(169,169,169)", "rgb(192,192,192)", "rgb(211,211,211)", "rgb(220,220,220)", "rgb(240,240,240)"]
   private volume: number
-  descriptiveIcon: string | undefined = '0';
+  descriptiveIcon: string | undefined = undefined;
   private idSemanticDescriptor: number | undefined = undefined
   private codeSemanticDescriptor: string | undefined = undefined
   seconds: number
@@ -118,9 +118,8 @@ class ItemMixPanel {
         }
       }
     }
-    if (this.descriptiveIcon != '0' ) {
-
-        painel.ctxCanvas.drawImage(painel.pageSoundSphereHome.listIcons[this.descriptiveIcon!], this.x + 20,  this.y-15 ,30,30);
+    if (this.descriptiveIcon != undefined ) {
+        painel.ctxCanvas.drawImage(painel.pageSoundSphereHome.getImgDescriptiveIcon(this.descriptiveIcon), this.x + 20,  this.y-15 ,30,30);
      
  
      

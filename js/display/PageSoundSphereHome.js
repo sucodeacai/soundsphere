@@ -5,10 +5,11 @@ class PageSoundSphereHome extends SimplePage {
     constructor(containerElement, titulo, soundSphereInfo, dao, sequenciador, tooltip, sessionControl, pixelpersecond) {
         super(containerElement, titulo, soundSphereInfo, dao, sequenciador);
         this.canvas = [];
-        this.descriptiveIcon = '0';
+        this.buttonRemoveStatus = false;
         this.contextCanvas = [];
         this.stopActived = true;
         this.reloadPainel = false;
+        this.listDescriptiveIcons = [];
         //pauseActived = false
         this.itemMixOption = undefined;
         this.itemOptionEnabled = true;
@@ -16,7 +17,6 @@ class PageSoundSphereHome extends SimplePage {
         this.idSelectedIcomAlbum = undefined;
         this.mouseInsideIconAlbum = undefined;
         this.mouseOutIconAlbum = true;
-        this.listIcons = [];
         // this.canvas = canvas;
         // this.contextCanvas = contextCanvas;
         this.pixelpersecond = pixelpersecond;
@@ -25,33 +25,29 @@ class PageSoundSphereHome extends SimplePage {
         this.startTemplate();
         this.generateHTML();
         this.showModalInitial();
-        this.loadIcons();
+        this.loadDescriptiveIcons();
     }
-    loadIcons() {
-        this.listIcons['agua'] = document.createElement("img");
-        this.listIcons['agua'].src = "img/icons/agua.png";
-        this.listIcons['agua_vazio'] = document.createElement("img");
-        this.listIcons['agua_vazio'].src = "img/icons/agua_vazio.png";
-        this.listIcons['cafe'] = document.createElement("img");
-        this.listIcons['cafe'].src = "img/icons/cafe.png";
-        this.listIcons['cafe_vazio'] = document.createElement("img");
-        this.listIcons['cafe_vazio'].src = "img/icons/cafe_vazio.png";
-        this.listIcons['laranja'] = document.createElement("img");
-        this.listIcons['laranja'].src = "img/icons/laranja.png";
-        this.listIcons['laranja_vazio'] = document.createElement("img");
-        this.listIcons['laranja_vazio'].src = "img/icons/laranja_vazio.png";
-        this.listIcons['limao'] = document.createElement("img");
-        this.listIcons['limao'].src = "img/icons/limao.png";
-        this.listIcons['limao_vazio'] = document.createElement("img");
-        this.listIcons['limao_vazio'].src = "img/icons/limao_vazio.png";
-        this.listIcons['maca'] = document.createElement("img");
-        this.listIcons['maca'].src = "img/icons/maca.png";
-        this.listIcons['maca_vazio'] = document.createElement("img");
-        this.listIcons['maca_vazio'].src = "img/icons/maca_vazio.png";
-        this.listIcons['tomate'] = document.createElement("img");
-        this.listIcons['tomate'].src = "img/icons/tomate.png";
-        this.listIcons['tomate_vazio'] = document.createElement("img");
-        this.listIcons['tomate_vazio'].src = "img/icons/tomate_vazio.png";
+    loadDescriptiveIcons() {
+        this.listDescriptiveIcons.push(new DescriptiveIcon(0, "img/icons/agua.png", "Agua", "agua"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(1, "img/icons/agua_vazio.png", "Agua vazio", "agua_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(2, "img/icons/cafe.png", "Café", "cafe"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(3, "img/icons/cafe_vazio.png", "Café vazio", "cafe_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(4, "img/icons/laranja.png", "Laranja", "laranja"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(5, "img/icons/laranja_vazio.png", "Laranja vazio", "laranja_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(6, "img/icons/limao.png", "Limão", "limao"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(7, "img/icons/limao_vazio.png", "Limão vazio", "limao_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(8, "img/icons/maca.png", "Maçã vazio", "maca_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(9, "img/icons/maca_vazio.png", "Maçã vazio", "maca_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(10, "img/icons/tomate.png", "Tomate", "tomate"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(11, "img/icons/tomate_vazio.png", "tomate vazio", "tomate_vazio"));
+    }
+    getImgDescriptiveIcon(tag) {
+        for (let index = 0; index < this.listDescriptiveIcons.length; index++) {
+            if (tag == this.listDescriptiveIcons[index].tag) {
+                return this.listDescriptiveIcons[index].img;
+            }
+        }
+        return '';
     }
     getNameClass() {
         return "PageSoundSphereHome";
@@ -97,6 +93,9 @@ class PageSoundSphereHome extends SimplePage {
                     <a id="buttonDownload" data-content="download" class="item">
                         <i class="download icon"></i>
                     </a>
+                    <a id="buttonRemove" data-content="Excluir" class="item">
+                        <i class="trash icon"></i>
+                    </a>
                     <div class="right menu">
                         <div id="dropdownCamadas" class="ui dropdown item">
                             Camadas <i class="dropdown icon"></i>
@@ -106,64 +105,7 @@ class PageSoundSphereHome extends SimplePage {
                                 <a data-value="2" class="item">Amplitude</a>
                             </div>
                         </div>
-                        <div id="dropdownIcons" class="ui dropdown item">
-                            <input type="hidden" name="bebida">
-                            <div class="default text">Nenhuma bebida</div>
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                <div class="item" data-value="0">
-                                    Nenhuma bebida
-                                </div>
-                                <div class="item" data-value="agua">
-                                    <img class="ui mini avatar image" src="img/icons/agua.png">
-                                    
-                                </div>
-                                <div class="item" data-value="agua_vazio">
-                                    <img class="ui mini avatar image" src="img/icons/agua_vazio.png">
-                                   
-                                </div>
-                                <div class="item" data-value="cafe">
-                                    <img class="ui mini avatar image" src="img/icons/cafe.png">
-                                   
-                                </div>
-                                <div class="item" data-value="cafe_vazio">
-                                    <img class="ui mini avatar image" src="img/icons/cafe_vazio.png">
-                                   
-                                </div>
-                                <div class="item" data-value="limao">
-                                    <img class="ui mini avatar image" src="img/icons/limao.png">
-                                   
-                                </div>
-                                <div class="item" data-value="limao_vazio">
-                                    <img class="ui mini avatar image" src="img/icons/limao_vazio.png">
-                                   
-                                </div>
-                                <div class="item" data-value="maca">
-                                    <img class="ui mini avatar image" src="img/icons/maca.png">
-                                   
-                                </div>
-                                <div class="item" data-value="maca_vazio">
-                                    <img class="ui mini avatar image" src="img/icons/maca_vazio.png">
-                                   
-                                </div>
-                                <div class="item" data-value="laranja">
-                                    <img class="ui mini avatar image" src="img/icons/laranja.png">
-                                  
-                                </div>
-                                <div class="item" data-value="laranja_vazio">
-                                    <img class="ui mini avatar image" src="img/icons/laranja_vazio.png">
-                                   
-                                </div>
-                                <div class="item" data-value="tomate">
-                                    <img class="ui mini avatar image" src="img/icons/tomate.png">
-                                 
-                                </div>
-                                <div class="item" data-value="tomate_vazio">
-                                    <img class="ui mini avatar image" src="img/icons/tomate_vazio.png">
-                                </div>
-
-                            </div>
-                        </div>
+                        
                        
                     </div>
                   
@@ -201,7 +143,7 @@ class PageSoundSphereHome extends SimplePage {
     //               <path data-id="${index}"d="${this.mouseInsideIconAlbum == index ? iconPlay : formD}"   style="fill: ${this.dao.listItemBuffer[index].color}" id="path${index}">
     //               </path>
     //             </g>
-    //             ${this.idSelectedIcomAlbum == index ? `<circle style="stroke:black; stroke-width:130; fill:none" transform="matrix(0.988396 -0.151897 0.151897 0.988396 1501.05 1501.05)" r="1436" id="0circle"></circle>` : ""} 
+    //             ${this.idSelectedIcomAlbum == index ? `<square style="stroke:black; stroke-width:130; fill:none" transform="matrix(0.988396 -0.151897 0.151897 0.988396 1501.05 1501.05)" r="1436" id="0square"></square>` : ""} 
     //           </svg>
     //           <p>
     //            ${this.dao.listItemBuffer[index].getReducedName()}
@@ -222,12 +164,21 @@ class PageSoundSphereHome extends SimplePage {
         if (this.dao.listItemBuffer.length != 0) {
             conteudo = `
         <div>
-         <h3 class="ui header centered">Amostras de Áudio</h3>
-         <div id="containerSoundIcons" class="scrollmenu">`;
+         
+         <div id="containerSoundIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">`;
             for (let index = 0; index < this.dao.listItemBuffer.length; index++) {
                 // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
                 conteudo += `
-        <a class="itemMenuAmostra" href="#home" data-id="${index}"  style=" width:50px; background-color: ${this.dao.listItemBuffer[index].color} "; width:50px" id="path${index}"><i class="icon circle"></i></a>
+        <a  data-html="<b>${this.dao.listItemBuffer[index].name}</b> </br> <b>Duração:</b> ${this.painel.sec2time(this.dao.listItemBuffer[index].timeDuration)}"  class="itemMenuAmostra" data-id="${index}"  style=" width:50px; background-color: ${this.dao.listItemBuffer[index].color} "; width:50px" id="path${index}"><i class="icon square"></i></a>
+        `;
+            }
+            conteudo += `
+      </div>
+      <div id="containerDescriptiveIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">`;
+            for (let index = 0; index < this.listDescriptiveIcons.length; index++) {
+                // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
+                conteudo += `
+        <a  style="padding:6px!important;" data-html=" ${this.listDescriptiveIcons[index].name}"  class="itemMenuDescriptiveIcon" data-tag="${this.listDescriptiveIcons[index].tag}" data-id="${index}"><img style="width:40px; height:40px;" src="${this.listDescriptiveIcons[index].url}">	</a>
         `;
             }
             conteudo += `
@@ -269,13 +220,6 @@ class PageSoundSphereHome extends SimplePage {
                 this.painel.reMake();
             }
         });
-        $('#dropdownIcons')
-            .dropdown({
-            direction: 'downward',
-            onChange: (value) => {
-                this.descriptiveIcon = value;
-            }
-        });
         this.voiceCommandMenuBar = new VoiceMenuBar(this.tooltip, this);
         this.voiceCommandModalOptions = new VoiceModalOptions(this.tooltip, this);
         $('#buttonVoiceComand').on('click', () => {
@@ -287,6 +231,22 @@ class PageSoundSphereHome extends SimplePage {
         });
         $('#buttonDownload').on('click', () => {
             this.showModalDownloads();
+        });
+        $('#buttonRemove').on('click', () => {
+            this.buttonRemoveStatus = !this.buttonRemoveStatus;
+            //Para a mixagem caso esteja executando
+            this.stopStandard();
+            //Remove a seleção dos demais botões
+            $('#buttonRemove').toggleClass("active");
+            $('#buttonPlay').removeClass("active");
+            $('#buttonPause').removeClass("active");
+            //Desabilita o painel;
+            if (this.buttonRemoveStatus) {
+                this.disableAlbum();
+            }
+            else {
+                this.enableAlbum();
+            }
         });
         $("#nameFile").attr("placeholder", this.dao.getDefaultName());
         $("#nameAuthor").attr("placeholder", this.dao.getDefaultAuthor());
@@ -404,10 +364,12 @@ class PageSoundSphereHome extends SimplePage {
         $('#initialModal').modal('hide');
     }
     playMixagem() {
-        this.panelReleased = false;
+        this.buttonRemoveStatus = false;
+        this.disableAlbum();
         this.sequenciador.play(() => {
             $('#buttonPlay').toggleClass("active");
             $('#buttonStop').removeClass("active");
+            $('#buttonRemove').removeClass("active");
             $('#buttonPause').removeClass("active");
             this.stopActived = false;
             // this.pauseActived = false;
@@ -416,15 +378,31 @@ class PageSoundSphereHome extends SimplePage {
             $('#buttonPlay').removeClass("active");
             if (this.stopActived) {
                 $('#buttonStop').addClass("active");
-                this.panelReleased = true;
+                this.enableAlbum();
             }
             if (!this.sequenciador.activePause) {
-                this.panelReleased = true;
+                this.enableAlbum();
             }
         });
     }
-    pauseMixagem() {
+    disableAlbum() {
+        this.panelReleased = false;
+        $('.itemMenuAmostra').children('i').removeClass('white');
+        $('.itemMenuAmostra').children('i').removeClass('black');
+        $('.itemMenuAmostra').children('i').addClass('grey');
+    }
+    enableAlbum() {
+        $('.itemMenuAmostra').children('i').removeClass('grey');
+        $('.itemMenuAmostra').children('i').addClass('white');
         this.panelReleased = true;
+        if (this.idSelectedIcomAlbum != undefined) {
+            $(`a[data-id="${this.idSelectedIcomAlbum}"]`).children('i').removeClass('grey');
+            $(`a[data-id="${this.idSelectedIcomAlbum}"]`).children('i').addClass('black');
+        }
+    }
+    pauseMixagem() {
+        this.buttonRemoveStatus = false;
+        this.disableAlbum();
         this.sequenciador.pause(() => {
             //console.log("chamou  o cakkbacj do pause")
             $('#buttonPause').addClass("active");
@@ -432,17 +410,21 @@ class PageSoundSphereHome extends SimplePage {
             //this.pauseActived = true
             this.stopActived = false;
         }, () => {
+            this.enableAlbum();
             $('#buttonPause').removeClass("active");
         });
     }
     stopMixagem() {
-        console.log("Painel stop");
+        this.buttonRemoveStatus = false;
+        this.enableAlbum();
         this.stopActived = true;
-        //  this.pauseActived = false
-        this.panelReleased = true;
+        this.stopStandard();
+    }
+    stopStandard() {
         this.sequenciador.stop(() => {
             $('img').attr('draggable');
             $('#buttonPlay').removeClass("active");
+            $('#buttonRemove').removeClass("active");
             $('#buttonPause').removeClass("active");
             $('#buttonStop').addClass("active");
         });
@@ -452,59 +434,64 @@ class PageSoundSphereHome extends SimplePage {
     //itemOptionEnabled = true - OPções liberada
     //itemOptionEnabled = false - Inserir amostras
     generateActionsAlbum() {
-        // console.log("genarate actions albun")
-        //Criação dos elementos que serão utilizados
+        $('.itemMenuAmostra')
+            .popup({
+            on: 'hover'
+        });
+        $('.itemMenuDescriptiveIcon')
+            .popup({
+            on: 'hover'
+        });
         $(".itemMenuAmostra").on('mouseenter', (e) => {
-            $(e.currentTarget).empty();
-            $(e.currentTarget).append('<i class="play icon"></i>');
-            if (this.mouseInsideIconAlbum == undefined && this.mouseOutIconAlbum && this.panelReleased) {
-                this.mouseInsideIconAlbum = $(e.target).data("id");
-                this.mouseOutIconAlbum = false;
-                this.tooltip.showMessageFixed("Executando: " + this.dao.listItemBuffer[$(e.currentTarget).data("id")].name);
-                this.sequenciador.playOneSound($(e.target).data("id"), () => {
-                    this.tooltip.removeMessageFixed();
-                    this.mouseInsideIconAlbum = undefined;
-                    $(e.currentTarget).empty();
-                    if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
-                        $(e.currentTarget).append('<i style="color:black" class="icon circle"></i>');
-                    }
-                    else {
-                        $(e.currentTarget).append('<i class="icon circle"></i>');
-                    }
-                });
+            if (this.panelReleased) {
+                $(e.currentTarget).children('i').toggleClass('square play');
+                if (this.mouseInsideIconAlbum == undefined && this.mouseOutIconAlbum && this.panelReleased) {
+                    this.mouseInsideIconAlbum = $(e.target).data("id");
+                    this.mouseOutIconAlbum = false;
+                    this.tooltip.showMessageFixedId("Executando: " + this.dao.listItemBuffer[$(e.currentTarget).data("id")].name, $(e.currentTarget).data("id"));
+                    this.sequenciador.playOneSound($(e.target).data("id"), () => {
+                        this.tooltip.removeMessageFixedId($(e.currentTarget).data("id"));
+                        this.mouseInsideIconAlbum = undefined;
+                        $(e.currentTarget).children('i.play').toggleClass('play square');
+                    });
+                }
             }
         });
         $(".itemMenuAmostra").on('mouseleave', (e) => {
-            $("i.icon.play").remove();
-            this.sequenciador.stopOneSound();
-            this.mouseInsideIconAlbum = undefined;
-            this.mouseOutIconAlbum = true;
-            this.tooltip.removeMessageFixed();
-            $(e.currentTarget).empty();
-            if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
-                $(e.currentTarget).append('<i style="color:black" class="icon circle"></i>');
-            }
-            else {
-                $(e.currentTarget).append('<i class="icon circle"></i>');
+            if (this.panelReleased) {
+                this.sequenciador.stopOneSound();
+                this.mouseInsideIconAlbum = undefined;
+                this.mouseOutIconAlbum = true;
+                this.tooltip.removeMessageFixedId($(e.currentTarget).data("id"));
+                $(e.currentTarget).children('i.play').toggleClass('play square');
             }
         });
         $(".itemMenuAmostra").on('click', (e) => {
-            // $("a.itemMenuAmostra ").removeClass("selected");
-            // $("a i.icon.check.circle").remove();
-            $("a i.icon.circle").remove();
-            $(".itemMenuAmostra").append('<i class="icon circle"></i>');
-            // $("a i.icon.check.circle").remove();
-            if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
-                this.idSelectedIcomAlbum = undefined;
-                this.itemOptionEnabled = true;
+            if (this.panelReleased) {
+                $("a.itemMenuAmostra").children('i.black').toggleClass('black white');
+                if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
+                    this.idSelectedIcomAlbum = undefined;
+                    this.itemOptionEnabled = true;
+                }
+                else {
+                    $(e.currentTarget).children('i').toggleClass('white black');
+                    this.idSelectedIcomAlbum = $(e.currentTarget).data("id");
+                    this.itemOptionEnabled = false;
+                    // this.painel.selectedAlbumItem()
+                }
             }
-            else {
-                //  $(e.currentTarget).addClass("selected");
-                $(e.currentTarget).children('.icon').remove();
-                $(e.currentTarget).append('<i style="color:black" class="icon circle"></i>');
-                this.idSelectedIcomAlbum = $(e.currentTarget).data("id");
-                this.itemOptionEnabled = false;
-                this.painel.selectedAlbumItem();
+        });
+        $(".itemMenuDescriptiveIcon").on('click', (e) => {
+            $(".itemMenuDescriptiveIcon").removeClass('itemMenuDescriptiveIconSelected');
+            if (this.panelReleased) {
+                if (this.descriptiveIcon == $(e.currentTarget).data("tag")) {
+                    $(e.currentTarget).removeClass('itemMenuDescriptiveIconSelected');
+                    this.descriptiveIcon = undefined;
+                }
+                else {
+                    $(e.currentTarget).addClass('itemMenuDescriptiveIconSelected');
+                    this.descriptiveIcon = $(e.currentTarget).data("tag");
+                }
             }
         });
     }
@@ -690,7 +677,7 @@ class PageSoundSphereHome extends SimplePage {
     </div>
 
     <div id="buttonCalcelModal" class="ui neutral right labeled icon button">Cancel</div>
-    <div  id="buttonOkModal"class="ui blue button ">Ok</div>
+    <div  id="buttonOkModal"class="ui blue button ">Salvar</div>
   </div>
 
     `;

@@ -44,7 +44,7 @@ class PageLeitor {
           itemMixPanel.solo = Boolean(this.dao.listItemMixPanel[i][j].solo);
           itemMixPanel.setVolume(this.dao.listItemMixPanel[i][j].getVolume());
           itemMixPanel.color = this.dao.listItemMixPanel[i][j].color;
-          itemMixPanel.descriptiveIcon = this.dao.listItemMixPanel[i][j].descriptiveIcon == "0" ? "0" : this.dao.listItemMixPanel[i][j].descriptiveIcon;
+          itemMixPanel.descriptiveIcon = this.dao.listItemMixPanel[i][j].descriptiveIcon == undefined ? "nenhum" : this.dao.listItemMixPanel[i][j].descriptiveIcon;
           itemMixPanel.linha = this.dao.listItemMixPanel[i][j].linha + 1;
           if (this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()) {
             itemMixPanel.nameDescritor = (this.dao.getNameSemanticDescriptor(this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()));
@@ -327,7 +327,7 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
-        <td>${element2.itemMixPanel.descriptiveIcon != "0" ? element2.itemMixPanel.descriptiveIcon : "nenhum"}</td>
+        <td>${element2.itemMixPanel.descriptiveIcon == undefined ?  "nenhum" : element2.itemMixPanel.descriptiveIcon }</td>
         <td>${element2.itemMixPanel.linha}</td>
         <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
       

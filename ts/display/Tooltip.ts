@@ -11,16 +11,21 @@ class Tooltip {
             }, 3000);
         }
     }
-    showMessageFixed (mensagem:string){
+    showMessageFixed(mensagem: string) {
 
-        $("#mensagens").append(`<div id="messageAdmin1" class="modalClass">${mensagem}</div>`);
+        $("#mensagens").append(`<div  id="messageAdmin1" class="modalClass">${mensagem}</div>`);
     }
-    removeMessageFixed (){
-        // console.log("chamou removeMessageFixed ")
+    removeMessageFixed() {
         $(`#messageAdmin1`).addClass("remover");
-     
-            $(`#messageAdmin1`).remove();
-      
+        $(`#messageAdmin1`).remove();
+    }
+    showMessageFixedId(mensagem: string, id:number) {
+
+        $("#mensagens").append(`<div id="messageAdmin${id}" class="modalClass">${mensagem}</div>`);
+    }
+    removeMessageFixedId(id:number) {
+        $(`#messageAdmin${id}`).addClass("remover");
+        $(`#messageAdmin${id}`).remove();
     }
     showMessage(mensagem: string): void {
         $("#mensagens").append(`<div id="messageAdmin1" class="modalClass">${mensagem}</div>`);

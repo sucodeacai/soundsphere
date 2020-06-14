@@ -66,7 +66,7 @@ class Painel {
         this.ctxCanvas = ctxCanvas;
         this.make();
         this.setSettings();
-        this.unselectedAlbumItem();
+        // this.unselectedAlbumItem();
         this.maxDisplacingXAxis = this.widthPainel - this.canvas.width;
         this.maxDisplacingYAxis = this.heightPainel - this.canvas.height;
     }
@@ -93,17 +93,27 @@ class Painel {
         this.deltaX = 0;
         this.deltaY = 0;
         this.mouseDown = false;
-        //console.log("actionMouseUp")
-        if (this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
-            //Se as opções do painel tiverem ativada ele pega o item que esta sobre o mouse e
-            //abre o modal
-            if (this.pageSoundSphereHome.descriptiveIcon != '0' && !this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum == undefined) {
-                console.log("xxxxxxxxxxxxxxx");
+        if (!this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
+            if (this.pageSoundSphereHome.buttonRemoveStatus) {
+                let itemMixTemp = this.getItemMix();
+                if (itemMixTemp) {
+                    this.setItemMixTemp(itemMixTemp);
+                    this.deleteItemMixPanel(itemMixTemp);
+                    this.reMake();
+                }
+                else {
+                    this.tooltip.showMessage("Nenhum ítem de mixagem selecionado.");
+                }
+            }
+        }
+        else if (this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
+            if (this.pageSoundSphereHome.descriptiveIcon != undefined && !this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum == undefined) {
                 let itemMixTemp = this.getItemMix();
                 if (itemMixTemp) {
                     this.setItemMixTemp(itemMixTemp);
                     this.pageSoundSphereHome.itemMixOption.descriptiveIcon = this.pageSoundSphereHome.descriptiveIcon;
                     this.DAOHome.updateItemMixPane(this.pageSoundSphereHome.itemMixOption, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.sizeTrail);
+                    this.reMake();
                 }
                 else {
                     this.tooltip.showMessage("O icone descritivo só pode ser inserido sobre um item de mixagem.");
@@ -117,13 +127,10 @@ class Painel {
                 }
             }
             else if (!this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum != undefined && (!this.pageSoundSphereHome.itemOptionEnabled)) {
-                //console.log("tenta inserir");
                 this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum);
             }
         }
-        //123
         if ((!this.moved && this.pageSoundSphereHome.sequenciador.activePause)) {
-            //  console.log("SE SEGUNDOS");
             let seconds = this.getSecondsByXPosition(this.getPositionX(event) + this.displacingXAxis);
             if (seconds <= this.totalTime) {
                 this.xMarker = this.getPositionX(event) + this.displacingXAxis;
@@ -215,9 +222,6 @@ class Painel {
                 }
                 else {
                     //Escrever o timecode do cursor
-                    // console.log("offsetx "+ (e.offsetX - 1) )
-                    // console.log("displacingXAxis "+ this.displacingXAxis)
-                    // console.log("displacingXAxis + displacing"+(e.offsetX - 1) + this.displacingXAxis)
                     if ((e.offsetX) + this.displacingXAxis >= 0) {
                         var evt = e || event;
                         // requestAnimationFrame(() => { this.reMake() });
@@ -226,16 +230,19 @@ class Painel {
                         //Verifica limite do painel para que a indicação do tempo do painel 
                         //não passe do painel
                         let tamanhoTexto = 60;
-                        // console.log("this.displacingXAxis: " + this.displacingXAxis);
-                        // console.log("(e.offsetY) + this.displacingYAxis : " + (e.offsetY) + this.displacingYAxis);
-                        // console.log("(e.offsetY)  : " + (e.offsetY));
-                        if ((e.offsetY) + this.displacingYAxis > 20) {
-                            if ((e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
-                                this.ctxCanvas.fillText(this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis)), (e.offsetX) + this.displacingXAxis, (e.offsetY) + this.displacingYAxis);
-                            }
-                            else {
-                                this.ctxCanvas.fillText(this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis)), (this.widthPainel - tamanhoTexto), (e.offsetY) + this.displacingYAxis);
-                            }
+                        let margemSuperior = 30;
+                        let textTimeToShow = this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis));
+                        if ((e.offsetY) + this.displacingYAxis >= 30 && (e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
+                            this.ctxCanvas.fillText(textTimeToShow, (e.offsetX) + this.displacingXAxis, (e.offsetY) + this.displacingYAxis);
+                        }
+                        else if ((e.offsetY) + this.displacingYAxis > 30 && (e.offsetX) + this.displacingXAxis >= (this.widthPainel - tamanhoTexto)) {
+                            this.ctxCanvas.fillText(textTimeToShow, (this.widthPainel - tamanhoTexto), (e.offsetY) + this.displacingYAxis);
+                        }
+                        else if ((e.offsetY) + this.displacingYAxis < 30 && (e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
+                            this.ctxCanvas.fillText(textTimeToShow, (e.offsetX) + this.displacingXAxis, margemSuperior);
+                        }
+                        else {
+                            this.ctxCanvas.fillText(textTimeToShow, (this.widthPainel - tamanhoTexto), margemSuperior);
                         }
                         this.ctxCanvas.stroke();
                     }
@@ -485,14 +492,14 @@ class Painel {
         }
     }
     ;
-    selectedAlbumItem() {
-        // console.log("Chamou funcao cursor")
-        //  $('canvas').css("cursor", "copy");
-    }
-    unselectedAlbumItem() {
-        // console.log("Chamou funcao cursor")
-        // $('canvas').css("cursor", "grab");
-    }
+    // selectedAlbumItem() {
+    //   // console.log("Chamou funcao cursor")
+    //   //  $('canvas').css("cursor", "copy");
+    // }
+    // unselectedAlbumItem() {
+    //   // console.log("Chamou funcao cursor")
+    //   // $('canvas').css("cursor", "grab");
+    // }
     //aofinalizar touch normalmente
     actionEndNormalTouchInPanel(evt) {
         //console.log("tenta inserir");
@@ -600,7 +607,7 @@ class Painel {
     //FUnção para desenhar/criar o painel
     //Definir parametros de criação do painel
     make() {
-        this.setTimePanel(60);
+        this.setTimePanel(1);
         this.setTrailPanel(80);
         this.reDrawAllItemMixPanel();
         this.drawTrails();
@@ -845,44 +852,36 @@ class Painel {
     //Função que tentar inserir desenhar/inserir o item no Painel
     //caso não seja possivel ela da uma mensagem informando o usuario
     insertItemMixPanel(idSoundIconSelect) {
-        //console.log("getQtdTrails" + this.getQtdTrails());
         let idBuffer = idSoundIconSelect;
         let itemMixPanel = new ItemMixPanel();
         itemMixPanel.seconds = this.DAOHome.listItemBuffer[idBuffer].timeDuration;
         itemMixPanel.color = this.DAOHome.listItemBuffer[idBuffer].color;
         itemMixPanel.idBuffer = idBuffer;
         itemMixPanel.width = (itemMixPanel.seconds * this.pixelPerSecond);
-        // if ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/Android/i)) || (navigator.userAgent.match(/iPod/i))) {
-        //   itemMixPanel.x = this.getPositionX() + this.displacingXAxis;
-        //   itemMixPanel.y = this.getMiddleHeigtTrail(this.getPositionY() + this.displacingYAxis);
-        // } else {
         itemMixPanel.x = this.getPositionX(event) + this.displacingXAxis;
         itemMixPanel.y = this.getMiddleHeigtTrail(this.getPositionY(event) + this.displacingYAxis);
-        // }
-        // console.log(this.lastX);
-        // console.log(this.lastY);
         let listColisoes = this.checkItemMixPanel(itemMixPanel);
         //Se ele colidir apenas com um ele joga para o lado
         //Se não houver nova colisão ele altera o itemMixPanel
         //e joga ele ao terminio do que ele colidiu
         //se houver alguma colisão mesmo depois de mover ele adota o comportamento padrão
         //que é jogar para baixo 
-        if (this.lastX != itemMixPanel.x || this.lastY != itemMixPanel.y) {
-            // console.log("~E diferente: " + listColisoes.length)
-            if (listColisoes.length === 1) {
-                // console.log("~tem colisao")
-                if (itemMixPanel.x >= listColisoes[0].x && itemMixPanel.x <= listColisoes[0].x + listColisoes[0].width) {
-                    let newItem = new ItemMixPanel();
-                    newItem.x = listColisoes[0].x + listColisoes[0].width;
-                    newItem.width = (itemMixPanel.seconds * this.pixelPerSecond);
-                    newItem.y = itemMixPanel.y;
-                    let colisoes2 = this.checkItemMixPanel(newItem);
-                    if (colisoes2.length === 0) {
-                        itemMixPanel.x = listColisoes[0].x + listColisoes[0].width;
-                    }
-                }
-            }
-        }
+        // if (this.lastX != itemMixPanel.x || this.lastY != itemMixPanel.y) {
+        //   // console.log("~E diferente: " + listColisoes.length)
+        //   if (listColisoes.length === 1) {
+        //     // console.log("~tem colisao")
+        //     if (itemMixPanel.x >= listColisoes[0].x && itemMixPanel.x <= listColisoes[0].x + listColisoes[0].width) {
+        //       let newItem = new ItemMixPanel();
+        //       newItem.x = listColisoes[0].x + listColisoes[0].width;
+        //       newItem.width = (itemMixPanel.seconds * this.pixelPerSecond);
+        //       newItem.y = itemMixPanel.y;
+        //       let colisoes2 = this.checkItemMixPanel(newItem);
+        //       if (colisoes2.length === 0) {
+        //         itemMixPanel.x = listColisoes[0].x + listColisoes[0].width;
+        //       }
+        //     }
+        //   }
+        // }
         this.lastX = itemMixPanel.x;
         this.lastY = itemMixPanel.y;
         if (this.changeToValidItem(itemMixPanel)) {
@@ -895,11 +894,10 @@ class Painel {
             itemMixPanel.linha = linha;
             this.tooltip.showMessage("Item inserido em: " + this.sec2time(itemMixPanel.startTime));
             this.DAOHome.pushItemMixPanel(itemMixPanel);
-            if (this.displacingInsertY > 0 && this.getNumberTrailByHeight(itemMixPanel.y) - 2 > this.numberOfTrails) {
+            // if (this.displacingInsertY > 0 && this.getNumberTrailByHeight(itemMixPanel.y) - 2 > this.numberOfTrails) {
+            if (this.displacingInsertY > 0 && (this.displacingInsertY + this.displacingYAxis) <= this.maxDisplacingYAxis) {
                 this.ctxCanvas.translate(0, -this.displacingInsertY);
                 this.displacingYAxis += this.displacingInsertY;
-                //Se moveu ele move o ultimo X e Y tbm para nao acontecer de ele tentar joogar
-                //para o lado
                 this.lastY += this.displacingInsertY;
                 this.reMake();
             }

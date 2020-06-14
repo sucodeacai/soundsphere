@@ -52,21 +52,14 @@ class Sequenciador {
     }
 
     stop(callback: any) {
-       //console.log("Stop sequenciado")
-       //console.log("Active play" + this.activePlay)
-       //console.log("Active pause" + this.activePause)
         if (this.activePlay || this.activePause) {
-           //console.log("Stop sequenciado if 1")
-            //   this.tooltip.showMessage("Pausado")
             if (!this.stopFlag) {
-               //console.log("Stop sequenciado if 2")
                 this.pauseAt = 0;
                 this.mixing.stop(0);
                 this.stopFlag = true;
                 this.activePlay = false;
                 this.activePause = false;
                 this.painel!.stopDrawLoopMarker();
-
                 callback();
             }else{
                 this.pauseAt = 0;
@@ -144,22 +137,14 @@ class Sequenciador {
        
         }else if (!this.activePause){
             if(this.haveItemMix()){
-                console.log(" existem itens no painel.");
-                
-                console.log("clicou pausado")
                 this.activePause = true;
-                //this.stopFlag= false;
+                this.stopFlag = false;
                 this.pauseAt =0;
-                callback();
                 this.painel!.drawStoppedMarker(this.getTotalTime()); 
-
-
+                callback();
             }else{
-                console.log("ão existem itens no painel.");
                 this.tooltip.showMessage("Não existem itens no painel.");
             }
-            
-            
         }else if(this.activePause){
             this.activePlay = false;
             this.activePause = false;
