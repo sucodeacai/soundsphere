@@ -50,7 +50,7 @@ class VoiceCommand {
             this.callback();
             //this.diagnostic.textContent = 'Atenção, mensagem de Erro: ' + event.error;
             if (event.error == 'not-allowed') {
-                this.tooltip.showMessage('Atenção, microfone bloqueado! Para utilizar as opções de comando de voz você deve realizar a liberação do mesmo.');
+                this.tooltip.showMessage('Atenção,  Erro: Microfone bloqueado, desbloquear no navegador.');
             }
             else {
                 this.tooltip.showMessage('Atenção, mensagem de Erro: ' + event.error);

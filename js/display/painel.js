@@ -93,8 +93,12 @@ class Painel {
         this.deltaX = 0;
         this.deltaY = 0;
         this.mouseDown = false;
-        if (!this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
+        //Ele só vai verificar as opções no painel se não houver um movimento
+        if (!this.moved) {
+            console.log("Mouse up " + this.pageSoundSphereHome.idSelectedIcomAlbum);
+            //Se o botão de exclusão estiver ativado
             if (this.pageSoundSphereHome.buttonRemoveStatus) {
+                console.log("Mouse up remove status");
                 let itemMixTemp = this.getItemMix();
                 if (itemMixTemp) {
                     this.setItemMixTemp(itemMixTemp);
@@ -104,10 +108,30 @@ class Painel {
                 else {
                     this.tooltip.showMessage("Nenhum ítem de mixagem selecionado.");
                 }
+                //Se as opções estiverem ativadas
             }
-        }
-        else if (this.pageSoundSphereHome.panelReleased && (!this.pageSoundSphereHome.sequenciador.activePause)) {
-            if (this.pageSoundSphereHome.descriptiveIcon != undefined && !this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum == undefined) {
+            else if (this.pageSoundSphereHome.itemOptionEnabled) {
+                console.log("Mouse up Option");
+                let itemMixTemp = this.getItemMix();
+                if (itemMixTemp) {
+                    this.setItemMixTemp(itemMixTemp);
+                    this.pageSoundSphereHome.showModalOptions();
+                }
+                //Se o pause estiver ativado
+            }
+            if (this.pageSoundSphereHome.sequenciador.activePause) {
+                console.log("Mouse up remove pause");
+                let seconds = this.getSecondsByXPosition(this.getPositionX(event) + this.displacingXAxis);
+                if (seconds <= this.totalTime) {
+                    this.xMarker = this.getPositionX(event) + this.displacingXAxis;
+                    this.lastMakerX = this.xMarker;
+                    this.pageSoundSphereHome.sequenciador.continueFrom = seconds;
+                    this.reMake();
+                }
+                //se o icone descritivo for diferente de indefinido
+            }
+            else if (this.pageSoundSphereHome.descriptiveIcon != undefined) {
+                console.log("Mouse up remove descriptiveIcon");
                 let itemMixTemp = this.getItemMix();
                 if (itemMixTemp) {
                     this.setItemMixTemp(itemMixTemp);
@@ -118,30 +142,14 @@ class Painel {
                 else {
                     this.tooltip.showMessage("O icone descritivo só pode ser inserido sobre um item de mixagem.");
                 }
+                //se o icone descritivo for diferente de indefinido
             }
-            else if (!this.moved && (this.pageSoundSphereHome.itemOptionEnabled)) {
-                let itemMixTemp = this.getItemMix();
-                if (itemMixTemp) {
-                    this.setItemMixTemp(itemMixTemp);
-                    this.pageSoundSphereHome.showModalOptions();
-                }
-            }
-            else if (!this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum != undefined && (!this.pageSoundSphereHome.itemOptionEnabled)) {
+            else if (this.pageSoundSphereHome.idSelectedIcomAlbum != undefined) {
+                console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
                 this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum);
             }
-        }
-        if ((!this.moved && this.pageSoundSphereHome.sequenciador.activePause)) {
-            let seconds = this.getSecondsByXPosition(this.getPositionX(event) + this.displacingXAxis);
-            if (seconds <= this.totalTime) {
-                this.xMarker = this.getPositionX(event) + this.displacingXAxis;
-                //  console.log("xMarker set" + this.xMarker);
-                this.lastMakerX = this.xMarker;
-                this.pageSoundSphereHome.sequenciador.continueFrom = seconds;
-                //console.log("OK Voce clicou em " + seconds + " segundos")
-                this.reMake();
-            }
             else {
-                //console.log("Fora - Voce clicou em " + seconds + " segundos")
+                console.log("nenhum");
             }
         }
         this.endMove();
@@ -170,82 +178,80 @@ class Painel {
     //FUnção que gerencia o movimento do painel caso a opção move seja verdadeira
     //de modo que se o usuário estiver clicando e arrastando ele movimenta o painel
     actionMouseMove(e) {
-        if (this.pageSoundSphereHome.panelReleased) {
-            var evt = e || event;
-            //para poder mover o canvas ele tem que ser diferente da posição do click.
-            // ta tendo um bug que quando clica ele lança um evento de move e isso contorna
-            if ((this.mouseDownX != (evt.offsetX)) || (this.mouseDownY != (evt.offsetY - 1))) {
-                if (this.mouseDown) {
-                    if (this.moved) {
-                        //Velocidade
-                        let velocidade = 1;
-                        const diferenceX = (evt.offsetX) - this.firstPositionX;
-                        if (diferenceX > -5 && diferenceX < 5) {
-                            this.deltaX = 0;
-                        }
-                        else if (diferenceX >= 5 && diferenceX < 100) {
-                            this.deltaX = -diferenceX * velocidade;
-                        }
-                        else if (diferenceX >= 100) {
-                            this.deltaX = -100 * velocidade;
-                        }
-                        else if (diferenceX <= -5 && diferenceX > -100) {
-                            this.deltaX = -diferenceX * velocidade;
-                        }
-                        else if (diferenceX <= -100) {
-                            this.deltaX = 100 * velocidade;
-                        }
-                        const diferenceY = (evt.offsetY - 1) - this.firstPositionY;
-                        if (diferenceY > -5 && diferenceY < 5) {
-                            this.deltaY = 0;
-                        }
-                        else if (diferenceY >= 5 && diferenceY < 100) {
-                            this.deltaY = -diferenceY * velocidade;
-                        }
-                        else if (diferenceY >= 100) {
-                            this.deltaY = -100 * velocidade;
-                        }
-                        else if (diferenceY <= -5 && diferenceY > -100) {
-                            this.deltaY = -diferenceY * velocidade;
-                        }
-                        else if (diferenceY <= -100) {
-                            this.deltaY = 100 * velocidade;
-                        }
+        var evt = e || event;
+        //para poder mover o canvas ele tem que ser diferente da posição do click.
+        // ta tendo um bug que quando clica ele lança um evento de move e isso contorna
+        if ((this.mouseDownX != (evt.offsetX)) || (this.mouseDownY != (evt.offsetY - 1))) {
+            if (this.mouseDown) {
+                if (this.moved) {
+                    //Velocidade
+                    let velocidade = 1;
+                    const diferenceX = (evt.offsetX) - this.firstPositionX;
+                    if (diferenceX > -5 && diferenceX < 5) {
+                        this.deltaX = 0;
                     }
-                    if (!this.moved) {
-                        this.firstPositionX = (evt.offsetX);
-                        this.firstPositionY = (evt.offsetY - 1);
-                        this.moveAction(e);
+                    else if (diferenceX >= 5 && diferenceX < 100) {
+                        this.deltaX = -diferenceX * velocidade;
                     }
-                    console.error("moveu");
-                    this.moved = true;
+                    else if (diferenceX >= 100) {
+                        this.deltaX = -100 * velocidade;
+                    }
+                    else if (diferenceX <= -5 && diferenceX > -100) {
+                        this.deltaX = -diferenceX * velocidade;
+                    }
+                    else if (diferenceX <= -100) {
+                        this.deltaX = 100 * velocidade;
+                    }
+                    const diferenceY = (evt.offsetY - 1) - this.firstPositionY;
+                    if (diferenceY > -5 && diferenceY < 5) {
+                        this.deltaY = 0;
+                    }
+                    else if (diferenceY >= 5 && diferenceY < 100) {
+                        this.deltaY = -diferenceY * velocidade;
+                    }
+                    else if (diferenceY >= 100) {
+                        this.deltaY = -100 * velocidade;
+                    }
+                    else if (diferenceY <= -5 && diferenceY > -100) {
+                        this.deltaY = -diferenceY * velocidade;
+                    }
+                    else if (diferenceY <= -100) {
+                        this.deltaY = 100 * velocidade;
+                    }
                 }
-                else {
-                    //Escrever o timecode do cursor
-                    if ((e.offsetX) + this.displacingXAxis >= 0) {
-                        var evt = e || event;
-                        // requestAnimationFrame(() => { this.reMake() });
-                        this.reMake();
-                        //Tempo no painel indicação de tempo do painel
-                        //Verifica limite do painel para que a indicação do tempo do painel 
-                        //não passe do painel
-                        let tamanhoTexto = 60;
-                        let margemSuperior = 30;
-                        let textTimeToShow = this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis));
-                        if ((e.offsetY) + this.displacingYAxis >= 30 && (e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
-                            this.ctxCanvas.fillText(textTimeToShow, (e.offsetX) + this.displacingXAxis, (e.offsetY) + this.displacingYAxis);
-                        }
-                        else if ((e.offsetY) + this.displacingYAxis > 30 && (e.offsetX) + this.displacingXAxis >= (this.widthPainel - tamanhoTexto)) {
-                            this.ctxCanvas.fillText(textTimeToShow, (this.widthPainel - tamanhoTexto), (e.offsetY) + this.displacingYAxis);
-                        }
-                        else if ((e.offsetY) + this.displacingYAxis < 30 && (e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
-                            this.ctxCanvas.fillText(textTimeToShow, (e.offsetX) + this.displacingXAxis, margemSuperior);
-                        }
-                        else {
-                            this.ctxCanvas.fillText(textTimeToShow, (this.widthPainel - tamanhoTexto), margemSuperior);
-                        }
-                        this.ctxCanvas.stroke();
+                if (!this.moved) {
+                    this.firstPositionX = (evt.offsetX);
+                    this.firstPositionY = (evt.offsetY - 1);
+                    this.moveAction(e);
+                }
+                console.error("moveu");
+                this.moved = true;
+            }
+            else {
+                //Escrever o timecode do cursor
+                if ((e.offsetX) + this.displacingXAxis >= 0) {
+                    var evt = e || event;
+                    // requestAnimationFrame(() => { this.reMake() });
+                    this.reMake();
+                    //Tempo no painel indicação de tempo do painel
+                    //Verifica limite do painel para que a indicação do tempo do painel 
+                    //não passe do painel
+                    let tamanhoTexto = 60;
+                    let margemSuperior = 30;
+                    let textTimeToShow = this.sec2time(this.getSecondsByXPosition((e.offsetX) + this.displacingXAxis));
+                    if ((e.offsetY) + this.displacingYAxis >= 30 && (e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
+                        this.ctxCanvas.fillText(textTimeToShow, (e.offsetX) + this.displacingXAxis, (e.offsetY) + this.displacingYAxis);
                     }
+                    else if ((e.offsetY) + this.displacingYAxis > 30 && (e.offsetX) + this.displacingXAxis >= (this.widthPainel - tamanhoTexto)) {
+                        this.ctxCanvas.fillText(textTimeToShow, (this.widthPainel - tamanhoTexto), (e.offsetY) + this.displacingYAxis);
+                    }
+                    else if ((e.offsetY) + this.displacingYAxis < 30 && (e.offsetX) + this.displacingXAxis < (this.widthPainel - tamanhoTexto)) {
+                        this.ctxCanvas.fillText(textTimeToShow, (e.offsetX) + this.displacingXAxis, margemSuperior);
+                    }
+                    else {
+                        this.ctxCanvas.fillText(textTimeToShow, (this.widthPainel - tamanhoTexto), margemSuperior);
+                    }
+                    this.ctxCanvas.stroke();
                 }
             }
         }
@@ -504,27 +510,26 @@ class Painel {
     actionEndNormalTouchInPanel(evt) {
         //console.log("tenta inserir");
         //enableScroll();
-        if (this.pageSoundSphereHome.panelReleased) {
-            if (!this.moved && (this.pageSoundSphereHome.itemOptionEnabled)) {
-                var itemMixTemp = this.getItemMix();
-                if (itemMixTemp) {
-                    this.pageSoundSphereHome.itemMixOption = new ItemMixPanel();
-                    this.pageSoundSphereHome.itemMixOption.x = itemMixTemp.x;
-                    this.pageSoundSphereHome.itemMixOption.y = itemMixTemp.y;
-                    this.pageSoundSphereHome.itemMixOption.startTime = itemMixTemp.startTime;
-                    this.pageSoundSphereHome.itemMixOption.endTime = itemMixTemp.endTime;
-                    this.pageSoundSphereHome.itemMixOption.seconds = itemMixTemp.seconds;
-                    this.pageSoundSphereHome.itemMixOption.setVolume(itemMixTemp.getVolume());
-                    this.pageSoundSphereHome.itemMixOption.solo = itemMixTemp.solo;
-                    this.pageSoundSphereHome.itemMixOption.setIdSemanticDescriptor(itemMixTemp.getidSemanticDescriptor());
-                    this.pageSoundSphereHome.itemMixOption.id = itemMixTemp.id;
-                    this.pageSoundSphereHome.itemMixOption.idBuffer = itemMixTemp.idBuffer;
-                    this.pageSoundSphereHome.showModalOptions();
-                }
+        // if (this.pageSoundSphereHome.panelReleased) {
+        if (!this.moved && (this.pageSoundSphereHome.itemOptionEnabled)) {
+            var itemMixTemp = this.getItemMix();
+            if (itemMixTemp) {
+                this.pageSoundSphereHome.itemMixOption = new ItemMixPanel();
+                this.pageSoundSphereHome.itemMixOption.x = itemMixTemp.x;
+                this.pageSoundSphereHome.itemMixOption.y = itemMixTemp.y;
+                this.pageSoundSphereHome.itemMixOption.startTime = itemMixTemp.startTime;
+                this.pageSoundSphereHome.itemMixOption.endTime = itemMixTemp.endTime;
+                this.pageSoundSphereHome.itemMixOption.seconds = itemMixTemp.seconds;
+                this.pageSoundSphereHome.itemMixOption.setVolume(itemMixTemp.getVolume());
+                this.pageSoundSphereHome.itemMixOption.solo = itemMixTemp.solo;
+                this.pageSoundSphereHome.itemMixOption.setIdSemanticDescriptor(itemMixTemp.getidSemanticDescriptor());
+                this.pageSoundSphereHome.itemMixOption.id = itemMixTemp.id;
+                this.pageSoundSphereHome.itemMixOption.idBuffer = itemMixTemp.idBuffer;
+                this.pageSoundSphereHome.showModalOptions();
             }
-            else if (!this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum && (!this.pageSoundSphereHome.itemOptionEnabled)) {
-                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum);
-            }
+        }
+        else if (!this.moved && this.pageSoundSphereHome.idSelectedIcomAlbum && (!this.pageSoundSphereHome.itemOptionEnabled)) {
+            this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum);
         }
         this.endMove();
     }
@@ -892,7 +897,7 @@ class Painel {
             this.pageSoundSphereHome.sequenciador.needGenerateBuffer = true;
             var linha = this.getNumberTrailByHeight(itemMixPanel.y) - 1;
             itemMixPanel.linha = linha;
-            this.tooltip.showMessage("Item inserido em: " + this.sec2time(itemMixPanel.startTime));
+            this.tooltip.showMessage("Evento inserido em: " + this.sec2time(itemMixPanel.startTime));
             this.DAOHome.pushItemMixPanel(itemMixPanel);
             // if (this.displacingInsertY > 0 && this.getNumberTrailByHeight(itemMixPanel.y) - 2 > this.numberOfTrails) {
             if (this.displacingInsertY > 0 && (this.displacingInsertY + this.displacingYAxis) <= this.maxDisplacingYAxis) {

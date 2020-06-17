@@ -71,7 +71,7 @@ class FileMenuBar extends FileWav {
             conteudoModal += `
             </div>
             <div class="actions">
-              <div id="closeModalMessage" class="ui approve button">Ok</div>
+              <div id="closeModalMessage" class="ui approve button">Cancelar</div>
             </div>
          
             `
