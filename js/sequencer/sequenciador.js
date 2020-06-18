@@ -56,6 +56,27 @@ class Sequenciador {
         }
     }
     ;
+    stopSimple(callback) {
+        if (this.activePlay || this.activePause) {
+            if (!this.stopFlag) {
+                this.pauseAt = 0;
+                this.mixing.stop(0);
+                this.stopFlag = true;
+                this.activePlay = false;
+                this.activePause = false;
+                this.painel.stopSimple();
+                callback();
+            }
+            else {
+                this.pauseAt = 0;
+                this.stopFlag = true;
+                this.activePlay = false;
+                this.activePause = false;
+                this.painel.stopSimple();
+            }
+        }
+    }
+    ;
     changeLoop() {
         if (this.activeLoop) {
             this.activeLoop = false;

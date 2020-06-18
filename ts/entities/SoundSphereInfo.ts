@@ -6,7 +6,7 @@ class SoundSphereInfo {
     beta: boolean
     constructor(){
         this.name = "SoundSphere"
-        this.version = "1.4.25"
+        this.version = "1.4.27"
         this.change = [
             "1.4.1 -  Aplicação  de alteração visual aos Itens de mixagem de acordo com o descritor semantico. Ajuste do translatte 0.5"
             ,"1.4.2 - Mudança das cores das amostras e Criação do campo JSONFileStructureVersion."
@@ -45,6 +45,8 @@ class SoundSphereInfo {
             ,"1.4.23 - Menu de icones descritivos apenás com ícones, mudança no mecanismo de inserção de ícone descritivo no painel e amostras de aúdio agrupadas em um menu horizontal."
             ,"1.4.24 - BUGs: erro ao continuar a partir e um arquivo JSON no SoundSphere e erro ao exibir ícone descritivo no leitor JSON (corrigidos), implementação da lista de amostras disponíveis com barra de rolagem."
             ,"1.4.25 - BUGs: Menu principal: botão play não aparece e Mensagem da amostra que está sendo executada não aparecendo (corrigidos); Redesenhar painel ao inserir um ícone descritivo; Removido título das amostras de áudio e inclusão de uma descrição através de um tooltip;  No painel sempre inserir no local do clique, volta do comportamento de mover a visualização caso exista colisão e exibição do tempo no curso não colide mais com a grade de tempo; Alteração no tamanho do conteúdo da página para ficar mais harmônico com o novo tamanho do menu; Itens descritivos saiu do dropdown para ser um menu independente; Opção de exclusão no menu principal."
+            ,"1.4.26 - Tooltip no menu principal, alterações de algumas mensagens e alternância entre menus."
+            ,"1.4.27 - Ajuste de comportamento do deslocamento do painel ao mudar de menus; mudança do cursor no painel na situação de excluir  e editar; Alteração do tempo do painel para 60 minutos."
         
           
           ]

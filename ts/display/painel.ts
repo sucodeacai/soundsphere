@@ -106,7 +106,18 @@ class Painel {
     //console.log("actionMouseOut")
     this.endMove();
   }
-
+  setCursorTrash(){
+    $('canvas').addClass('cursorTrash');
+  }
+  unsetCursorTrash(){
+    $('canvas').removeClass('cursorTrash');
+  }
+  setCursorEdit(){
+    $('canvas').addClass('cursorEdit');
+  }
+  unsetCursorEdit(){
+    $('canvas').removeClass('cursorEdit');
+  }
   //O evento ocorre quando o usuário libera um botão do mouse sobre um elemento
   //O movimento do painel só e realizado enquanto se esitver preciosando a tecla
   //ao soltar é desfeita a ação independente se ele soltar no canvas ou não
@@ -135,6 +146,8 @@ class Painel {
         if (itemMixTemp) {
           this.setItemMixTemp(itemMixTemp);
           this.pageSoundSphereHome.showModalOptions();
+        }else {
+          this.tooltip.showMessage("Nenhum ítem de mixagem selecionado.");
         }
         //Se o pause estiver ativado
         
@@ -410,7 +423,14 @@ class Painel {
       this.removeClassCanvas();
       this.lastClassCursor = ""
       console.log("---Default")
-      $('canvas').addClass('default');
+      if(this.pageSoundSphereHome.itemOptionEnabled ){
+        this.setCursorEdit();
+      }else if(this.pageSoundSphereHome.buttonRemoveStatus){
+        this.setCursorTrash();
+      }else{
+        $('canvas').addClass('default');
+      }
+      
     }
 
 
@@ -646,7 +666,7 @@ class Painel {
   //minutos informado 
   setTimePanel(minutos: number): void {
 
-    var seconds = minutos * 60;
+    var seconds = minutos * 3600;
     this.widthPainel = this.pixelPerSecond * seconds;
   };
   //Alterar o numero de trilhas para mixagem
@@ -1244,6 +1264,10 @@ class Painel {
     this.resetTranslate();
     this.reMake();
   };
+    stopSimple() {
+      this.flagDrawMaker = false;
+      this.reMake();
+    };
   //Despausar
   cancelPause() {
     this.flagDrawMaker = false;

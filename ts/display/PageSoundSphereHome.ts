@@ -37,9 +37,19 @@ class PageSoundSphereHome extends SimplePage {
     this.showModalInitial()
     this.loadDescriptiveIcons();
   }
+  enableItemOption(){
+    this.itemOptionEnabled = true;
+    this.painel.setCursorEdit();
+    console.log("CHAMOU O CURSOR EDIT ENABLE");
+  }
+  disableItemOption(){
+    this.itemOptionEnabled = false;
+    this.painel.unsetCursorEdit();
+  }
   disableAlbum() {
     this.idSelectedIcomAlbum = undefined;
-    this.itemOptionEnabled = false;
+    
+    this.disableItemOption();
     $('.itemMenuAmostra').children('i.black').toggleClass('black white');
   }
   disableMenuDescriptiveIcon(){
@@ -47,7 +57,12 @@ class PageSoundSphereHome extends SimplePage {
     $('.itemMenuDescriptiveIcon.itemMenuDescriptiveIconSelected').removeClass('itemMenuDescriptiveIconSelected');
   }
   disableMainenu() {
-    this.itemOptionEnabled = true;
+    //Por conta do callback ele verifica antes se ainda precisa desativar o itemoption
+
+    if(this.descriptiveIcon  == undefined && this.idSelectedIcomAlbum == undefined){
+      this.enableItemOption();
+    } 
+  
     
   }
   loadDescriptiveIcons() {
@@ -120,7 +135,7 @@ class PageSoundSphereHome extends SimplePage {
                     <a  data-html="Descarrega"   id="buttonDownload" data-content="download" class="item mainmenu">
                         <i class="download icon"></i>
                     </a>
-                    <a data-html="Apaga" id="buttonRemove" data-content="Excluir" class="item">
+                    <a data-html="Apaga" id="buttonRemove" data-content="Excluir" class="item mainmenu">
                         <i class="trash icon"></i>
                     </a>
                     <div class="right menu">
@@ -231,18 +246,20 @@ class PageSoundSphereHome extends SimplePage {
     });
     $('#buttonRemove').on('click', () => {
       this.buttonRemoveStatus = !this.buttonRemoveStatus;
-      console.log(" this.buttonRemoveStatus: " + this.buttonRemoveStatus);
       //Para a mixagem caso esteja executando
-      this.stopStandard();
+      this.stopTrash();
       //Remove a seleção dos demais botões
-      $('#buttonRemove').toggleClass("active");
       $('#buttonPlay').removeClass("active");
       $('#buttonPause').removeClass("active");
       //Desabilita o painel;
       if (this.buttonRemoveStatus) {
+        $('#buttonRemove').addClass("active");
+        this.painel.setCursorTrash();
         this.disableAlbum();
         this.disableMenuDescriptiveIcon();
       } else {
+        $('#buttonRemove').removeClass("active");
+        this.painel.unsetCursorTrash();
         this.disableMainenu();
       }
 
@@ -420,13 +437,33 @@ class PageSoundSphereHome extends SimplePage {
     this.stopActived = true;
     this.stopStandard();
   }
-  stopStandard() {
-    this.sequenciador.stop(() => {
-      $('img').attr('draggable');
+  stopSimple(){
+    this.buttonRemoveStatus = false;
+    this.disableItemOption();
+    this.stopActived = true;
+    this.sequenciador.stopSimple(() => {
+      // $('img').attr('draggable');
       $('#buttonPlay').removeClass("active");
       $('#buttonRemove').removeClass("active");
       $('#buttonPause').removeClass("active");
       $('#buttonStop').addClass("active");
+    })
+  }
+  stopStandard() {
+    this.sequenciador.stop(() => {
+      // $('img').attr('draggable');
+      $('#buttonPlay').removeClass("active");
+      $('#buttonRemove').removeClass("active");
+      $('#buttonPause').removeClass("active");
+      $('#buttonStop').addClass("active");
+    })
+  }
+  stopTrash() {
+    this.sequenciador.stop(() => {
+      // $('img').attr('draggable');
+      $('#buttonPlay').removeClass("active");
+      $('#buttonPause').removeClass("active");
+     $('#buttonStop').addClass("active");
     })
   }
 
@@ -479,37 +516,49 @@ class PageSoundSphereHome extends SimplePage {
 
     });
     $(".itemMenuAmostra").on('click', (e: JQueryEventObject) => {
-      this.stopMixagem();
+ 
       if(this.descriptiveIcon){
         this.disableMenuDescriptiveIcon();
+      }else if(this.buttonRemoveStatus){
+        this.disableButtonTrash();
       }
+      this.stopSimple();
       $("a.itemMenuAmostra").children('i.black').toggleClass('black white');
       if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
         this.idSelectedIcomAlbum = undefined;
-        this.itemOptionEnabled = true;
+        this.enableItemOption();
       } else {
         $(e.currentTarget).children('i').toggleClass('white black');
         this.idSelectedIcomAlbum = $(e.currentTarget).data("id");
-        this.itemOptionEnabled = false
+        console.log("CHAMOU O DISABLE ITEM");
+        this.disableItemOption();
       }
     });
     $(".itemMenuDescriptiveIcon").on('click', (e: JQueryEventObject) => {
-      this.stopMixagem();
+     
       if(this.idSelectedIcomAlbum){
         this.disableAlbum();
+      }else if(this.buttonRemoveStatus){
+        this.disableButtonTrash();
       }
+      this.stopSimple();
       $(".itemMenuDescriptiveIcon").removeClass('itemMenuDescriptiveIconSelected');
       if (this.descriptiveIcon == $(e.currentTarget).data("tag")) {
         $(e.currentTarget).removeClass('itemMenuDescriptiveIconSelected');
         this.descriptiveIcon = undefined;
-        this.itemOptionEnabled = true;
+        this.enableItemOption();
       } else {
         $(e.currentTarget).addClass('itemMenuDescriptiveIconSelected');
         this.descriptiveIcon = $(e.currentTarget).data("tag");
-        this.itemOptionEnabled = false
+        this.disableItemOption();
       }
 
     });
+  }
+  disableButtonTrash(){
+    this.buttonRemoveStatus = false;
+    $('#buttonRemove').removeClass("active");
+    this.painel.unsetCursorTrash();
   }
   protected renderAlbum() {
     // console.log("render album")

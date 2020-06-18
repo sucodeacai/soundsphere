@@ -86,6 +86,18 @@ class Painel {
         //console.log("actionMouseOut")
         this.endMove();
     }
+    setCursorTrash() {
+        $('canvas').addClass('cursorTrash');
+    }
+    unsetCursorTrash() {
+        $('canvas').removeClass('cursorTrash');
+    }
+    setCursorEdit() {
+        $('canvas').addClass('cursorEdit');
+    }
+    unsetCursorEdit() {
+        $('canvas').removeClass('cursorEdit');
+    }
     //O evento ocorre quando o usuário libera um botão do mouse sobre um elemento
     //O movimento do painel só e realizado enquanto se esitver preciosando a tecla
     //ao soltar é desfeita a ação independente se ele soltar no canvas ou não
@@ -116,6 +128,9 @@ class Painel {
                 if (itemMixTemp) {
                     this.setItemMixTemp(itemMixTemp);
                     this.pageSoundSphereHome.showModalOptions();
+                }
+                else {
+                    this.tooltip.showMessage("Nenhum ítem de mixagem selecionado.");
                 }
                 //Se o pause estiver ativado
             }
@@ -410,7 +425,15 @@ class Painel {
             this.removeClassCanvas();
             this.lastClassCursor = "";
             console.log("---Default");
-            $('canvas').addClass('default');
+            if (this.pageSoundSphereHome.itemOptionEnabled) {
+                this.setCursorEdit();
+            }
+            else if (this.pageSoundSphereHome.buttonRemoveStatus) {
+                this.setCursorTrash();
+            }
+            else {
+                $('canvas').addClass('default');
+            }
         }
     }
     // actionMouseMove(e: any) {
@@ -623,7 +646,7 @@ class Painel {
     //COnfigura o comprimento do painel de mixagem de acordo com o tempo em
     //minutos informado 
     setTimePanel(minutos) {
-        var seconds = minutos * 60;
+        var seconds = minutos * 3600;
         this.widthPainel = this.pixelPerSecond * seconds;
     }
     ;
@@ -1194,6 +1217,11 @@ class Painel {
     stopDrawLoopMarker() {
         this.flagDrawMaker = false;
         this.resetTranslate();
+        this.reMake();
+    }
+    ;
+    stopSimple() {
+        this.flagDrawMaker = false;
         this.reMake();
     }
     ;
