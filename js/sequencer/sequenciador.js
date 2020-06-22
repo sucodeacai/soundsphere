@@ -22,7 +22,7 @@ class Sequenciador {
         this.newListBufferProv = [];
         //
         this.startAt = 0;
-        this.pauseAt = 0;
+        // pauseAt: number = 0
         this.generateIcons = true;
         this.controlIdItemMix = 1;
         this.audioOptionsPanel = false;
@@ -36,45 +36,46 @@ class Sequenciador {
         this.audioCtx = audioCtx;
     }
     stop(callback) {
-        if (this.activePlay || this.activePause) {
-            if (!this.stopFlag) {
-                this.pauseAt = 0;
-                this.mixing.stop(0);
-                this.stopFlag = true;
-                this.activePlay = false;
-                this.activePause = false;
-                this.painel.stopDrawLoopMarker();
-                callback();
-            }
-            else {
-                this.pauseAt = 0;
-                this.stopFlag = true;
-                this.activePlay = false;
-                this.activePause = false;
-                this.painel.stopDrawLoopMarker();
-            }
+        // if (this.activePlay || this.activePause) {
+        this.continueFrom = 0;
+        if (!this.stopFlag) {
+            // this.pauseAt = 0;
+            this.mixing.stop(0);
+            this.stopFlag = true;
+            this.activePlay = false;
+            this.activePause = false;
+            this.painel.stopDrawLoopMarker();
+            callback();
         }
+        else {
+            // this.pauseAt = 0;
+            this.stopFlag = true;
+            this.activePlay = false;
+            this.activePause = false;
+            this.painel.stopDrawLoopMarker();
+        }
+        // }
     }
     ;
     stopSimple(callback) {
-        if (this.activePlay || this.activePause) {
-            if (!this.stopFlag) {
-                this.pauseAt = 0;
-                this.mixing.stop(0);
-                this.stopFlag = true;
-                this.activePlay = false;
-                this.activePause = false;
-                this.painel.stopSimple();
-                callback();
-            }
-            else {
-                this.pauseAt = 0;
-                this.stopFlag = true;
-                this.activePlay = false;
-                this.activePause = false;
-                this.painel.stopSimple();
-            }
+        // if (this.activePlay || this.activePause) {
+        if (!this.stopFlag) {
+            // this.pauseAt = 0;
+            this.mixing.stop(0);
+            this.stopFlag = true;
+            this.activePlay = false;
+            this.activePause = false;
+            this.painel.stopSimple();
+            callback();
         }
+        else {
+            // this.pauseAt = 0;
+            this.stopFlag = true;
+            this.activePlay = false;
+            this.activePause = false;
+            this.painel.stopSimple();
+        }
+        // }
     }
     ;
     changeLoop() {
@@ -129,15 +130,11 @@ class Sequenciador {
     }
     ;
     pause(callback, cancelPause) {
-        //console.log("pause sequenciado")
-        //console.log("pause sequenciado this.activePlay = " + this.activePlay)
         if (this.activePlay) {
             callback();
             this.activePause = true;
             this.activePlay = false;
-            //console.log("pause start at:  this.startAt")
-            this.pauseAt = (Date.now() - this.startAt);
-            this.continueFrom = this.pauseAt / 1000;
+            this.continueFrom = (Date.now() - this.startAt) / 1000;
             this.mixing.stop(0);
             this.painel.pauseDrawLoopMarker();
         }
@@ -145,7 +142,6 @@ class Sequenciador {
             if (this.haveItemMix()) {
                 this.activePause = true;
                 this.stopFlag = false;
-                this.pauseAt = 0;
                 this.painel.drawStoppedMarker(this.getTotalTime());
                 callback();
             }
@@ -164,9 +160,6 @@ class Sequenciador {
     //FUnção que starta e faz as verifcacoes
     // de requisitos para que se possa executar o play da aplicação
     play(onPlay, onEndPlayList) {
-        // this.dao.saveLocalStorage();
-        //console.log("play - chamando Play")
-        console.log("this.haveItemMix(): " + this.haveItemMix());
         if (this.haveItemMix()) {
             if (!this.activePlay) {
                 //Funcação que vai ser passada para o mix, a ser executada
@@ -174,7 +167,6 @@ class Sequenciador {
                 const callback = (bufferRendered) => {
                     //console.log("play - Callback - recebendo valor final para executar ")
                     const buffer = bufferRendered;
-                    //   var l, o;
                     this.activePlay = true;
                     this.stopFlag = false;
                     this.mixing = this.audioCtx.createBufferSource();
@@ -190,27 +182,31 @@ class Sequenciador {
                         this.onEndPlayDefault(onEndPlayList);
                     };
                     console.log('activePause:  ' + this.activePause);
-                    if (this.activePause) {
-                        console.log("PAUSE AT");
-                        this.startAt = Date.now() - (this.continueFrom * 1000);
-                        //console.log("Pausado continua de: " + this.pauseAt)
-                        this.painel.continueLoopMarker();
-                        this.mixing.start(0, this.continueFrom);
-                        this.unPause();
+                    // if (this.activePause) {
+                    this.startAt = Date.now() - (this.continueFrom * 1000);
+                    if (!this.activePause) {
+                        this.painel.drawStoppedMarker(this.getTotalTime());
                     }
-                    else {
-                        this.painel.startLoopMarker(this.getTotalTime());
-                        this.startAt = (Date.now());
+                    this.painel.continueLoopMarker(this.getTotalTime());
+                    if (this.continueFrom == 0) {
                         this.mixing.start(0);
                     }
+                    else {
+                        this.mixing.start(0, this.continueFrom);
+                    }
+                    this.unPause();
+                    // }
+                    // else {
+                    //     this.painel!.startLoopMarker(this.getTotalTime());
+                    //     this.startAt = (Date.now());
+                    //     this.mixing.start(0);
+                    // }
                     //se tiver algum onPlay como parametro
                     if (onPlay) {
                         onPlay();
                     }
                 };
-                //console.log("play - antes de this.mix(callback); ")
                 this.mix(callback);
-                //console.log("play - depois de this.mix(callback); ")
             }
         }
         else {
@@ -222,7 +218,7 @@ class Sequenciador {
     //res
     unPause() {
         this.activePause = false;
-        this.pauseAt = 0;
+        // this.pauseAt = 0;
     }
     ;
     getMaxChannelsPlayList() {
