@@ -33,6 +33,7 @@ class Sequenciador {
     generateIcons: boolean = true;
     controlIdItemMix: number = 1;
     currentAudio: any;
+    gainNodeAlbum: any;
     audioOptionsPanel: boolean = false;
     stopFlag: boolean = true;
     nameList: string[] = [];
@@ -193,7 +194,6 @@ class Sequenciador {
                         if(!this.activePause){
                             this.painel!.drawStoppedMarker(this.getTotalTime()); 
                         }
-                      
                         this.painel!.continueLoopMarker(this.getTotalTime());
                         if(this.continueFrom ==0){
                             this.mixing.start(0);
@@ -460,7 +460,8 @@ class Sequenciador {
         //console.log("chamou stop one sound")
         //console.log(this.currentAudio.buffer)
         if (this.currentAudio.buffer) {
-            this.currentAudio.stop(0);
+            this.gainNodeAlbum.gain.linearRampToValueAtTime(0, this.audioCtx.currentTime + 0.4);
+            //this.currentAudio.stop(0);
         }
         this.activecurrentAudio = false;
         //}
@@ -577,7 +578,12 @@ class Sequenciador {
             this.activecurrentAudio = true;
             this.currentAudio = this.audioCtx.createBufferSource();
             this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
-            this.currentAudio.connect(this.audioCtx.destination);
+            this.gainNodeAlbum = this.audioCtx.createGain();
+            this.gainNodeAlbum.gain.value = 1;
+            this.currentAudio.connect(this.gainNodeAlbum);
+            
+            this.gainNodeAlbum.connect(this.audioCtx.destination);
+            // this.currentAudio.connect(this.audioCtx.destination);
             this.currentAudio.onended = (e: any) => {
                 //console.log("no end")
                 //console.log("callback activecurrentAudio")

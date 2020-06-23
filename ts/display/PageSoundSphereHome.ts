@@ -74,7 +74,7 @@ class PageSoundSphereHome extends SimplePage {
     this.listDescriptiveIcons.push(new DescriptiveIcon(5, "img/icons/laranja_vazio.png", "Laranja vazio", "laranja_vazio"));
     this.listDescriptiveIcons.push(new DescriptiveIcon(6, "img/icons/limao.png", "Limão", "limao"));
     this.listDescriptiveIcons.push(new DescriptiveIcon(7, "img/icons/limao_vazio.png", "Limão vazio", "limao_vazio"));
-    this.listDescriptiveIcons.push(new DescriptiveIcon(8, "img/icons/maca.png", "Maçã vazio", "maca_vazio"));
+    this.listDescriptiveIcons.push(new DescriptiveIcon(8, "img/icons/maca.png", "Maçã", "maca"));
     this.listDescriptiveIcons.push(new DescriptiveIcon(9, "img/icons/maca_vazio.png", "Maçã vazio", "maca_vazio"));
     this.listDescriptiveIcons.push(new DescriptiveIcon(10, "img/icons/tomate.png", "Tomate", "tomate"));
     this.listDescriptiveIcons.push(new DescriptiveIcon(11, "img/icons/tomate_vazio.png", "tomate vazio", "tomate_vazio"));
@@ -393,6 +393,7 @@ class PageSoundSphereHome extends SimplePage {
     this.buttonRemoveStatus = false;
     this.disableAlbum();
     this.disableMenuDescriptiveIcon();
+    this.disableButtonTrash();
     this.sequenciador.play(() => {
       $('#buttonPlay').toggleClass("active");
       $('#buttonStop').removeClass("active");
@@ -459,7 +460,7 @@ class PageSoundSphereHome extends SimplePage {
     })
   }
   stopTrash() {
-    this.sequenciador.stop(() => {
+    this.sequenciador.stopSimple(() => {
       // $('img').attr('draggable');
       $('#buttonPlay').removeClass("active");
       $('#buttonPause').removeClass("active");
