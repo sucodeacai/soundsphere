@@ -6,7 +6,7 @@ class SoundSphereInfo {
     beta: boolean
     constructor(){
         this.name = "SoundSphere"
-        this.version = "1.4.29"
+        this.version = "1.5"
         this.change = [
             "1.4.1 -  Aplicação  de alteração visual aos Itens de mixagem de acordo com o descritor semantico. Ajuste do translatte 0.5"
             ,"1.4.2 - Mudança das cores das amostras e Criação do campo JSONFileStructureVersion."
@@ -49,6 +49,8 @@ class SoundSphereInfo {
             ,"1.4.27 - Ajuste de comportamento do deslocamento do painel ao mudar de menus; mudança do cursor no painel na situação de excluir  e editar; Alteração do tempo do painel para 60 minutos."
             ,"1.4.28 - Alteração do comportamento do comando de reprodução em relação a posição do painel."
             ,"1.4.29 - Ajuste ao ativar e desativar o excluir, mudança na função de parar a reprodução de uma amostra de áudio no álbum e alteração dos ícones."
+            ,"1.5 - Versão estável."
+            ,"1.5.1 - Correção do bug de ao pausar não desativar o excluir."
         
           
           ]

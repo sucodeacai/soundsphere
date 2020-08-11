@@ -379,10 +379,12 @@ class PageSoundSphereHome extends SimplePage {
     }
     pauseMixagem() {
         this.buttonRemoveStatus = false;
+        this.painel.unsetCursorTrash();
         this.disableAlbum();
         this.disableMenuDescriptiveIcon();
         this.sequenciador.pause(() => {
             //console.log("chamou  o cakkbacj do pause")
+            $('#buttonRemove').removeClass("active");
             $('#buttonPause').addClass("active");
             $('#buttonStop').removeClass("active");
             //this.pauseActived = true

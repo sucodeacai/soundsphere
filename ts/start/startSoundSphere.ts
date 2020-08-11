@@ -6,7 +6,7 @@ $(document).ready(function () {
   //pega parametros
   var query = location.search.slice(1);
   var partes = query.split('&');
-  var data:any = {};
+  var data: any = {};
   partes.forEach(function (parte) {
     var chaveValor = parte.split('=');
     var chave = chaveValor[0];
@@ -24,7 +24,7 @@ $(document).ready(function () {
   sessionControl.newEventSession();
   let daoHome = new DAOHome(soundSphereInfo, listSemanticDescriptors, audioCtx, controlFiles, sessionControl);
   let sequenciador = new Sequenciador(controlFiles, tooltip, daoHome, audioCtx);
-  let pageSoundSphereHome = new PageSoundSphereHome($('#bodyAplication'), " ", soundSphereInfo, daoHome, sequenciador, tooltip, sessionControl,pixelpersecond);
+  let pageSoundSphereHome = new PageSoundSphereHome($('#bodyAplication'), " ", soundSphereInfo, daoHome, sequenciador, tooltip, sessionControl, pixelpersecond);
   let fileMenuBar = new FileMenuBar(sequenciador, daoHome, tooltip, pageSoundSphereHome);
   let fileHomeJson = new FileHomeJson(sequenciador, daoHome, tooltip, pageSoundSphereHome);
   let fileHomeWav = new FileHomeWav(sequenciador, daoHome, tooltip, pageSoundSphereHome);
@@ -37,7 +37,7 @@ $(document).ready(function () {
   if (daoHome.listItemBuffer.length > 0) {
     painel.reMake();
   }
-}
+  
 
 
 
