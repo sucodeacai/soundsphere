@@ -37,33 +37,33 @@ class PageSoundSphereHome extends SimplePage {
     this.showModalInitial()
     this.loadDescriptiveIcons();
   }
-  enableItemOption(){
+  enableItemOption() {
     this.itemOptionEnabled = true;
     this.painel.setCursorEdit();
     console.log("CHAMOU O CURSOR EDIT ENABLE");
   }
-  disableItemOption(){
+  disableItemOption() {
     this.itemOptionEnabled = false;
     this.painel.unsetCursorEdit();
   }
   disableAlbum() {
     this.idSelectedIcomAlbum = undefined;
-    
+
     this.disableItemOption();
     $('.itemMenuAmostra').children('i.black').toggleClass('black white');
   }
-  disableMenuDescriptiveIcon(){
+  disableMenuDescriptiveIcon() {
     this.descriptiveIcon = undefined;
     $('.itemMenuDescriptiveIcon.itemMenuDescriptiveIconSelected').removeClass('itemMenuDescriptiveIconSelected');
   }
   disableMainenu() {
     //Por conta do callback ele verifica antes se ainda precisa desativar o itemoption
 
-    if(this.descriptiveIcon  == undefined && this.idSelectedIcomAlbum == undefined){
+    if (this.descriptiveIcon == undefined && this.idSelectedIcomAlbum == undefined) {
       this.enableItemOption();
-    } 
-  
-    
+    }
+
+
   }
   loadDescriptiveIcons() {
     this.listDescriptiveIcons.push(new DescriptiveIcon(0, "img/icons/agua.png", "Agua", "agua"));
@@ -175,9 +175,12 @@ class PageSoundSphereHome extends SimplePage {
          <div id="containerSoundIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">`
       for (let index = 0; index < this.dao.listItemBuffer.length; index++) {
         // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
-        conteudo += `
-        <a  data-html="<b>${this.dao.listItemBuffer[index].name}</b> </br> ${this.painel.sec2time(this.dao.listItemBuffer[index].timeDuration)}"  class="itemMenuAmostra" data-id="${index}"  style=" width:50px; background-color: ${this.dao.listItemBuffer[index].color} "; width:50px" id="path${index}"><i class="icon square"></i></a>
-        `
+        if (this.dao.listItemBuffer[index].show) {
+          conteudo += `
+          <a  data-html="<b>${this.dao.listItemBuffer[index].name}</b> </br> ${this.painel.sec2time(this.dao.listItemBuffer[index].timeDuration)}"  class="itemMenuAmostra" data-id="${index}"  style=" width:50px; background-color: ${this.dao.listItemBuffer[index].color} "; width:50px" id="path${index}"><i class="icon square"></i></a>
+          `
+        }
+
       }
       conteudo += `
       </div>
@@ -440,7 +443,7 @@ class PageSoundSphereHome extends SimplePage {
     this.stopActived = true;
     this.stopStandard();
   }
-  stopSimple(){
+  stopSimple() {
     this.buttonRemoveStatus = false;
     this.disableItemOption();
     this.stopActived = true;
@@ -466,7 +469,7 @@ class PageSoundSphereHome extends SimplePage {
       // $('img').attr('draggable');
       $('#buttonPlay').removeClass("active");
       $('#buttonPause').removeClass("active");
-     $('#buttonStop').addClass("active");
+      $('#buttonStop').addClass("active");
     })
   }
 
@@ -519,10 +522,10 @@ class PageSoundSphereHome extends SimplePage {
 
     });
     $(".itemMenuAmostra").on('click', (e: JQueryEventObject) => {
- 
-      if(this.descriptiveIcon){
+
+      if (this.descriptiveIcon) {
         this.disableMenuDescriptiveIcon();
-      }else if(this.buttonRemoveStatus){
+      } else if (this.buttonRemoveStatus) {
         this.disableButtonTrash();
       }
       this.stopSimple();
@@ -538,10 +541,10 @@ class PageSoundSphereHome extends SimplePage {
       }
     });
     $(".itemMenuDescriptiveIcon").on('click', (e: JQueryEventObject) => {
-     
-      if(this.idSelectedIcomAlbum){
+
+      if (this.idSelectedIcomAlbum) {
         this.disableAlbum();
-      }else if(this.buttonRemoveStatus){
+      } else if (this.buttonRemoveStatus) {
         this.disableButtonTrash();
       }
       this.stopSimple();
@@ -558,7 +561,7 @@ class PageSoundSphereHome extends SimplePage {
 
     });
   }
-  disableButtonTrash(){
+  disableButtonTrash() {
     this.buttonRemoveStatus = false;
     $('#buttonRemove').removeClass("active");
     this.painel.unsetCursorTrash();

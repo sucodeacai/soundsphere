@@ -154,9 +154,11 @@ class PageSoundSphereHome extends SimplePage {
          <div id="containerSoundIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">`;
             for (let index = 0; index < this.dao.listItemBuffer.length; index++) {
                 // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
-                conteudo += `
-        <a  data-html="<b>${this.dao.listItemBuffer[index].name}</b> </br> ${this.painel.sec2time(this.dao.listItemBuffer[index].timeDuration)}"  class="itemMenuAmostra" data-id="${index}"  style=" width:50px; background-color: ${this.dao.listItemBuffer[index].color} "; width:50px" id="path${index}"><i class="icon square"></i></a>
-        `;
+                if (this.dao.listItemBuffer[index].show) {
+                    conteudo += `
+          <a  data-html="<b>${this.dao.listItemBuffer[index].name}</b> </br> ${this.painel.sec2time(this.dao.listItemBuffer[index].timeDuration)}"  class="itemMenuAmostra" data-id="${index}"  style=" width:50px; background-color: ${this.dao.listItemBuffer[index].color} "; width:50px" id="path${index}"><i class="icon square"></i></a>
+          `;
+                }
             }
             conteudo += `
       </div>

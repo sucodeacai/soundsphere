@@ -81,8 +81,14 @@ class PageLeitor {
         amostrasUtilizadas.push(element.idBuffer);
 
       }
-
     });
+    let amostrasDiferentesPainel: any = [];
+    listaOrdenada.forEach(element => {
+      if (!element.excluded && !amostrasDiferentesPainel.includes(element.idBuffer)) {
+        amostrasDiferentesPainel.push(element.idBuffer);
+      }
+    });
+
     var historico = `
     <table class="ui celled table">
     <thead>
@@ -110,8 +116,9 @@ class PageLeitor {
     <table class="ui celled table">
     <thead>
       <tr>
-        <th>Quantidade de Amostras Disponiveis</th>
-        <th>Quantidade de Amostras Diferentes Utilizadas</th>
+        <th>Quantidade de Amostras Carregadas em Todas as sessões</th>
+        <th>Quantidade de Amostras Diferentes Utilizadas contando excluidas</th>
+        <th>Quantidade de Amostras Diferentes na mixagem final</th>
         <th>Tempo total da mixagem</th>
         <th>Quantidade de Itens de Mixagens no painel</th>
         <th>Quantidade de Itens de Mixagens Inseridos</th>
@@ -129,7 +136,7 @@ class PageLeitor {
         <th>Nome</th>
         <th>Tempo da Amostra</th>
         <th>Número de Canais</th>
-        <th>Quantidade de Vezes Utilizado</th>
+        <th>Quantidade de Vezes Utilizadoss</th>
       </tr>
     </thead>
     <tbody>
@@ -263,6 +270,7 @@ class PageLeitor {
       <tr>
       <td>${this.dao.listItemBuffer.length}</td>
       <td>${amostrasUtilizadas.length}</td>
+      <td>${amostrasDiferentesPainel.length}</td>
       <td>${listaOrdenada.reduce(reducerTempoTotal, 0)}</td>
       <td>${listaOrdenada.reduce(reducerAtivos, 0)}</td>
       <td>${listaEventItemMixPanel.reduce(reducerInseridos, 0)}</td>
@@ -271,9 +279,9 @@ class PageLeitor {
     
       
   
-      </tr>`
+      </tr>`;
 
-
+ 
     listaOrdenada.forEach(element => {
       if (!element.excluded) {
 
@@ -327,7 +335,7 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
-        <td>${element2.itemMixPanel.descriptiveIcon == undefined ?  "nenhum" : element2.itemMixPanel.descriptiveIcon }</td>
+        <td>${element2.itemMixPanel.descriptiveIcon == undefined ? "nenhum" : element2.itemMixPanel.descriptiveIcon}</td>
         <td>${element2.itemMixPanel.linha}</td>
         <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
       

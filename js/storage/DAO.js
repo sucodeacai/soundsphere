@@ -65,7 +65,7 @@ class DAO {
     }
     isItemBufferLoadedByName(name) {
         for (let index = 0; index < this.listItemBuffer.length; index++) {
-            if (this.listItemBuffer[index].name == name) {
+            if (this.listItemBuffer[index].name == name && this.listItemBuffer[index].show) {
                 //    console.log("XXXXXX - Nome repetido: "+name)
                 return true;
             }
@@ -88,7 +88,11 @@ class DAO {
     getListNameOfBuffers() {
         let listName = [];
         for (let index = 0; index < this.listItemBuffer.length; index++) {
-            listName.push(this.listItemBuffer[index].name);
+            console.log("this.listItemBuffer[index].name: " + this.listItemBuffer[index].name);
+            console.log("this.listItemBuffer[index].amount: " + this.listItemBuffer[index].amount);
+            if (this.listItemBuffer[index].amount != 0) {
+                listName.push(this.listItemBuffer[index].name);
+            }
         }
         return listName;
     }
@@ -236,8 +240,8 @@ class DAO {
     // }
     //QUantidade de buffers
     synchronizeSoundSphereDB(soundSphereBD) {
-        this.synchronizeItemMixPanel(soundSphereBD.listItemMixPanel);
         this.syncronizeListItemBuffers(soundSphereBD.listItemBuffer);
+        this.synchronizeItemMixPanel(soundSphereBD.listItemMixPanel);
         this.synchronizeSemanticDescriptor(soundSphereBD);
         this.synchronizesessionControl(soundSphereBD.sessionControl);
         this.synchronizeContId();
@@ -271,9 +275,7 @@ class DAO {
                 itemMixPanel.descriptiveIcon = element.itemMixPanel.descriptiveIcon;
                 itemMixPanel.changeStardValues();
                 itemMixPanel.setIdSemanticDescriptor(element.itemMixPanel.idSemanticDescriptor);
-                console.log("Syncronize: " + element.itemMixPanel.codeSemanticDescriptor);
                 itemMixPanel.setCodeSemanticDescriptor(element.itemMixPanel.codeSemanticDescriptor);
-                console.log("Syncronize: " + itemMixPanel.getCodeSemanticDescriptor());
                 let evtItemMixPanel = new EventItemMixPanel(itemMixPanel, element.eventCrud, element.date);
                 evtSession.listEventItemMixPanel.push(evtItemMixPanel);
             });
@@ -291,6 +293,7 @@ class DAO {
             itemBuffer.timeDuration = listBuffer[index].timeDuration;
             itemBuffer.color = listBuffer[index].color;
             itemBuffer.numberOfChannels = listBuffer[index].numberOfChannels;
+            itemBuffer.show = false;
             this.listItemBuffer.push(itemBuffer);
         }
     }
@@ -318,6 +321,10 @@ class DAO {
                     itemMixPanel.id = listItemMixPanel[i][j].id;
                     itemMixPanel.excluded = listItemMixPanel[i][j].excluded;
                     itemMixPanel.idBuffer = listItemMixPanel[i][j].idBuffer;
+                    if (!itemMixPanel.excluded) {
+                        this.listItemBuffer[itemMixPanel.idBuffer].amount = this.listItemBuffer[itemMixPanel.idBuffer].amount + 1;
+                        this.listItemBuffer[itemMixPanel.idBuffer].show = true;
+                    }
                     itemMixPanel.color = listItemMixPanel[i][j].color;
                     itemMixPanel.setVolume(listItemMixPanel[i][j].volume);
                     itemMixPanel.seconds = listItemMixPanel[i][j].seconds;

@@ -8,8 +8,6 @@ class FileHomeWav extends FileWav {
         this.simplePage = simplePage;
         $('#fileHomeWav').on('change', (evt: any) => {
             "use strict";
-            console.log("Chamou handledFIleselect file home")
-            console.log(this.dao.getListNameOfBuffers())
             this.listNamesInvalid = [];
             this.listNamesValid = this.dao.getListNameOfBuffers();
 
@@ -29,7 +27,7 @@ class FileHomeWav extends FileWav {
                     if (sameName) {
                         files.push(evt.target.files[i]);
                     } else {
-                        this.listNamesInvalid.push(evt.target.files[i].name + ": - Arquivo não carregado, pois não está na lista");
+                        this.listNamesInvalid.push(evt.target.files[i].name + ": - Arquivo não carregado, pois não foi utilizado na mixagem anterior.");
                     }
                 }
             }

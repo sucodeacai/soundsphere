@@ -8,8 +8,9 @@ class FileHomeJson extends FileJson {
         this.simplePage.showErrorMessageJson1(mensagem);
     }
     onReaderJson(evt) {
+        console.log("\n\n\n\n\n xxxxxxxxxxxxxxOn Reader JSON");
         let soundSphereDB = JSON.parse(evt.target.result);
-        console.log(soundSphereDB);
+        //console.log(soundSphereDB)
         if (soundSphereDB.soundSphereInfo != undefined && soundSphereDB.soundSphereInfo.JSONFileStructureVersion == this.dao.soundSphereInfo.JSONFileStructureVersion) {
             this.dao.synchronizeSoundSphereDB(soundSphereDB);
             if (this.dao.listItemBuffer.length == 0 && this.dao.listItemMixPanel.length == 0) {

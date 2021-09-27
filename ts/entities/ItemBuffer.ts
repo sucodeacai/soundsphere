@@ -10,6 +10,7 @@ class ItemBuffer {
      name:string='';
      amount:number=0;
      color:string='';
+     show:boolean = true;
      getReducedName():string{
         return this.name.slice(0, 9) + '...';
   

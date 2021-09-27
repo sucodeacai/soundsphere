@@ -12,6 +12,7 @@ class ItemBuffer {
         this.name = '';
         this.amount = 0;
         this.color = '';
+        this.show = true;
     }
     getReducedName() {
         return this.name.slice(0, 9) + '...';

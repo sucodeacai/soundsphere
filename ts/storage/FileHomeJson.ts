@@ -11,8 +11,9 @@ class FileHomeJson extends FileJson {
     }
 
     onReaderJson(evt: any): any {
+        console.log("\n\n\n\n\n xxxxxxxxxxxxxxOn Reader JSON")
         let soundSphereDB = JSON.parse(evt.target.result);
-        console.log(soundSphereDB)
+        //console.log(soundSphereDB)
         if (soundSphereDB.soundSphereInfo != undefined && soundSphereDB.soundSphereInfo.JSONFileStructureVersion == this.dao.soundSphereInfo.JSONFileStructureVersion) {
             this.dao.synchronizeSoundSphereDB(soundSphereDB);
             if (this.dao.listItemBuffer.length == 0 && this.dao.listItemMixPanel.length == 0) {
