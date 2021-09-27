@@ -6,7 +6,7 @@ class SoundSphereInfo {
     beta: boolean
     constructor(){
         this.name = "SoundSphere"
-        this.version = "1.5.2"
+        this.version = "1.5.3"
         this.change = [
             "1.4.1 -  Aplicação  de alteração visual aos Itens de mixagem de acordo com o descritor semantico. Ajuste do translatte 0.5"
             ,"1.4.2 - Mudança das cores das amostras e Criação do campo JSONFileStructureVersion."
@@ -52,7 +52,7 @@ class SoundSphereInfo {
             ,"1.5 - Versão estável."
             ,"1.5.1 - Correção do bug de ao pausar não desativar o excluir."
             ,"1.5.2 - Ao continuar uma mixagem agora só é exigido os arquivos WAV que tenham algum Item de Mixagem no painel. Logo, os arquivos nunca utilizados ou que tenham sido inseridos e posteriormente todos os seus Itens de mixagem removidos não são mais exigidos. No leitor JSON em Dados gerais:  foi alterado o campo 'Quantidade de amostras disponíveis' para 'Quantidade de Amostras Carregadas em Todas as sessões’; Removido o campo 'Quantidade de Amostras Diferentes Utilizadas' e incluído os campos 'Quantidade de Amostras Diferentes Utilizadas contando excluídas' e ‘Quantidade de Amostras Diferentes na mixagem final' ."
-            ,"1.5.3 - Correção do BUG que não exibia o ícone das amostras de aúdio ."
+            ,"1.5.3 - Correção do BUG que não exibia os ícones das amostras de audios."
 
           ]
         this.JSONFileStructureVersion = "1.4.8"
