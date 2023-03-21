@@ -2,7 +2,6 @@
 class SoundSphereInfo {
     constructor() {
         this.name = "SoundSphere";
-        this.version = "1.5.3";
         this.change = [
             "1.4.1 -  Aplicação  de alteração visual aos Itens de mixagem de acordo com o descritor semantico. Ajuste do translatte 0.5",
             "1.4.2 - Mudança das cores das amostras e Criação do campo JSONFileStructureVersion.",
@@ -51,6 +50,10 @@ class SoundSphereInfo {
             "1.5.3 - Correção do BUG que não exibia os ícones das amostras de audios.",
             "1.5.4 - Inclusão de mensagem de erro ao utilizar outros navegadores que não seja o Google Chrome.",
         ];
+        //**************************************** */
+        // ATENÇÃO LEMBRAR DE TROCAR VERSÃO
+        //**************************************** */
+        this.version = "1.5.4";
         this.JSONFileStructureVersion = "1.4.8";
         this.beta = true;
     }
