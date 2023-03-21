@@ -48,7 +48,8 @@ class SoundSphereInfo {
             "1.5 - Versão estável.",
             "1.5.1 - Correção do bug de ao pausar não desativar o excluir.",
             "1.5.2 - Ao continuar uma mixagem agora só é exigido os arquivos WAV que tenham algum Item de Mixagem no painel. Logo, os arquivos nunca utilizados ou que tenham sido inseridos e posteriormente todos os seus Itens de mixagem removidos não são mais exigidos. No leitor JSON em Dados gerais:  foi alterado o campo 'Quantidade de amostras disponíveis' para 'Quantidade de Amostras Carregadas em Todas as sessões’; Removido o campo 'Quantidade de Amostras Diferentes Utilizadas' e incluído os campos 'Quantidade de Amostras Diferentes Utilizadas contando excluídas' e ‘Quantidade de Amostras Diferentes na mixagem final' .",
-            "1.5.3 - Correção do BUG que não exibia os ícones das amostras de audios."
+            "1.5.3 - Correção do BUG que não exibia os ícones das amostras de audios.",
+            "1.5.4 - Inclusão de mensagem de erro ao utilizar outros navegadores que não seja o Google Chrome.",
         ];
         this.JSONFileStructureVersion = "1.4.8";
         this.beta = true;
@@ -60,6 +61,6 @@ class SoundSphereInfo {
         return `${this.name} - ${this.version}`;
     }
     getColorTitle() {
-        return this.beta ? 'red' : 'black';
+        return this.beta ? "red" : "black";
     }
 }
