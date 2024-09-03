@@ -54,7 +54,7 @@ class SoundSphereInfo {
         //**************************************** */
         // ATENÇÃO LEMBRAR DE TROCAR VERSÃO
         //**************************************** */
-        this.version = "1.5.4";
+        this.version = "1.5.5";
         this.JSONFileStructureVersion = "1.4.8";
         this.beta = true;
     }
