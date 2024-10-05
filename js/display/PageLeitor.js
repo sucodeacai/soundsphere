@@ -10,21 +10,21 @@ class PageLeitor {
         this.showModalMessageInitial();
     }
     closeModal() {
-        $('.ui.modal').modal('hide');
+        $(".ui.modal").modal("hide");
     }
     showData() {
-        $('#content').css({ display: 'block' });
+        $("#content").css({ display: "block" });
         this.showDataValues();
     }
     showDataValues() {
         console.log("show data values");
-        let dadosAmostrasDiv = document.getElementById('dadosAmostras');
-        let dadosSessionDiv = document.getElementById('dadosSession');
-        let dadosItensDiv = document.getElementById('dadosItens');
-        let historicoDIV = document.getElementById('historico');
-        let dadosMixagemDiv = document.getElementById('dadosMixagem');
+        let dadosAmostrasDiv = document.getElementById("dadosAmostras");
+        let dadosSessionDiv = document.getElementById("dadosSession");
+        let dadosItensDiv = document.getElementById("dadosItens");
+        let historicoDIV = document.getElementById("historico");
+        let dadosMixagemDiv = document.getElementById("dadosMixagem");
         var listaOrdenada = [];
-        this.dao.listItemBuffer.forEach(element => {
+        this.dao.listItemBuffer.forEach((element) => {
             element.amount = 0;
         });
         for (var i = 0; i < this.dao.listItemMixPanel.length; i++) {
@@ -38,10 +38,21 @@ class PageLeitor {
                     itemMixPanel.solo = Boolean(this.dao.listItemMixPanel[i][j].solo);
                     itemMixPanel.setVolume(this.dao.listItemMixPanel[i][j].getVolume());
                     itemMixPanel.color = this.dao.listItemMixPanel[i][j].color;
-                    itemMixPanel.descriptiveIcon = this.dao.listItemMixPanel[i][j].descriptiveIcon == undefined ? "nenhum" : this.dao.listItemMixPanel[i][j].descriptiveIcon;
+                    itemMixPanel.descriptiveIcon =
+                        this.dao.listItemMixPanel[i][j].descriptiveIcon == undefined
+                            ? "nenhum"
+                            : this.dao.listItemMixPanel[i][j].descriptiveIcon;
+                    itemMixPanel.tag_dimension =
+                        this.dao.listItemMixPanel[i][j].tag_dimension == undefined
+                            ? "nenhum"
+                            : this.dao.listItemMixPanel[i][j].tag_dimension;
+                    itemMixPanel.tag_intensity =
+                        this.dao.listItemMixPanel[i][j].tag_intensity == undefined
+                            ? "nenhum"
+                            : this.dao.listItemMixPanel[i][j].tag_intensity;
                     itemMixPanel.linha = this.dao.listItemMixPanel[i][j].linha + 1;
                     if (this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()) {
-                        itemMixPanel.nameDescritor = (this.dao.getNameSemanticDescriptor(this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()));
+                        itemMixPanel.nameDescritor = this.dao.getNameSemanticDescriptor(this.dao.listItemMixPanel[i][j].getidSemanticDescriptor());
                     }
                     else {
                         itemMixPanel.nameDescritor = "nenhum";
@@ -63,7 +74,7 @@ class PageLeitor {
         });
         let amostrasUtilizadas = [];
         amostrasUtilizadas[0] = listaOrdenada[0].idBuffer;
-        listaOrdenada.forEach(element => {
+        listaOrdenada.forEach((element) => {
             this.dao.listItemBuffer[element.idBuffer].amount += 1;
             var insere = true;
             for (let index = 0; index < amostrasUtilizadas.length; index++) {
@@ -76,8 +87,9 @@ class PageLeitor {
             }
         });
         let amostrasDiferentesPainel = [];
-        listaOrdenada.forEach(element => {
-            if (!element.excluded && !amostrasDiferentesPainel.includes(element.idBuffer)) {
+        listaOrdenada.forEach((element) => {
+            if (!element.excluded &&
+                !amostrasDiferentesPainel.includes(element.idBuffer)) {
                 amostrasDiferentesPainel.push(element.idBuffer);
             }
         });
@@ -99,7 +111,8 @@ class PageLeitor {
       <th>Linha</th>
       <th>Cor</th>
       <th>Descritor</th>
-     
+      <th>Dimensão</th>
+      <th>Intensidade</th>
       </tr>
     </thead>
     <tbody>
@@ -162,12 +175,14 @@ class PageLeitor {
         <th>Linha</th>
         <th>Cor</th>
         <th>Descritor</th>
+        <th>Dimensão</th>
+        <th>Intensitade</th>
       </tr>
     </thead>
     <tbody>
      
     `;
-        this.dao.listItemBuffer.forEach(element => {
+        this.dao.listItemBuffer.forEach((element) => {
             dadosAmostras += `
       <tr>
       <td>${element.name}</td>
@@ -178,10 +193,10 @@ class PageLeitor {
       </tr>`;
         });
         function formateDateBr(date) {
-            const stringDate = `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} `;
+            const stringDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} `;
             return stringDate;
         }
-        this.dao.sessionControl.listEventSession.forEach(element => {
+        this.dao.sessionControl.listEventSession.forEach((element) => {
             if (element.datDateSave) {
                 const dataStart = new Date(element.dateStartWork);
                 const dataSave = new Date(element.datDateSave);
@@ -262,7 +277,7 @@ class PageLeitor {
       
   
       </tr>`;
-        listaOrdenada.forEach(element => {
+        listaOrdenada.forEach((element) => {
             if (!element.excluded) {
                 dadosItens += `
         <tr>
@@ -274,9 +289,14 @@ class PageLeitor {
         <td>${element.excluded ? `sim` : `não`}</td>
         <td>${element.getVolume()}</td>
         <td>${element.descriptiveIcon}</td>
+          
         <td>${element.linha}</td>
         <td style="color:${element.color}">${element.color}</td>
+
         <td>${element.nameDescritor}</td>
+        <td>${element.tag_dimension}</td>
+        <td>${element.tag_intensity}</td>
+
         </tr>`;
             }
         });
@@ -295,9 +315,9 @@ class PageLeitor {
             }
         }
         console.log("----------------");
-        this.dao.sessionControl.listEventSession.forEach(element => {
+        this.dao.sessionControl.listEventSession.forEach((element) => {
             if (element.name) {
-                element.listEventItemMixPanel.forEach(element2 => {
+                element.listEventItemMixPanel.forEach((element2) => {
                     historico += ` <tr>
           <td>${element.name}</td>
       
@@ -310,13 +330,26 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
-        <td>${element2.itemMixPanel.descriptiveIcon == undefined ? "nenhum" : element2.itemMixPanel.descriptiveIcon}</td>
-        <td>${element2.itemMixPanel.linha}</td>
+        <td>${element2.itemMixPanel.descriptiveIcon == undefined
+                        ? "nenhum"
+                        : element2.itemMixPanel.descriptiveIcon}</td>
+          <td>${element2.itemMixPanel.linha}</td>
         <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
-      
-        <td>${element2.itemMixPanel.getIdSemanticDescriptor() ? this.dao.getNameSemanticDescriptor(element2.itemMixPanel.getIdSemanticDescriptor()) : "nenhum"}</td>
+         
+
+        <td>${element2.itemMixPanel.getIdSemanticDescriptor()
+                        ? this.dao.getNameSemanticDescriptor(element2.itemMixPanel.getIdSemanticDescriptor())
+                        : "nenhum"}</td>
+        <td>${element2.itemMixPanel.tag_dimension == undefined
+                        ? "nenhum"
+                        : element2.itemMixPanel.tag_dimension}</td>
+         <td>${element2.itemMixPanel.tag_intensity == undefined
+                        ? "nenhum"
+                        : element2.itemMixPanel.tag_intensity}</td>
          </tr>
         `;
+                    console.log("xxxxxx: ", element2.itemMixPanel.tag_dimension);
+                    console.log("xxxxxx: ", element2.itemMixPanel.tag_intensity);
                 });
             }
         });
@@ -330,9 +363,12 @@ class PageLeitor {
         historicoDIV.innerHTML = historico;
     }
     setSettingsActions() {
-        $('#buttonIniciar').on('click', (e) => {
+        $("#buttonIniciar").on("click", (e) => {
             this.closeModal();
-            $('#step1').modal({ closable: false }).modal('setting', 'transition', 'horizontal flip').modal("show");
+            $("#step1")
+                .modal({ closable: false })
+                .modal("setting", "transition", "horizontal flip")
+                .modal("show");
         });
     }
     generateContent() {
@@ -361,7 +397,7 @@ class PageLeitor {
     <h1>Dados Gerais</h1>
     <div id="dadosMixagem"></div>
     `;
-        $('#content').html(conteudoHTML);
+        $("#content").html(conteudoHTML);
     }
     generateContentofModalStep1() {
         let conteudoHTML = `
@@ -413,7 +449,7 @@ class PageLeitor {
       <div onclick="filesAudioToJson.click()" class="ui green button">Selecionar</div>
     </div>
 `;
-        $('#step1').html(conteudoHTML);
+        $("#step1").html(conteudoHTML);
     }
     generateContentofModalMessageInitial() {
         let conteudoHTML = `
@@ -434,10 +470,13 @@ class PageLeitor {
     </div>
   </div>
 `;
-        $('#messageInitial').html(conteudoHTML);
+        $("#messageInitial").html(conteudoHTML);
     }
     showModalMessageInitial() {
-        $('#messageInitial').modal({ closable: false }).modal('setting', 'transition', 'horizontal flip').modal("show");
+        $("#messageInitial")
+            .modal({ closable: false })
+            .modal("setting", "transition", "horizontal flip")
+            .modal("show");
     }
     showMessageErrorJson(mensagem) {
         const message = `
@@ -452,6 +491,6 @@ class PageLeitor {
       </ul>
     </div>
     `;
-        $('#mensageStep1JSON').html(message);
+        $("#mensageStep1JSON").html(message);
     }
 }

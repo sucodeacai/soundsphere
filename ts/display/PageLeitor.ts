@@ -1,36 +1,39 @@
 class PageLeitor {
-
-  containerElement: JQuery
-  titulo: string
-  soundSphereInfo: SoundSphereInfo
-  dao: DAO
-  constructor(containerElement: JQuery, titulo: string, soundSphereInfo: SoundSphereInfo, dao: DAO, tooltip: Tooltip) {
-    this.containerElement = containerElement
+  containerElement: JQuery;
+  titulo: string;
+  soundSphereInfo: SoundSphereInfo;
+  dao: DAO;
+  constructor(
+    containerElement: JQuery,
+    titulo: string,
+    soundSphereInfo: SoundSphereInfo,
+    dao: DAO,
+    tooltip: Tooltip
+  ) {
+    this.containerElement = containerElement;
     this.titulo = titulo ? titulo : "";
-    this.dao = dao
+    this.dao = dao;
     this.soundSphereInfo = soundSphereInfo;
     this.generateContent();
     this.setSettingsActions();
-    this.showModalMessageInitial()
-
+    this.showModalMessageInitial();
   }
   closeModal() {
-    $('.ui.modal').modal('hide');
+    $(".ui.modal").modal("hide");
   }
   showData() {
-
-    $('#content').css({ display: 'block' })
+    $("#content").css({ display: "block" });
     this.showDataValues();
   }
   showDataValues() {
-    console.log("show data values")
-    let dadosAmostrasDiv = document.getElementById('dadosAmostras');
-    let dadosSessionDiv = document.getElementById('dadosSession');
-    let dadosItensDiv = document.getElementById('dadosItens');
-    let historicoDIV = document.getElementById('historico');
-    let dadosMixagemDiv = document.getElementById('dadosMixagem');
+    console.log("show data values");
+    let dadosAmostrasDiv = document.getElementById("dadosAmostras");
+    let dadosSessionDiv = document.getElementById("dadosSession");
+    let dadosItensDiv = document.getElementById("dadosItens");
+    let historicoDIV = document.getElementById("historico");
+    let dadosMixagemDiv = document.getElementById("dadosMixagem");
     var listaOrdenada = [];
-    this.dao.listItemBuffer.forEach(element => {
+    this.dao.listItemBuffer.forEach((element) => {
       element.amount = 0;
     });
     for (var i = 0; i < this.dao.listItemMixPanel.length; i++) {
@@ -44,16 +47,31 @@ class PageLeitor {
           itemMixPanel.solo = Boolean(this.dao.listItemMixPanel[i][j].solo);
           itemMixPanel.setVolume(this.dao.listItemMixPanel[i][j].getVolume());
           itemMixPanel.color = this.dao.listItemMixPanel[i][j].color;
-          itemMixPanel.descriptiveIcon = this.dao.listItemMixPanel[i][j].descriptiveIcon == undefined ? "nenhum" : this.dao.listItemMixPanel[i][j].descriptiveIcon;
+          itemMixPanel.descriptiveIcon =
+            this.dao.listItemMixPanel[i][j].descriptiveIcon == undefined
+              ? "nenhum"
+              : this.dao.listItemMixPanel[i][j].descriptiveIcon;
+          itemMixPanel.tag_dimension =
+            this.dao.listItemMixPanel[i][j].tag_dimension == undefined
+              ? "nenhum"
+              : this.dao.listItemMixPanel[i][j].tag_dimension;
+          itemMixPanel.tag_intensity =
+            this.dao.listItemMixPanel[i][j].tag_intensity == undefined
+              ? "nenhum"
+              : this.dao.listItemMixPanel[i][j].tag_intensity;
           itemMixPanel.linha = this.dao.listItemMixPanel[i][j].linha + 1;
           if (this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()) {
-            itemMixPanel.nameDescritor = (this.dao.getNameSemanticDescriptor(this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()));
+            itemMixPanel.nameDescritor = this.dao.getNameSemanticDescriptor(
+              this.dao.listItemMixPanel[i][j].getidSemanticDescriptor()
+            );
           } else {
-            itemMixPanel.nameDescritor = "nenhum"
+            itemMixPanel.nameDescritor = "nenhum";
           }
 
           itemMixPanel.x = this.dao.listItemMixPanel[i][j].x;
-          itemMixPanel.excluded = Boolean(this.dao.listItemMixPanel[i][j].excluded);
+          itemMixPanel.excluded = Boolean(
+            this.dao.listItemMixPanel[i][j].excluded
+          );
           itemMixPanel.y = this.dao.listItemMixPanel[i][j].y;
           itemMixPanel.seconds = this.dao.listItemMixPanel[i][j].seconds;
           itemMixPanel.width = this.dao.listItemMixPanel[i][j].width;
@@ -69,7 +87,7 @@ class PageLeitor {
     });
     let amostrasUtilizadas: any = [];
     amostrasUtilizadas[0] = listaOrdenada[0].idBuffer;
-    listaOrdenada.forEach(element => {
+    listaOrdenada.forEach((element) => {
       this.dao.listItemBuffer[element.idBuffer].amount += 1;
       var insere = true;
       for (let index = 0; index < amostrasUtilizadas.length; index++) {
@@ -79,12 +97,14 @@ class PageLeitor {
       }
       if (insere) {
         amostrasUtilizadas.push(element.idBuffer);
-
       }
     });
     let amostrasDiferentesPainel: any = [];
-    listaOrdenada.forEach(element => {
-      if (!element.excluded && !amostrasDiferentesPainel.includes(element.idBuffer)) {
+    listaOrdenada.forEach((element) => {
+      if (
+        !element.excluded &&
+        !amostrasDiferentesPainel.includes(element.idBuffer)
+      ) {
         amostrasDiferentesPainel.push(element.idBuffer);
       }
     });
@@ -107,7 +127,8 @@ class PageLeitor {
       <th>Linha</th>
       <th>Cor</th>
       <th>Descritor</th>
-     
+      <th>Dimensão</th>
+      <th>Intensidade</th>
       </tr>
     </thead>
     <tbody>
@@ -170,13 +191,15 @@ class PageLeitor {
         <th>Linha</th>
         <th>Cor</th>
         <th>Descritor</th>
+        <th>Dimensão</th>
+        <th>Intensitade</th>
       </tr>
     </thead>
     <tbody>
      
     `;
 
-    this.dao.listItemBuffer.forEach(element => {
+    this.dao.listItemBuffer.forEach((element) => {
       dadosAmostras += `
       <tr>
       <td>${element.name}</td>
@@ -184,15 +207,16 @@ class PageLeitor {
       <td>${element.timeDuration}</td>
       <td>${element.numberOfChannels}</td>
       <td>${element.amount}</td>
-      </tr>`
+      </tr>`;
     });
     function formateDateBr(date: any) {
-
-      const stringDate = `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} `;
+      const stringDate = `${date.getDate()}/${
+        date.getMonth() + 1
+      }/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} `;
 
       return stringDate;
     }
-    this.dao.sessionControl.listEventSession.forEach(element => {
+    this.dao.sessionControl.listEventSession.forEach((element) => {
       if (element.datDateSave) {
         const dataStart = new Date(element.dateStartWork);
         const dataSave = new Date(element.datDateSave);
@@ -222,9 +246,8 @@ class PageLeitor {
         <td>${stringDataStart}</td>
         <td>${stringDataSave}</td>
         <td>${days} - ${hours}:${minutes}:${Math.round(seconds)} </td>
-        </tr>`
+        </tr>`;
       }
-
     });
 
     const array1 = [1, 2, 3, 4];
@@ -234,7 +257,7 @@ class PageLeitor {
         accumulator = accumulator + 1;
       }
       return accumulator;
-    }
+    };
     //Se o elemento nao for excluido  verifica o seu tempo final
     //par se seja pego o tempo total da mixagem
     const reducerTempoTotal = (accumulator, element) => {
@@ -242,29 +265,30 @@ class PageLeitor {
         accumulator = element.endTime;
       }
       return accumulator;
-    }
-    let listaEventItemMixPanel = this.dao.sessionControl.getAllEventItemMixPanel();
+    };
+    let listaEventItemMixPanel =
+      this.dao.sessionControl.getAllEventItemMixPanel();
     //Conta quantos itens foram inseridos
     const reducerInseridos = (accumulator, element) => {
       if (element.eventCrud == 0) {
         accumulator = accumulator + 1;
       }
       return accumulator;
-    }
+    };
     //Conta quantos itens foram alterados
     const reducerAlterados = (accumulator, element) => {
       if (element.eventCrud == 2) {
         accumulator = accumulator + 1;
       }
       return accumulator;
-    }
+    };
     //Conta quantos itens foram excluidos
     const reducerExcluidos = (accumulator, element) => {
       if (element.eventCrud == 1) {
         accumulator = accumulator + 1;
       }
       return accumulator;
-    }
+    };
     //this.dao.sessionControl.listEventSession.reduce(reducerInseridos,0)
     dadosMixagem += `
       <tr>
@@ -281,10 +305,8 @@ class PageLeitor {
   
       </tr>`;
 
- 
-    listaOrdenada.forEach(element => {
+    listaOrdenada.forEach((element) => {
       if (!element.excluded) {
-
         dadosItens += `
         <tr>
         <td>${element.id}</td>
@@ -295,34 +317,36 @@ class PageLeitor {
         <td>${element.excluded ? `sim` : `não`}</td>
         <td>${element.getVolume()}</td>
         <td>${element.descriptiveIcon}</td>
+          
         <td>${element.linha}</td>
         <td style="color:${element.color}">${element.color}</td>
+
         <td>${element.nameDescritor}</td>
-        </tr>`
+        <td>${element.tag_dimension}</td>
+        <td>${element.tag_intensity}</td>
+
+        </tr>`;
       }
-
-
     });
     function crudName(name) {
       if (name == 0) {
-        return "Inserir"
+        return "Inserir";
       }
       if (name == 1) {
-        return "Deletar"
+        return "Deletar";
       }
       if (name == 2) {
-        return "Alterar"
+        return "Alterar";
       }
       if (name == 3) {
-        return "Ler"
+        return "Ler";
       }
     }
     console.log("----------------");
 
-    this.dao.sessionControl.listEventSession.forEach(element => {
+    this.dao.sessionControl.listEventSession.forEach((element) => {
       if (element.name) {
-
-        element.listEventItemMixPanel.forEach(element2 => {
+        element.listEventItemMixPanel.forEach((element2) => {
           historico += ` <tr>
           <td>${element.name}</td>
       
@@ -335,15 +359,40 @@ class PageLeitor {
         <td>${element2.itemMixPanel.solo}</td>
         <td>${element2.itemMixPanel.excluded ? `sim` : `não`}</td>
         <td>${element2.itemMixPanel.getVolume()}</td>
-        <td>${element2.itemMixPanel.descriptiveIcon == undefined ? "nenhum" : element2.itemMixPanel.descriptiveIcon}</td>
-        <td>${element2.itemMixPanel.linha}</td>
-        <td style="color:${element2.itemMixPanel.color}">${element2.itemMixPanel.color}</td>
-      
-        <td>${element2.itemMixPanel.getIdSemanticDescriptor() ? this.dao.getNameSemanticDescriptor(<number>element2.itemMixPanel.getIdSemanticDescriptor()) : "nenhum"}</td>
-         </tr>
-        `
-        })
+        <td>${
+          element2.itemMixPanel.descriptiveIcon == undefined
+            ? "nenhum"
+            : element2.itemMixPanel.descriptiveIcon
+        }</td>
+          <td>${element2.itemMixPanel.linha}</td>
+        <td style="color:${element2.itemMixPanel.color}">${
+            element2.itemMixPanel.color
+          }</td>
+         
 
+        <td>${
+          element2.itemMixPanel.getIdSemanticDescriptor()
+            ? this.dao.getNameSemanticDescriptor(
+                <number>element2.itemMixPanel.getIdSemanticDescriptor()
+              )
+            : "nenhum"
+        }</td>
+        <td>${
+          element2.itemMixPanel.tag_dimension == undefined
+            ? "nenhum"
+            : element2.itemMixPanel.tag_dimension
+        }</td>
+         <td>${
+           element2.itemMixPanel.tag_intensity == undefined
+             ? "nenhum"
+             : element2.itemMixPanel.tag_intensity
+         }</td>
+         </tr>
+        `;
+          console.log("xxxxxx: ", element2.itemMixPanel.tag_dimension);
+
+          console.log("xxxxxx: ", element2.itemMixPanel.tag_intensity);
+        });
       }
     });
 
@@ -357,21 +406,21 @@ class PageLeitor {
     historicoDIV!.innerHTML = historico;
   }
   setSettingsActions() {
-    $('#buttonIniciar').on('click', (e: JQueryEventObject) => {
+    $("#buttonIniciar").on("click", (e: JQueryEventObject) => {
       this.closeModal();
-      $('#step1').modal({ closable: false }).modal('setting', 'transition', 'horizontal flip').modal("show");
-
+      $("#step1")
+        .modal({ closable: false })
+        .modal("setting", "transition", "horizontal flip")
+        .modal("show");
     });
   }
   generateContent() {
     this.generateContentofModalMessageInitial();
     this.generateContentofModalStep1();
     this.generateContentofData();
-
   }
   generateContentofData() {
-    let conteudoHTML =
-      `
+    let conteudoHTML = `
     <h2 class="ui header centered">
       <div id="titulo">
         <font color="red">
@@ -390,9 +439,8 @@ class PageLeitor {
     <div id="dadosItens"></div>
     <h1>Dados Gerais</h1>
     <div id="dadosMixagem"></div>
-    `
-    $('#content').html(conteudoHTML);
-
+    `;
+    $("#content").html(conteudoHTML);
   }
   generateContentofModalStep1() {
     let conteudoHTML = `
@@ -443,8 +491,8 @@ class PageLeitor {
       <div class="ui red button">Cancelar</div>
       <div onclick="filesAudioToJson.click()" class="ui green button">Selecionar</div>
     </div>
-`
-    $('#step1').html(conteudoHTML);
+`;
+    $("#step1").html(conteudoHTML);
   }
   generateContentofModalMessageInitial() {
     let conteudoHTML = `
@@ -464,15 +512,17 @@ class PageLeitor {
       </div>
     </div>
   </div>
-`
-    $('#messageInitial').html(conteudoHTML);
+`;
+    $("#messageInitial").html(conteudoHTML);
   }
   showModalMessageInitial() {
-    $('#messageInitial').modal({ closable: false }).modal('setting', 'transition', 'horizontal flip').modal("show");
+    $("#messageInitial")
+      .modal({ closable: false })
+      .modal("setting", "transition", "horizontal flip")
+      .modal("show");
   }
   showMessageErrorJson(mensagem: string): void {
-    const message =
-      `
+    const message = `
     <div class="ui error message">
    
       <div class="header">
@@ -483,8 +533,7 @@ class PageLeitor {
 
       </ul>
     </div>
-    `
-    $('#mensageStep1JSON').html(message);
-
+    `;
+    $("#mensageStep1JSON").html(message);
   }
 }

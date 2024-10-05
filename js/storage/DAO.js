@@ -3,7 +3,7 @@
 Registrado sob a licença  Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
 */
-//Classe responsavel por gerenciar as informações da 
+//Classe responsavel por gerenciar as informações da
 //aplicação no Local Storage e no arquivo JSON
 class DAO {
     constructor(soundSphereInfo, listSemanticDescriptors, audioCtx, controlFiles, sessionControl) {
@@ -29,7 +29,7 @@ class DAO {
         //Pegar o id dentro da lista
         const getId = (item) => item.id;
         //Pegar todos os itens dentro da lista
-        const getListItens = list => list.map(getId);
+        const getListItens = (list) => list.map(getId);
         Array.prototype.flatMap = function (callback) {
             return Array.prototype.concat.apply([], this.map(callback));
         };
@@ -52,7 +52,18 @@ class DAO {
         }
         else {
             var now = new Date();
-            return "SoundSphere A" + now.getFullYear() + "M" + (now.getMonth() + 1) + "D" + now.getDate() + "H" + now.getHours() + "-" + now.getMinutes() + "-" + now.getSeconds();
+            return ("SoundSphere A" +
+                now.getFullYear() +
+                "M" +
+                (now.getMonth() + 1) +
+                "D" +
+                now.getDate() +
+                "H" +
+                now.getHours() +
+                "-" +
+                now.getMinutes() +
+                "-" +
+                now.getSeconds());
         }
     }
     getDefaultAuthor() {
@@ -65,7 +76,8 @@ class DAO {
     }
     isItemBufferLoadedByName(name) {
         for (let index = 0; index < this.listItemBuffer.length; index++) {
-            if (this.listItemBuffer[index].name == name && this.listItemBuffer[index].show) {
+            if (this.listItemBuffer[index].name == name &&
+                this.listItemBuffer[index].show) {
                 //    console.log("XXXXXX - Nome repetido: "+name)
                 return true;
             }
@@ -89,7 +101,8 @@ class DAO {
         let listName = [];
         for (let index = 0; index < this.listItemBuffer.length; index++) {
             console.log("this.listItemBuffer[index].name: " + this.listItemBuffer[index].name);
-            console.log("this.listItemBuffer[index].amount: " + this.listItemBuffer[index].amount);
+            console.log("this.listItemBuffer[index].amount: " +
+                this.listItemBuffer[index].amount);
             if (this.listItemBuffer[index].amount != 0) {
                 listName.push(this.listItemBuffer[index].name);
             }
@@ -116,13 +129,18 @@ class DAO {
         this.listItemBufferProv = [];
         this.listaNamesOk = [];
         for (let index = 0; index < listAudioData.length; index++) {
-            this.audioCtx.decodeAudioData(listAudioData[index].buffer).then((buffer) => {
-                if (buffer.numberOfChannels == 1 || buffer.numberOfChannels == 2 || buffer.numberOfChannels == 4 || buffer.numberOfChannels == 6) {
+            this.audioCtx
+                .decodeAudioData(listAudioData[index].buffer)
+                .then((buffer) => {
+                if (buffer.numberOfChannels == 1 ||
+                    buffer.numberOfChannels == 2 ||
+                    buffer.numberOfChannels == 4 ||
+                    buffer.numberOfChannels == 6) {
                     // console.log("Inserindo buffer prov: listAudioData[index].name ")
                     // console.log(listAudioData[index].name)
                     let itemBuffer = this.createItemBuffer(buffer, listAudioData[index].name);
                     //Se for uma nova lista de itens os mesmos não possuem cores
-                    //entao possa ser que exista cores nos nomes esse trecho do código 
+                    //entao possa ser que exista cores nos nomes esse trecho do código
                     //verifica isso
                     if (newList) {
                         if (this.validColor(this.getColor(listAudioData[index].name))) {
@@ -132,10 +150,12 @@ class DAO {
                     this.listItemBufferProv.push(itemBuffer);
                 }
                 else {
-                    this.listMessagesError.push(listAudioData[index].name + " só são permitidos arquivos mono, stereo, quad e 5.1.");
+                    this.listMessagesError.push(listAudioData[index].name +
+                        " só são permitidos arquivos mono, stereo, quad e 5.1.");
                 }
                 //se  o tamanho da lista de itens provisiorios e o tamannho do errros somados juntos forem igual ao tamaho da lista decode, quer dizer que terminou
-                if ((this.listItemBufferProv.length + this.listMessagesError.length) == listAudioData.length) {
+                if (this.listItemBufferProv.length + this.listMessagesError.length ==
+                    listAudioData.length) {
                     //Cria a lista em ordem alfabeita
                     this.listaNamesOk = this.createListNames(this.listItemBufferProv);
                     if (newList) {
@@ -157,7 +177,7 @@ class DAO {
             for (let index3 = 0; index3 < this.listItemBufferProv.length; index3++) {
                 if (this.listaNamesOk[index2] == this.listItemBufferProv[index3].name) {
                     //console.log("Inserindo na lista de buffers OK: " + this.listItemBufferProv[index3].name)
-                    if (this.listItemBufferProv[index3].color == '') {
+                    if (this.listItemBufferProv[index3].color == "") {
                         this.listItemBufferProv[index3].color = this.controlFiles.getColor(this.listItemBuffer.length);
                     }
                     this.listItemBuffer.push(this.listItemBufferProv[index3]);
@@ -169,9 +189,11 @@ class DAO {
     loadCotinue() {
         for (let index2 = 0; index2 < this.listItemBuffer.length; index2++) {
             for (let index3 = 0; index3 < this.listItemBufferProv.length; index3++) {
-                if (this.listItemBuffer[index2].name == this.listItemBufferProv[index3].name) {
+                if (this.listItemBuffer[index2].name ==
+                    this.listItemBufferProv[index3].name) {
                     //console.log("Inserindo na lista de Continue: " + this.listItemBufferProv[index3].name)
-                    this.listItemBuffer[index2].buffer = this.listItemBufferProv[index3].buffer;
+                    this.listItemBuffer[index2].buffer =
+                        this.listItemBufferProv[index3].buffer;
                     break;
                 }
             }
@@ -206,14 +228,15 @@ class DAO {
      * @param  {ItemMixPanel[][]} listItemMixPanel
      */
     downloadJSON(nameFileUser, authorUser) {
-        let a = document.createElement('a');
+        let a = document.createElement("a");
         console.log("-------- NAME AUTHOR: " + authorUser);
         this.sessionControl.putName(nameFileUser ? nameFileUser : this.getDefaultName());
         this.sessionControl.putAuthor(authorUser ? authorUser : this.getDefaultAuthor());
         // this.sessionControl.putAuthor("teste put autor");
         this.sessionControl.putEndEventSession();
-        let data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.soundSphereDBToJson(this.listItemBuffer, this.listItemMixPanel, this.listSemanticDescriptors, this.soundSphereInfo, this.sessionControl)));
-        a.href = 'data:' + data;
+        let data = "text/json;charset=utf-8," +
+            encodeURIComponent(JSON.stringify(this.soundSphereDBToJson(this.listItemBuffer, this.listItemMixPanel, this.listSemanticDescriptors, this.soundSphereInfo, this.sessionControl)));
+        a.href = "data:" + data;
         var nameFile = this.sessionControl.getLastEventName();
         a.download = nameFile + ".json";
         a.click();
@@ -248,13 +271,13 @@ class DAO {
     }
     synchronizesessionControl(sessionControl) {
         this.sessionControl.listEventSession = [];
-        sessionControl.listEventSession.forEach(element => {
+        sessionControl.listEventSession.forEach((element) => {
             let evtSession = new EventSession();
             evtSession.datDateSave = element.datDateSave;
             evtSession.dateStartWork = element.dateStartWork;
             evtSession.name = element.name;
             evtSession.author = element.author;
-            element.listEventItemMixPanel.forEach(element => {
+            element.listEventItemMixPanel.forEach((element) => {
                 let itemMixPanel = new ItemMixPanel();
                 itemMixPanel.x = element.itemMixPanel.x;
                 itemMixPanel.y = element.itemMixPanel.y;
@@ -273,6 +296,8 @@ class DAO {
                 itemMixPanel.linha = element.itemMixPanel.linha;
                 itemMixPanel.style = element.itemMixPanel.style;
                 itemMixPanel.descriptiveIcon = element.itemMixPanel.descriptiveIcon;
+                itemMixPanel.tag_dimension = element.itemMixPanel.tag_dimension;
+                itemMixPanel.tag_intensity = element.itemMixPanel.tag_intensity;
                 itemMixPanel.changeStardValues();
                 itemMixPanel.setIdSemanticDescriptor(element.itemMixPanel.idSemanticDescriptor);
                 itemMixPanel.setCodeSemanticDescriptor(element.itemMixPanel.codeSemanticDescriptor);
@@ -322,7 +347,8 @@ class DAO {
                     itemMixPanel.excluded = listItemMixPanel[i][j].excluded;
                     itemMixPanel.idBuffer = listItemMixPanel[i][j].idBuffer;
                     if (!itemMixPanel.excluded) {
-                        this.listItemBuffer[itemMixPanel.idBuffer].amount = this.listItemBuffer[itemMixPanel.idBuffer].amount + 1;
+                        this.listItemBuffer[itemMixPanel.idBuffer].amount =
+                            this.listItemBuffer[itemMixPanel.idBuffer].amount + 1;
                         this.listItemBuffer[itemMixPanel.idBuffer].show = true;
                     }
                     itemMixPanel.color = listItemMixPanel[i][j].color;
@@ -334,6 +360,8 @@ class DAO {
                     itemMixPanel.linha = listItemMixPanel[i][j].linha;
                     itemMixPanel.style = listItemMixPanel[i][j].style;
                     itemMixPanel.descriptiveIcon = listItemMixPanel[i][j].descriptiveIcon;
+                    itemMixPanel.tag_dimension = listItemMixPanel[i][j].tag_dimension;
+                    itemMixPanel.tag_intensity = listItemMixPanel[i][j].tag_intensity;
                     itemMixPanel.changeStardValues();
                     itemMixPanel.setIdSemanticDescriptor(listItemMixPanel[i][j].idSemanticDescriptor);
                     itemMixPanel.setCodeSemanticDescriptor(listItemMixPanel[i][j].codeSemanticDescriptor);

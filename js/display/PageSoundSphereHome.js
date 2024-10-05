@@ -10,6 +10,8 @@ class PageSoundSphereHome extends SimplePage {
         this.stopActived = true;
         this.reloadPainel = false;
         this.listDescriptiveIcons = [];
+        this.listDimension = [];
+        this.listIntisty = [];
         //pauseActived = false
         this.itemMixOption = undefined;
         this.itemOptionEnabled = true;
@@ -24,6 +26,8 @@ class PageSoundSphereHome extends SimplePage {
         this.generateHTML();
         this.showModalInitial();
         this.loadDescriptiveIcons();
+        this.loadDimensions();
+        this.loadIntensity();
     }
     enableItemOption() {
         this.itemOptionEnabled = true;
@@ -35,6 +39,7 @@ class PageSoundSphereHome extends SimplePage {
         this.painel.unsetCursorEdit();
     }
     disableAlbum() {
+        console.log("disabilitando menu album");
         this.idSelectedIcomAlbum = undefined;
         this.disableItemOption();
         $(".itemMenuAmostra").children("i.black").toggleClass("black white");
@@ -50,25 +55,32 @@ class PageSoundSphereHome extends SimplePage {
             this.enableItemOption();
         }
     }
+    loadDimensions() {
+        this.listDimension.push(new Dimension("A - Amargo", "A"));
+        this.listDimension.push(new Dimension("D - Doce", "D"));
+    }
+    loadIntensity() {
+        this.listIntisty.push(new Intensity("Mínimo", 1));
+        this.listIntisty.push(new Intensity("Pouco", 2));
+        this.listIntisty.push(new Intensity("Moderado", 3));
+        this.listIntisty.push(new Intensity("Muito", 4));
+        this.listIntisty.push(new Intensity("Máximo", 5));
+    }
     loadDescriptiveIcons() {
-        this.listDescriptiveIcons.push(new DescriptiveIcon(0, "img/icons/chocolate_tradicional.png", "Chocolate Tradicional", "chocolate_tradicioinal"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(1, "img/icons/chocolate_branco.png", "Chocolate Branco", "chocolate_branco"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(2, "img/icons/achocolatado_tradicional_cheio.png", "Achocolatado Tradicional", "achocolatado_tradicional"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(3, "img/icons/achocolatado_tradicional_vazio.png", "Achocolatado Tradicional Vazio", "achocolatado_tradicional_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(4, "img/icons/achocolatado_branco_cheio.png", "Achocolatado Branco", "achocolatado_branco"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(5, "img/icons/achocolatado_branco_vazio.png", "Achocolatado Branco Vazio", "achocolatado_branco_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(0, "img/icons/agua.png", "Agua", "agua"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(6, "img/icons/agua_vazio.png", "Agua vazio", "agua_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(2, "img/icons/cafe.png", "Café", "cafe"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(7, "img/icons/cafe_vazio.png", "Café vazio", "cafe_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(8, "img/icons/laranja.png", "Laranja", "laranja"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(9, "img/icons/laranja_vazio.png", "Laranja vazio", "laranja_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(6, "img/icons/limao.png", "Limão", "limao"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(1, "img/icons/chocolate_tradicional.png", "Chocolate Tradicional", "chocolate_tradicioinal"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(2, "img/icons/chocolate_branco.png", "Chocolate Branco", "chocolate_branco"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(3, "img/icons/agua.png", "Agua", "agua"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(4, "img/icons/agua_vazio.png", "Agua vazio", "agua_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(5, "img/icons/cafe.png", "Café", "cafe"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(6, "img/icons/cafe_vazio.png", "Café vazio", "cafe_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(7, "img/icons/laranja.png", "Laranja", "laranja"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(8, "img/icons/laranja_vazio.png", "Laranja vazio", "laranja_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(9, "img/icons/limao.png", "Limão", "limao"));
         this.listDescriptiveIcons.push(new DescriptiveIcon(10, "img/icons/limao_vazio.png", "Limão vazio", "limao_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(8, "img/icons/maca.png", "Maçã", "maca"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(10, "img/icons/maca.png", "Maçã", "maca"));
         this.listDescriptiveIcons.push(new DescriptiveIcon(11, "img/icons/maca_vazio.png", "Maçã vazio", "maca_vazio"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(10, "img/icons/tomate.png", "Tomate", "tomate"));
-        this.listDescriptiveIcons.push(new DescriptiveIcon(12, "img/icons/tomate_vazio.png", "tomate vazio", "tomate_vazio"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(12, "img/icons/tomate.png", "Tomate", "tomate"));
+        this.listDescriptiveIcons.push(new DescriptiveIcon(13, "img/icons/tomate_vazio.png", "tomate vazio", "tomate_vazio"));
     }
     getImgDescriptiveIcon(tag) {
         for (let index = 0; index < this.listDescriptiveIcons.length; index++) {
@@ -129,9 +141,13 @@ class PageSoundSphereHome extends SimplePage {
                         <div id="dropdownCamadas" class="ui dropdown item">
                             Camadas <i class="dropdown icon"></i>
                             <div class="menu">
-                                <a data-value="0" class="item active">Descritor + Amplitude</a>
+                                <a data-value="0" class="item active"> Todos</a>
                                 <a data-value="1" class="item ">Descritor</a>
                                 <a data-value="2" class="item">Amplitude</a>
+                                <a data-value="4" class="item">Alimentos</a>
+                                <a data-value="3" class="item">Dimensão</a>
+                                <a data-value="5" class="item">Intensidade</a>
+
                             </div>
                         </div>
                         
@@ -157,8 +173,9 @@ class PageSoundSphereHome extends SimplePage {
         if (this.dao.listItemBuffer.length != 0) {
             conteudo = `
         <div>
-         
-         <div id="containerSoundIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">`;
+        
+         <div id="containerSoundIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">
+           <h3 class="ui header" style="margin-bottom: 0px;">Amostras</h3>`;
             for (let index = 0; index < this.dao.listItemBuffer.length; index++) {
                 // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
                 if (this.dao.listItemBuffer[index].show) {
@@ -169,13 +186,36 @@ class PageSoundSphereHome extends SimplePage {
             }
             conteudo += `
       </div>
-      <div id="containerDescriptiveIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">`;
+      <div id="containerDescriptiveIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">
+            <h3 class="ui header" style="margin-bottom: 0px;" >Alimentos</h3>`;
             for (let index = 0; index < this.listDescriptiveIcons.length; index++) {
                 // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
                 conteudo += `
         <a  style="padding:6px!important;" data-html=" ${this.listDescriptiveIcons[index].name}"  class="itemMenuDescriptiveIcon" data-tag="${this.listDescriptiveIcons[index].tag}" data-id="${index}"><img style="width:40px; height:40px;" src="${this.listDescriptiveIcons[index].url}">	</a>
         `;
             }
+            //Dimensao
+            conteudo += `
+         <div class="row">
+          <div class="column">
+            <h3 class="ui header" style="margin-bottom: 0px;">Dimensão</h3>`;
+            for (let index = 0; index < this.listDimension.length; index++) {
+                conteudo += `<a class="ui  button button_dimension" data-tag="${this.listDimension[index].tag}"> ${this.listDimension[index].name} </a>`;
+            }
+            conteudo += `</div>
+        </div>
+      `;
+            //Intensidade
+            conteudo += `
+     <div class="row">
+      <div class="column">
+        <h3 class="ui header" style="margin-bottom: 0px;">Intensidade</h3>`;
+            for (let index = 0; index < this.listIntisty.length; index++) {
+                conteudo += `<a class="ui  button button_intensity" data-tag="${this.listIntisty[index].tag}"> ${this.listIntisty[index].tag} - ${this.listIntisty[index].name} </a>`;
+            }
+            conteudo += `</div>
+    </div>
+    `;
             conteudo += `
       </div>
        </div>`;
@@ -201,14 +241,44 @@ class PageSoundSphereHome extends SimplePage {
                 if (value == 0) {
                     this.painel.drawDescritor = true;
                     this.painel.drawGradient = true;
+                    this.painel.drawDimension = true;
+                    this.painel.drawFood = true;
+                    this.painel.drawIntensity = true;
                 }
                 else if (value == 1) {
                     this.painel.drawDescritor = true;
                     this.painel.drawGradient = false;
+                    this.painel.drawDimension = false;
+                    this.painel.drawFood = false;
+                    this.painel.drawIntensity = false;
+                }
+                else if (value == 2) {
+                    this.painel.drawDescritor = false;
+                    this.painel.drawGradient = true;
+                    this.painel.drawDimension = false;
+                    this.painel.drawFood = false;
+                    this.painel.drawIntensity = false;
+                }
+                else if (value == 3) {
+                    this.painel.drawDescritor = false;
+                    this.painel.drawGradient = false;
+                    this.painel.drawDimension = true;
+                    this.painel.drawFood = false;
+                    this.painel.drawIntensity = false;
+                }
+                else if (value == 4) {
+                    this.painel.drawDescritor = false;
+                    this.painel.drawGradient = false;
+                    this.painel.drawDimension = false;
+                    this.painel.drawFood = true;
+                    this.painel.drawIntensity = false;
                 }
                 else {
                     this.painel.drawDescritor = false;
-                    this.painel.drawGradient = true;
+                    this.painel.drawGradient = false;
+                    this.painel.drawDimension = false;
+                    this.painel.drawFood = false;
+                    this.painel.drawIntensity = true;
                 }
                 this.painel.reMake();
             },
@@ -470,13 +540,10 @@ class PageSoundSphereHome extends SimplePage {
             $(e.currentTarget).children("i.play").toggleClass("play square");
         });
         $(".itemMenuAmostra").on("click", (e) => {
-            if (this.descriptiveIcon) {
-                this.disableMenuDescriptiveIcon();
-            }
-            else if (this.buttonRemoveStatus) {
+            this.stopSimple();
+            if (this.buttonRemoveStatus) {
                 this.disableButtonTrash();
             }
-            this.stopSimple();
             $("a.itemMenuAmostra").children("i.black").toggleClass("black white");
             if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
                 this.idSelectedIcomAlbum = undefined;
@@ -485,28 +552,55 @@ class PageSoundSphereHome extends SimplePage {
             else {
                 $(e.currentTarget).children("i").toggleClass("white black");
                 this.idSelectedIcomAlbum = $(e.currentTarget).data("id");
-                console.log("CHAMOU O DISABLE ITEM");
                 this.disableItemOption();
             }
         });
         $(".itemMenuDescriptiveIcon").on("click", (e) => {
-            if (this.idSelectedIcomAlbum) {
-                this.disableAlbum();
-            }
-            else if (this.buttonRemoveStatus) {
+            this.stopSimple();
+            if (this.buttonRemoveStatus) {
                 this.disableButtonTrash();
             }
-            this.stopSimple();
             $(".itemMenuDescriptiveIcon").removeClass("itemMenuDescriptiveIconSelected");
             if (this.descriptiveIcon == $(e.currentTarget).data("tag")) {
+                console.log($(e.currentTarget).data("tag"));
                 $(e.currentTarget).removeClass("itemMenuDescriptiveIconSelected");
                 this.descriptiveIcon = undefined;
-                this.enableItemOption();
             }
             else {
                 $(e.currentTarget).addClass("itemMenuDescriptiveIconSelected");
                 this.descriptiveIcon = $(e.currentTarget).data("tag");
-                this.disableItemOption();
+            }
+        });
+        $(".button_dimension").on("click", (e) => {
+            this.stopSimple();
+            if (this.buttonRemoveStatus) {
+                this.disableButtonTrash();
+            }
+            $(".button_dimension").removeClass("black");
+            if (this.selected_tag_dimension == $(e.currentTarget).data("tag")) {
+                console.log($(e.currentTarget).data("tag"));
+                $(e.currentTarget).removeClass("black");
+                this.selected_tag_dimension = undefined;
+            }
+            else {
+                $(e.currentTarget).addClass("black");
+                this.selected_tag_dimension = $(e.currentTarget).data("tag");
+            }
+        });
+        $(".button_intensity").on("click", (e) => {
+            this.stopSimple();
+            if (this.buttonRemoveStatus) {
+                this.disableButtonTrash();
+            }
+            $(".button_intensity").removeClass("black");
+            if (this.selected_tag_intensity == $(e.currentTarget).data("tag")) {
+                console.log($(e.currentTarget).data("tag"));
+                $(e.currentTarget).removeClass("black");
+                this.selected_tag_intensity = undefined;
+            }
+            else {
+                $(e.currentTarget).addClass("black");
+                this.selected_tag_intensity = $(e.currentTarget).data("tag");
             }
         });
     }

@@ -20,6 +20,8 @@ class DAOHome extends DAO {
         newItem.setCodeSemanticDescriptor(itemMixPanel.getCodeSemanticDescriptor());
         newItem.id = itemMixPanel.id;
         newItem.descriptiveIcon = itemMixPanel.descriptiveIcon;
+        newItem.tag_dimension = itemMixPanel.tag_dimension;
+        newItem.tag_intensity = itemMixPanel.tag_intensity;
         newItem.idBuffer = itemMixPanel.idBuffer;
         this.sessionControl.addEventItemMixPanel(new EventItemMixPanel(newItem, EventsCRUD.INSERT));
         if (this.listItemMixPanel[itemMixPanel.linha] == undefined) {
@@ -64,20 +66,24 @@ class DAOHome extends DAO {
                     //Se teve alguma alteração no item ele faz a alteração e retorna true iformando que teve alterações
                     //se nao ele retorna false
                     console.log("Entrou no  id == id");
-                    console.log("this.listItemMixPanel[linha][index].descriptiveIcon: " + this.listItemMixPanel[linha][index].descriptiveIcon);
+                    console.log("this.listItemMixPanel[linha][index].descriptiveIcon: " +
+                        this.listItemMixPanel[linha][index].descriptiveIcon);
                     if (!this.listItemMixPanel[linha][index].equals(itemMixPanel)) {
                         alteração = true;
                         console.log("ALTERANDO: " + itemMixPanel.getCodeSemanticDescriptor());
                         this.listItemMixPanel[linha][index].setVolume(itemMixPanel.getVolume());
                         this.listItemMixPanel[linha][index].setIdSemanticDescriptor(itemMixPanel.getidSemanticDescriptor());
                         this.listItemMixPanel[linha][index].setCodeSemanticDescriptor(itemMixPanel.getCodeSemanticDescriptor());
-                        console.log("itemMixPanel.getCodeSemanticDescriptor() " + itemMixPanel.getCodeSemanticDescriptor());
-                        this.listItemMixPanel[linha][index].startTime = itemMixPanel.startTime;
+                        console.log("itemMixPanel.getCodeSemanticDescriptor() " +
+                            itemMixPanel.getCodeSemanticDescriptor());
+                        this.listItemMixPanel[linha][index].startTime =
+                            itemMixPanel.startTime;
                         this.listItemMixPanel[linha][index].x = itemMixPanel.x;
                         this.listItemMixPanel[linha][index].endTime = itemMixPanel.endTime;
                         this.listItemMixPanel[linha][index].solo = itemMixPanel.solo;
                         console.log("xxxitemMixPanel.descriptiveIcon: " + itemMixPanel.descriptiveIcon);
-                        this.listItemMixPanel[linha][index].descriptiveIcon = itemMixPanel.descriptiveIcon;
+                        this.listItemMixPanel[linha][index].descriptiveIcon =
+                            itemMixPanel.descriptiveIcon;
                         this.listItemMixPanel[linha][index].changeStardValues();
                     }
                 }
@@ -97,7 +103,7 @@ class DAOHome extends DAO {
             //Atualiza a nova linha no item
             itemMixPanel.linha = newLinha;
             if (this.listItemMixPanel[newLinha] == undefined) {
-                itemMixPanel.y = ((newLinha * sizeTrail) + (sizeTrail / 2));
+                itemMixPanel.y = newLinha * sizeTrail + sizeTrail / 2;
                 this.listItemMixPanel[newLinha] = new Array();
                 this.listItemMixPanel[newLinha].push(itemMixPanel);
             }
