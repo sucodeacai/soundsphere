@@ -150,17 +150,17 @@ class Painel {
           this.tooltip.showMessage("Nenhum ítem de mixagem selecionado. 1");
         }
         //Se as opções estiverem ativadas
-        // } else if (this.pageSoundSphereHome.sequenciador.activePause) {
-        //   console.log("Mouse up remove pause");
-        //   let seconds = this.getSecondsByXPosition(
-        //     this.getPositionX(event) + this.displacingXAxis
-        //   );
-        //   if (seconds <= this.totalTime) {
-        //     this.xMarker = this.getPositionX(event) + this.displacingXAxis;
-        //     this.lastMakerX = this.xMarker;
-        //     this.pageSoundSphereHome.sequenciador.continueFrom = seconds;
-        //     this.reMake();
-        //   }
+      } else if (this.pageSoundSphereHome.sequenciador.activePause) {
+        console.log("Mouse up remove pause");
+        let seconds = this.getSecondsByXPosition(
+          this.getPositionX(event) + this.displacingXAxis
+        );
+        if (seconds <= this.totalTime) {
+          this.xMarker = this.getPositionX(event) + this.displacingXAxis;
+          this.lastMakerX = this.xMarker;
+          this.pageSoundSphereHome.sequenciador.continueFrom = seconds;
+          this.reMake();
+        }
       } else if (this.pageSoundSphereHome.idSelectedIcomAlbum != undefined) {
         console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
         console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);

@@ -35,6 +35,7 @@ class Sequenciador {
         this.dao = dao;
         this.audioCtx = audioCtx;
     }
+    //Manda o traker lá para o começo e move o painel
     stop(callback) {
         // if (this.activePlay || this.activePause) {
         this.continueFrom = 0;
@@ -56,6 +57,7 @@ class Sequenciador {
         }
         // }
     }
+    //Para o painel no nocal que pause ou para a execução
     stopSimple(callback) {
         // if (this.activePlay || this.activePause) {
         if (!this.stopFlag) {

@@ -1,5 +1,14 @@
 "use strict";
 class PageSoundSphereHome extends SimplePage {
+    render() {
+        this.loadContainerAudio();
+        this.loadContainerSemaitsDescriptors();
+        this.loadContainerActionDescriptiveIcons();
+        this.loadContainerDimension();
+        this.loadContainerIntensity();
+        this.addClickEventToItensModificadoresPanel();
+        this.addTooltipEvents();
+    }
     generateActions() {
         throw new Error("Method not implemented.");
     }
@@ -39,7 +48,7 @@ class PageSoundSphereHome extends SimplePage {
         this.codeSemanticDescriptor = undefined;
         this.idSelectedIcomAlbum = undefined;
         //Controlar Modificadores Painel
-        this.buttonModificadorPainel = undefined;
+        this.buttonModificadorPainel = [];
         //pauseActived = false
         this.itemMixOption = undefined;
         this.itemOptionEnabled = true;
@@ -69,65 +78,13 @@ class PageSoundSphereHome extends SimplePage {
     }
     //Seta as configuracoes padroes da aplicacao
     setSettingsActions() {
-        var _a, _b, _c, _d;
+        var _a;
         (_a = document
             .getElementById("button_iniciar_upload")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
             this.sequenciador.stop(function () { });
             this.modal_welcome.hide();
             document.getElementById("filesWav").click();
         });
-        //Confifuração dos botoes do menu-botoes-painel
-        (_b = document.getElementById("buttonPlay")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
-            if (!this.sequenciador.activePlay) {
-                this.playMixagem();
-            }
-            else {
-                console.warn("Play já está ativo");
-            }
-        });
-        (_c = document.getElementById("buttonPause")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => {
-            this.pauseMixagem();
-        });
-        (_d = document.getElementById("buttonStop")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => {
-            this.stopMixagem();
-        });
-    }
-    stopMixagem() {
-        this.stopActived = true;
-        this.sequenciador.stop(() => {
-            // $('img').attr('draggable');
-            document.getElementById("buttonPlay").classList.remove("active");
-            document.getElementById("buttonPause").classList.remove("active");
-            document.getElementById("buttonStop").classList.add("active");
-        });
-    }
-    pauseMixagem() {
-        this.sequenciador.pause(() => {
-            document.getElementById("buttonPause").classList.add("active");
-        }, () => {
-            document.getElementById("buttonPause").classList.remove("active");
-        });
-    }
-    playMixagem() {
-        this.sequenciador.play(() => {
-            document.getElementById("buttonPause").classList.remove("active");
-            document.getElementById("buttonStop").classList.remove("active");
-            document.getElementById("buttonPlay").classList.toggle("active");
-            this.stopActived = false;
-            // this.pauseActived = false;
-        }, () => {
-            //console.log("Terminou de executar")
-            document.getElementById("buttonPlay").classList.remove("active");
-        });
-    }
-    render() {
-        this.loadContainerAudio();
-        this.loadContainerSemaitsDescriptors();
-        this.loadContainerActionDescriptiveIcons();
-        this.loadContainerDimension();
-        this.loadContainerIntensity();
-        this.addClickEventToItensModificadoresPanel();
-        this.addTooltipEvents();
     }
     loadContainerSemaitsDescriptors() {
         this.listSemanticDescriptors = generatorSemanticDescriptors();
@@ -183,10 +140,16 @@ class PageSoundSphereHome extends SimplePage {
     }
     //Verifica se excluir está ativo
     isDeleteButtonActive() {
-        if (this.buttonModificadorPainel == "remove") {
-            return true;
-        }
-        return false;
+        var _a;
+        return (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("remove");
+    }
+    isPlayButtonActive() {
+        var _a;
+        return (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("play");
+    }
+    isPauseButtonActive() {
+        var _a;
+        return (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("pause");
     }
     loadContainerIntensity() {
         let conteudo = "";
@@ -381,11 +344,18 @@ class PageSoundSphereHome extends SimplePage {
     disableItensModificadoresPanel() {
         const botoesModificadores = document.querySelectorAll("#container-modificadores .btn");
         botoesModificadores.forEach((button) => {
-            if (button.classList.contains("active")) {
+            if (button.classList.contains("active") &&
+                button.getAttribute("data-action") != "stop") {
                 button.classList.remove("active");
+                console.log("Removeu classe active");
+            }
+            else {
+                console.log("Não removeu stop");
             }
         });
-        this.buttonModificadorPainel = undefined;
+        console.log("fim teste");
+        this.stopMixagem();
+        this.buttonModificadorPainel = [];
     }
     addClickEventToActionDescriptiveIcons() {
         const alimentosItems = document.querySelectorAll(".itemMenuDescriptiveIcon");
@@ -425,24 +395,73 @@ class PageSoundSphereHome extends SimplePage {
         });
     }
     addClickEventToItensModificadoresPanel() {
+        var _a, _b, _c, _d;
         const botoesModificadoresPanel = document.querySelectorAll("#container-modificadores .btn");
+        //Confifuração dos botoes do menu-botoes-painel
         botoesModificadoresPanel.forEach((button) => {
             button.addEventListener("click", () => {
                 var _a;
                 if (button.classList.contains("active")) {
-                    button.classList.remove("active");
+                    if (!this.sequenciador.activePlay &&
+                        button.getAttribute("data-action") != "play") {
+                        button.classList.remove("active");
+                    }
                 }
                 else {
                     botoesModificadoresPanel.forEach((otherButton) => {
                         otherButton.classList.remove("active");
                     });
-                    this.buttonModificadorPainel =
-                        (_a = button.getAttribute("data-action")) !== null && _a !== void 0 ? _a : undefined;
-                    console.log(`Ação Modificadora: ${this.buttonModificadorPainel}`);
+                    const action = button.getAttribute("data-action");
+                    if (action) {
+                        (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.push(action);
+                    }
+                    console.log(`Ação Modificadora: ${this.buttonModificadorPainel[0]}`);
                     button.classList.add("active");
                     this.disableItensCumulative();
                 }
             });
+        });
+        (_a = document.getElementById("buttonPlay")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
+            if (!this.sequenciador.activePlay) {
+                this.sequenciador.play(() => {
+                    this.stopActived = false;
+                    // this.pauseActived = false;
+                }, () => {
+                    //console.log("Terminou de executar")
+                    document.getElementById("buttonPlay").classList.remove("active");
+                    if (!this.isPauseButtonActive()) {
+                        this.stopMixagem();
+                    }
+                    this.buttonModificadorPainel = [];
+                });
+            }
+            else {
+                console.warn("Play já está ativo");
+            }
+        });
+        (_b = document.getElementById("buttonPause")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
+            this.sequenciador.pause(() => { }, () => {
+                this.stopMixagem();
+            });
+        });
+        (_c = document.getElementById("buttonStop")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => {
+            this.stopMixagem();
+        });
+        (_d = document
+            .getElementById("modificador-excluir")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => {
+            this.stopMixagem();
+            console.log("this.buttonModificadorPainel");
+            document.getElementById("buttonStop").classList.add("active");
+            console.log(this.buttonModificadorPainel);
+        });
+    }
+    stopMixagem() {
+        this.stopActived = true;
+        this.sequenciador.stopSimple(() => {
+            // $('img').attr('draggable');
+            document.getElementById("buttonPlay").classList.remove("active");
+            document.getElementById("buttonPause").classList.remove("active");
+            document.getElementById("buttonStop").classList.add("active");
         });
     }
     //Adiciona os eventos aos itens musicais

@@ -320,32 +320,27 @@
 
   <!-- Menu de botões -->
   <div id="menu-botoes-painel" class="container mt-4 d-flex justify-content-center">
-    <div class="btn-group">
-      <button type="button" id="buttonPlay" class="btn btn-secondary">
+    <div id="container-modificadores" class="btn-group">
+      <button data-action="play" type="button" id="buttonPlay" class="btn btn-secondary">
         <i class="fas fa-play"></i>
       </button>
-      <button type="button" id="buttonPause" class="btn btn-secondary">
+      <button data-action="pause" type="button" id="buttonPause" class="btn btn-secondary">
         <i class="fas fa-pause"></i>
       </button>
-      <button type="button" id="buttonStop" class="btn btn-secondary active">
+      <button data-action="stop" type="button" id="buttonStop" class="btn btn-secondary active">
         <i class="fas fa-stop"></i>
+      </button>
+      <button data-action="remove" id="modificador-excluir" class="btn btn-secondary">
+        <i class="fas fa-trash"></i>
+      </button>
+      <button data-action="move" id="modificador-mover" class="btn btn-secondary">
+        <i class="fas  fa-arrows-alt"></i>
       </button>
     </div>
   </div>
 
 
   <div id="general-options-panel">
-    <div class="option-itens mt-4">
-      <h2>Modificadores</h2>
-      <div id="container-modificadores" class="option-itens-itens">
-        <button data-action="remove" id="modificador-excluir" class="btn btn-light m-2 btn-rounded">
-          <i class="fas fa-trash"></i> Excluir
-        </button>
-        <button data-action="move" id="modificador-mover" class="btn btn-light m-2 btn-rounded">
-          <i class="fas  fa-arrows-alt"></i> Mover
-        </button>
-      </div>
-    </div>
     <div class="option-itens mt-4">
       <h2>Amostras</h2>
       <div id="container-amostras-audio" class="option-itens-itens">

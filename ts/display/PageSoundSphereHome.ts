@@ -1,4 +1,13 @@
 class PageSoundSphereHome extends SimplePage {
+  render(): void {
+    this.loadContainerAudio();
+    this.loadContainerSemaitsDescriptors();
+    this.loadContainerActionDescriptiveIcons();
+    this.loadContainerDimension();
+    this.loadContainerIntensity();
+    this.addClickEventToItensModificadoresPanel();
+    this.addTooltipEvents();
+  }
   generateActions(): string {
     throw new Error("Method not implemented.");
   }
@@ -40,7 +49,7 @@ class PageSoundSphereHome extends SimplePage {
   idSelectedIcomAlbum: number | undefined = undefined;
 
   //Controlar Modificadores Painel
-  buttonModificadorPainel: string | undefined = undefined;
+  buttonModificadorPainel: string[] = [];
 
   //pauseActived = false
   itemMixOption: ItemMixPanel | undefined = undefined;
@@ -109,67 +118,8 @@ class PageSoundSphereHome extends SimplePage {
         this.modal_welcome.hide();
         document.getElementById("filesWav")!.click();
       });
-
-    //Confifuração dos botoes do menu-botoes-painel
-    document.getElementById("buttonPlay")?.addEventListener("click", () => {
-      if (!this.sequenciador.activePlay) {
-        this.playMixagem();
-      } else {
-        console.warn("Play já está ativo");
-      }
-    });
-    document.getElementById("buttonPause")?.addEventListener("click", () => {
-      this.pauseMixagem();
-    });
-    document.getElementById("buttonStop")?.addEventListener("click", () => {
-      this.stopMixagem();
-    });
   }
 
-  stopMixagem() {
-    this.stopActived = true;
-    this.sequenciador.stop(() => {
-      // $('img').attr('draggable');
-      document.getElementById("buttonPlay")!.classList.remove("active")!;
-      document.getElementById("buttonPause")!.classList.remove("active");
-      document.getElementById("buttonStop")!.classList.add("active");
-    });
-  }
-
-  pauseMixagem() {
-    this.sequenciador.pause(
-      () => {
-        document.getElementById("buttonPause")!.classList.add("active");
-      },
-      () => {
-        document.getElementById("buttonPause")!.classList.remove("active");
-      }
-    );
-  }
-  playMixagem() {
-    this.sequenciador.play(
-      () => {
-        document.getElementById("buttonPause")!.classList.remove("active");
-        document.getElementById("buttonStop")!.classList.remove("active");
-        document.getElementById("buttonPlay")!.classList.toggle("active");
-        this.stopActived = false;
-        // this.pauseActived = false;
-      },
-      () => {
-        //console.log("Terminou de executar")
-        document.getElementById("buttonPlay")!.classList.remove("active");
-      }
-    );
-  }
-  render(): void {
-    this.loadContainerAudio();
-    this.loadContainerSemaitsDescriptors();
-    this.loadContainerActionDescriptiveIcons();
-    this.loadContainerDimension();
-    this.loadContainerIntensity();
-    this.addClickEventToItensModificadoresPanel();
-    this.addTooltipEvents();
-  }
   loadContainerSemaitsDescriptors(): void {
     this.listSemanticDescriptors = generatorSemanticDescriptors();
     for (let index = 0; index < this.listSemanticDescriptors.length; index++) {
@@ -231,11 +181,14 @@ class PageSoundSphereHome extends SimplePage {
     });
   }
   //Verifica se excluir está ativo
-  isDeleteButtonActive(): boolean {
-    if (this.buttonModificadorPainel == "remove") {
-      return true;
-    }
-    return false;
+  isDeleteButtonActive(): boolean | undefined {
+    return this.buttonModificadorPainel?.includes("remove");
+  }
+  isPlayButtonActive(): boolean | undefined {
+    return this.buttonModificadorPainel?.includes("play");
+  }
+  isPauseButtonActive(): boolean | undefined {
+    return this.buttonModificadorPainel?.includes("pause");
   }
   loadContainerIntensity(): void {
     let conteudo = "";
@@ -503,11 +456,19 @@ class PageSoundSphereHome extends SimplePage {
       "#container-modificadores .btn"
     );
     botoesModificadores.forEach((button) => {
-      if (button.classList.contains("active")) {
+      if (
+        button.classList.contains("active") &&
+        button.getAttribute("data-action") != "stop"
+      ) {
         button.classList.remove("active");
+        console.log("Removeu classe active");
+      } else {
+        console.log("Não removeu stop");
       }
     });
-    this.buttonModificadorPainel = undefined;
+    console.log("fim teste");
+    this.stopMixagem();
+    this.buttonModificadorPainel = [];
   }
   addClickEventToActionDescriptiveIcons(): void {
     const alimentosItems = document.querySelectorAll(
@@ -558,23 +519,83 @@ class PageSoundSphereHome extends SimplePage {
     const botoesModificadoresPanel = document.querySelectorAll(
       "#container-modificadores .btn"
     );
+    //Confifuração dos botoes do menu-botoes-painel
 
     botoesModificadoresPanel.forEach((button) => {
       button.addEventListener("click", () => {
         if (button.classList.contains("active")) {
-          button.classList.remove("active");
+          if (
+            !this.sequenciador.activePlay &&
+            button.getAttribute("data-action") != "play"
+          ) {
+            button.classList.remove("active");
+          }
         } else {
           botoesModificadoresPanel.forEach((otherButton) => {
             otherButton.classList.remove("active");
           });
-          this.buttonModificadorPainel =
-            button.getAttribute("data-action") ?? undefined;
 
-          console.log(`Ação Modificadora: ${this.buttonModificadorPainel}`);
+          const action = button.getAttribute("data-action");
+
+          if (action) {
+            this.buttonModificadorPainel?.push(action);
+          }
+          console.log(`Ação Modificadora: ${this.buttonModificadorPainel[0]}`);
           button.classList.add("active");
           this.disableItensCumulative();
         }
       });
+    });
+
+    document.getElementById("buttonPlay")?.addEventListener("click", () => {
+      if (!this.sequenciador.activePlay) {
+        this.sequenciador.play(
+          () => {
+            this.stopActived = false;
+            // this.pauseActived = false;
+          },
+          () => {
+            //console.log("Terminou de executar")
+            document.getElementById("buttonPlay")!.classList.remove("active");
+
+            if (!this.isPauseButtonActive()) {
+              this.stopMixagem();
+            }
+            this.buttonModificadorPainel = [];
+          }
+        );
+      } else {
+        console.warn("Play já está ativo");
+      }
+    });
+    document.getElementById("buttonPause")?.addEventListener("click", () => {
+      this.sequenciador.pause(
+        () => {},
+        () => {
+          this.stopMixagem();
+        }
+      );
+    });
+    document.getElementById("buttonStop")?.addEventListener("click", () => {
+      this.stopMixagem();
+    });
+    document
+      .getElementById("modificador-excluir")
+      ?.addEventListener("click", () => {
+        this.stopMixagem();
+        console.log("this.buttonModificadorPainel");
+        document.getElementById("buttonStop")!.classList.add("active");
+        console.log(this.buttonModificadorPainel);
+      });
+  }
+  stopMixagem() {
+    this.stopActived = true;
+
+    this.sequenciador.stopSimple(() => {
+      // $('img').attr('draggable');
+      document.getElementById("buttonPlay")!.classList.remove("active")!;
+      document.getElementById("buttonPause")!.classList.remove("active");
+      document.getElementById("buttonStop")!.classList.add("active");
     });
   }
   //Adiciona os eventos aos itens musicais
