@@ -393,7 +393,7 @@ class ItemMixPanel {
       }
     }
     if (this.descriptiveIcon != undefined) {
-      console.log("******* desenhar food )");
+      // console.log("******* desenhar food )");
 
       if (painel.drawFood) {
         painel.ctxCanvas.drawImage(

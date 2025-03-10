@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVGs com Tooltip</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .svg-item {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="general-options-panel">
+        <div class="option-itens mt-4">
+            <h2>SVGs Coloridos</h2>
+            <div id="container-amostras-audio" class="option-itens-itens">
+                <div class="svg-item" data-name="101 copy 4.wav" data-duration="15"
+                    style="background-color: rgb(244, 67, 54);" data-bs-toggle="tooltip" title="">
+                    <svg width="50" height="50" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="10" fill="white" class="circle-svg"></circle>
+                        <polygon points="15,10 15,40 35,25" fill="white" class="play-icon"></polygon>
+                    </svg>
+                </div>
+                <div class="svg-item" data-name="101 copy 5.wav" data-duration="15"
+                    style="background-color: rgb(76, 175, 80);" data-bs-toggle="tooltip" title="">
+                    <svg width="50" height="50" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="10" fill="white" class="circle-svg"></circle>
+                        <polygon points="15,10 15,40 35,25" fill="white" class="play-icon"></polygon>
+                    </svg>
+                </div>
+                <div class="svg-item" data-name="Teste_#FFFF.wav" data-duration="15"
+                    style="background-color: rgb(33, 150, 243);" data-bs-toggle="tooltip" title="">
+                    <svg width="50" height="50" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="10" fill="white" class="circle-svg"></circle>
+                        <polygon points="15,10 15,40 35,25" fill="white" class="play-icon"></polygon>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inicializa tooltips e adiciona o título dinâmico
+        document.addEventListener("DOMContentLoaded", function () {
+            const svgItems = document.querySelectorAll(".svg-item");
+            svgItems.forEach(item => {
+                const name = item.getAttribute("data-name");
+                const duration = item.getAttribute("data-duration");
+                item.setAttribute("title", `Nome: ${name}\nDuração: ${duration}s`);
+            });
+            // Inicializa todos os tooltips do Bootstrap
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipTriggerList.forEach(tooltipEl => {
+                new bootstrap.Tooltip(tooltipEl);
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,33 +1,65 @@
 class PageSoundSphereHome extends SimplePage {
+  generateActions(): string {
+    throw new Error("Method not implemented.");
+  }
+
+  setSettingsAttributes(): void {
+    throw new Error("Method not implemented.");
+  }
+  getNameClass(): string {
+    throw new Error("Method not implemented.");
+  }
+  generateHTML(): void {
+    throw new Error("Method not implemented.");
+  }
+  generateAttributes(): string {
+    throw new Error("Method not implemented.");
+  }
+
+  startTemplate(): void {
+    throw new Error("Method not implemented.");
+  }
   canvas: any = [];
   buttonRemoveStatus: boolean = false;
   pixelpersecond: number;
-  descriptiveIcon: string | undefined;
   contextCanvas: any = [];
   stopActived = true;
   reloadPainel = false;
-  listDescriptiveIcons: DescriptiveIcon[] = [];
+
+  listActionDescriptiveIcons: ActionDescriptiveIcon[] = [];
   listDimension: Dimension[] = [];
-  listIntisty: Intensity[] = [];
+  listIntensity: Intensity[] = [];
+  listSemanticDescriptors: SemanticDescriptor[] = [];
+
+  //COntrolar Caracteristicas empilhaveis
+  idActionDescriptiveIcon: string | undefined = undefined;
+  idDimension: string | undefined = undefined;
+  idIntensity: string | undefined = undefined;
+  idSemanticDescriptor: number | undefined = undefined;
+  codeSemanticDescriptor: string | undefined = undefined;
+  idSelectedIcomAlbum: number | undefined = undefined;
+
+  //Controlar Modificadores Painel
+  buttonModificadorPainel: string | undefined = undefined;
 
   //pauseActived = false
   itemMixOption: ItemMixPanel | undefined = undefined;
   itemOptionEnabled: boolean = true;
   voiceCommandMenuBar?: VoiceCommand;
   voiceCommandModalOptions?: VoiceCommand;
-  idSelectedIcomAlbum: number | undefined = undefined;
+
   mouseInsideIconAlbum: number | undefined = undefined;
-  selected_tag_dimension: string | undefined;
-  selected_tag_intensity: string | undefined;
-  tooltip: Tooltip;
+
+  tooltip: Tooltip | undefined;
   painel!: Painel;
 
-  sessionControl: SessionControl;
-
+  sessionControl: SessionControl | undefined;
+  modal_welcome: any;
+  modal_loading: any;
   //itemOptionitemOptionEnabled: boolean = true;
   // constructor(containerElement: JQuery, titulo: string, soundSphereInfo: SoundSphereInfo, dao: DAO, sequenciador: any, canvas: any, contextCanvas: any) {
   constructor(
-    containerElement: JQuery,
+    containerElement: HTMLElement | null,
     titulo: string,
     soundSphereInfo: SoundSphereInfo,
     dao: DAO,
@@ -39,1420 +71,613 @@ class PageSoundSphereHome extends SimplePage {
     super(containerElement, titulo, soundSphereInfo, dao, sequenciador);
     // this.canvas = canvas;
     // this.contextCanvas = contextCanvas;
-
+    this.startWelcomeModal();
     this.pixelpersecond = pixelpersecond;
-
-    this.tooltip = tooltip;
-    this.sessionControl = sessionControl;
-    this.startTemplate();
-    this.generateHTML();
-    this.showModalInitial();
-    this.loadDescriptiveIcons();
-    this.loadDimensions();
-    this.loadIntensity();
-  }
-  enableItemOption() {
-    this.itemOptionEnabled = true;
-    this.painel.setCursorEdit();
-    console.log("CHAMOU O CURSOR EDIT ENABLE");
-  }
-  disableItemOption() {
-    this.itemOptionEnabled = false;
-    this.painel.unsetCursorEdit();
+    this.setSettingsActions();
   }
 
-  disableAlbum() {
-    console.log("disabilitando menu album");
-    this.idSelectedIcomAlbum = undefined;
-    this.disableItemOption();
-    $(".itemMenuAmostra").children("i.black").toggleClass("black white");
+  startWelcomeModal() {
+    this.modal_welcome = new (window as any).bootstrap.Modal(
+      document.getElementById("welcomeModal")
+    );
+    this.modal_welcome.show();
   }
-  disableMenuDescriptiveIcon() {
-    this.descriptiveIcon = undefined;
-    $(".itemMenuDescriptiveIcon.itemMenuDescriptiveIconSelected").removeClass(
-      "itemMenuDescriptiveIconSelected"
+  startErrorModal(mensagens: string[]) {
+    const errorModalBody = document.getElementById(
+      "errorModalBody"
+    ) as HTMLElement;
+    errorModalBody.innerHTML = "";
+    mensagens.forEach((text) => {
+      const paragraph = document.createElement("p"); // Cria o elemento <p>
+      paragraph.textContent = text; // Define o conteúdo do parágrafo
+      errorModalBody.appendChild(paragraph); // Adiciona ao contêiner
+      errorModalBody.appendChild(document.createElement("br"));
+    });
+    //Exibe modal com os erros
+    const modalElement = new (window as any).bootstrap.Modal(
+      document.getElementById("errorModal")
     );
-  }
-  disableMainenu() {
-    //Por conta do callback ele verifica antes se ainda precisa desativar o itemoption
-
-    if (
-      this.descriptiveIcon == undefined &&
-      this.idSelectedIcomAlbum == undefined
-    ) {
-      this.enableItemOption();
-    }
-  }
-  loadDimensions() {
-    this.listDimension.push(new Dimension("A - Amargo", "A"));
-    this.listDimension.push(new Dimension("D - Doce", "D"));
-  }
-  loadIntensity() {
-    this.listIntisty.push(new Intensity("Mínimo", 1));
-    this.listIntisty.push(new Intensity("Pouco", 2));
-    this.listIntisty.push(new Intensity("Moderado", 3));
-    this.listIntisty.push(new Intensity("Muito", 4));
-    this.listIntisty.push(new Intensity("Máximo", 5));
-  }
-  loadDescriptiveIcons() {
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        1,
-        "img/icons/chocolate_tradicional.png",
-        "Chocolate Tradicional",
-        "chocolate_tradicioinal"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        2,
-        "img/icons/chocolate_branco.png",
-        "Chocolate Branco",
-        "chocolate_branco"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(3, "img/icons/agua.png", "Agua", "agua")
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        4,
-        "img/icons/agua_vazio.png",
-        "Agua vazio",
-        "agua_vazio"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(5, "img/icons/cafe.png", "Café", "cafe")
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        6,
-        "img/icons/cafe_vazio.png",
-        "Café vazio",
-        "cafe_vazio"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(7, "img/icons/laranja.png", "Laranja", "laranja")
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        8,
-        "img/icons/laranja_vazio.png",
-        "Laranja vazio",
-        "laranja_vazio"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(9, "img/icons/limao.png", "Limão", "limao")
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        10,
-        "img/icons/limao_vazio.png",
-        "Limão vazio",
-        "limao_vazio"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(10, "img/icons/maca.png", "Maçã", "maca")
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        11,
-        "img/icons/maca_vazio.png",
-        "Maçã vazio",
-        "maca_vazio"
-      )
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(12, "img/icons/tomate.png", "Tomate", "tomate")
-    );
-    this.listDescriptiveIcons.push(
-      new DescriptiveIcon(
-        13,
-        "img/icons/tomate_vazio.png",
-        "tomate vazio",
-        "tomate_vazio"
-      )
-    );
-  }
-  getImgDescriptiveIcon(tag: string): string {
-    for (let index = 0; index < this.listDescriptiveIcons.length; index++) {
-      if (tag == this.listDescriptiveIcons[index].tag) {
-        return this.listDescriptiveIcons[index].img;
-      }
-    }
-    return "";
+    modalElement.show();
   }
 
-  getNameClass(): string {
-    return "PageSoundSphereHome";
-  }
-
-  render(): void {
-    //console.asdf
-  }
-
-  startTemplate(): void {
-    this.containerElement.addClass("simpleTheme");
-    this.containerElement.addClass("container");
-  }
-  generateAttributes(): string {
-    return this.generatePainel();
-  }
-  generateActions(): string {
-    let conteudo;
-    conteudo = `
-    <div class="ui alternate stripe vertical segment">
-        <div class="ui stackable  aligned grid " style="margin-bottom: 5px;">
-            <div style="margin:0 auto !important; ">
-                <div class="ui  menu inverted">
-                    <a data-html="Comando de voz"  id="buttonVoiceComand" data-content="Comando de Voz" class="item mainmenu">
-                        <i class="microphone icon"></i>
-                    </a>
-                    <a data-html="Repete" id="buttonLoop" data-content="Loop" class="item mainmenu">
-                        <i class="refresh icon"></i>
-                    </a>
-                    <a data-html="Toca" id="buttonPlay" data-content="Play" class="item mainmenu">
-                        <i class="play icon"></i>
-                    </a>
-                    <a data-html="Pausa" id="buttonPause" data-content="Pause" class="item mainmenu">
-                        <i class="pause icon"></i>
-                    </a>
-                    <a data-html="Pare" id="buttonStop" data-content="Stop" class="item active  mainmenu">
-                        <i class="stop icon "></i>
-                    </a>
-                    <a  id="restartPanel" data-content="Recomeçar" class="item mainmenu">
-                        <i class="file outlin icon"></i>
-                    </a>
-                    <a data-html="Carrega"  id="buttonUploadWav" data-content="Upload" class="item mainmenu">
-                        <i class="upload icon"></i>
-                    </a>
-                    <a  data-html="Descarrega"   id="buttonDownload" data-content="download" class="item mainmenu">
-                        <i class="download icon"></i>
-                    </a>
-                    <a data-html="Apaga" id="buttonRemove" data-content="Excluir" class="item mainmenu">
-                        <i class="trash icon"></i>
-                    </a>
-                    <div class="right menu">
-                        <div id="dropdownCamadas" class="ui dropdown item">
-                            Camadas <i class="dropdown icon"></i>
-                            <div class="menu">
-                                <a data-value="0" class="item active"> Todos</a>
-                                <a data-value="1" class="item ">Descritor</a>
-                                <a data-value="2" class="item">Amplitude</a>
-                                <a data-value="4" class="item">Alimentos</a>
-                                <a data-value="3" class="item">Dimensão</a>
-                                <a data-value="5" class="item">Intensidade</a>
-
-                            </div>
-                        </div>
-                        
-                       
-                    </div>
-                  
-                </div>
-            </div>
-        </div>
-    </div>
-    
-
-    `;
-    return conteudo;
-  }
-  generatePainel(): string {
-    return `
-        <canvas class="canvas" width="600" height="300" id="canvas2">
-        </canvas>`;
-  }
-  generateAlbum(): string {
-    let conteudo;
-    if (this.dao.listItemBuffer.length != 0) {
-      conteudo = `
-        <div>
-        
-         <div id="containerSoundIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">
-           <h3 class="ui header" style="margin-bottom: 0px;">Amostras</h3>`;
-
-      for (let index = 0; index < this.dao.listItemBuffer.length; index++) {
-        // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
-        if (this.dao.listItemBuffer[index].show) {
-          conteudo += `
-          <a  data-html="<b>${
-            this.dao.listItemBuffer[index].name
-          }</b> </br> ${this.painel.sec2time(
-            this.dao.listItemBuffer[index].timeDuration
-          )}"  class="itemMenuAmostra" data-id="${index}"  style=" width:50px; background-color: ${
-            this.dao.listItemBuffer[index].color
-          } "; width:50px" id="path${index}"><i class="icon square"></i></a>
-          `;
-        }
-      }
-      conteudo += `
-      </div>
-      <div id="containerDescriptiveIcons"style="width: 590px; margin: 0 auto" class="scrollmenu">
-            <h3 class="ui header" style="margin-bottom: 0px;" >Alimentos</h3>`;
-
-      for (let index = 0; index < this.listDescriptiveIcons.length; index++) {
-        // onclick="togle(id)" onmouseenter="playOneSound(id)" onmouseleave="stopOneSound(id)"
-        conteudo += `
-        <a  style="padding:6px!important;" data-html=" ${this.listDescriptiveIcons[index].name}"  class="itemMenuDescriptiveIcon" data-tag="${this.listDescriptiveIcons[index].tag}" data-id="${index}"><img style="width:40px; height:40px;" src="${this.listDescriptiveIcons[index].url}">	</a>
-        `;
-      }
-      //Dimensao
-      conteudo += `
-         <div class="row">
-          <div class="column">
-            <h3 class="ui header" style="margin-bottom: 0px;">Dimensão</h3>`;
-      for (let index = 0; index < this.listDimension.length; index++) {
-        conteudo += `<a class="ui  button button_dimension" data-tag="${this.listDimension[index].tag}"> ${this.listDimension[index].name} </a>`;
-      }
-      conteudo += `</div>
-        </div>
-      `;
-      //Intensidade
-      conteudo += `
-     <div class="row">
-      <div class="column">
-        <h3 class="ui header" style="margin-bottom: 0px;">Intensidade</h3>`;
-      for (let index = 0; index < this.listIntisty.length; index++) {
-        conteudo += `<a class="ui  button button_intensity" data-tag="${this.listIntisty[index].tag}"> ${this.listIntisty[index].tag} - ${this.listIntisty[index].name} </a>`;
-      }
-      conteudo += `</div>
-    </div>
-    `;
-
-      conteudo += `
-      </div>
-       </div>`;
-
-      return conteudo;
-    } else {
-      return "";
-    }
-  }
-  onEndRecordMenuBar() {
-    $("#buttonVoiceComand").toggleClass("active");
-  }
-  onEndRecordModalOptions() {
-    $("#buttonVoiceComandModal").toggleClass("active");
-  }
-
+  //Seta as configuracoes padroes da aplicacao
   setSettingsActions(): void {
-    $(".ui.dropdown").dropdown({
-      direction: "downward",
-    });
-    $("#dropdownCamadas").dropdown({
-      direction: "downward",
-      onChange: (value: any) => {
-        if (value == 0) {
-          this.painel.drawDescritor = true;
-          this.painel.drawGradient = true;
-          this.painel.drawDimension = true;
-          this.painel.drawFood = true;
-          this.painel.drawIntensity = true;
-        } else if (value == 1) {
-          this.painel.drawDescritor = true;
-          this.painel.drawGradient = false;
-          this.painel.drawDimension = false;
-          this.painel.drawFood = false;
-          this.painel.drawIntensity = false;
-        } else if (value == 2) {
-          this.painel.drawDescritor = false;
-          this.painel.drawGradient = true;
-          this.painel.drawDimension = false;
-          this.painel.drawFood = false;
-          this.painel.drawIntensity = false;
-        } else if (value == 3) {
-          this.painel.drawDescritor = false;
-          this.painel.drawGradient = false;
-          this.painel.drawDimension = true;
-          this.painel.drawFood = false;
-          this.painel.drawIntensity = false;
-        } else if (value == 4) {
-          this.painel.drawDescritor = false;
-          this.painel.drawGradient = false;
-          this.painel.drawDimension = false;
-          this.painel.drawFood = true;
-          this.painel.drawIntensity = false;
-        } else {
-          this.painel.drawDescritor = false;
-          this.painel.drawGradient = false;
-          this.painel.drawDimension = false;
-          this.painel.drawFood = false;
-          this.painel.drawIntensity = true;
-        }
+    document
+      .getElementById("button_iniciar_upload")
+      ?.addEventListener("click", () => {
+        this.sequenciador.stop(function () {});
+        this.modal_welcome.hide();
+        document.getElementById("filesWav")!.click();
+      });
 
-        this.painel.reMake();
-      },
-    });
-    this.voiceCommandMenuBar = new VoiceMenuBar(this.tooltip, this);
-    this.voiceCommandModalOptions = new VoiceModalOptions(this.tooltip, this);
-    $("#buttonVoiceComand").on("click", () => {
-      $("#buttonVoiceComand").toggleClass("active");
-      this.voiceCommandMenuBar!.startRecognition(this.onEndRecordMenuBar);
-    });
-    $("#restartPanel").on("click", () => {
-      this.showModalRestartPanel();
-    });
-    $("#buttonDownload").on("click", () => {
-      this.showModalDownloads();
-    });
-    $("#buttonRemove").on("click", () => {
-      this.buttonRemoveStatus = !this.buttonRemoveStatus;
-      //Para a mixagem caso esteja executando
-      this.stopTrash();
-      //Remove a seleção dos demais botões
-      $("#buttonPlay").removeClass("active");
-      $("#buttonPause").removeClass("active");
-      //Desabilita o painel;
-      if (this.buttonRemoveStatus) {
-        $("#buttonRemove").addClass("active");
-        this.painel.setCursorTrash();
-        this.disableAlbum();
-        this.disableMenuDescriptiveIcon();
+    //Confifuração dos botoes do menu-botoes-painel
+    document.getElementById("buttonPlay")?.addEventListener("click", () => {
+      if (!this.sequenciador.activePlay) {
+        this.playMixagem();
       } else {
-        $("#buttonRemove").removeClass("active");
-        this.painel.unsetCursorTrash();
-        this.disableMainenu();
+        console.warn("Play já está ativo");
       }
     });
-    $("#nameFile").attr("placeholder", this.dao.getDefaultName());
-    $("#nameAuthor").attr("placeholder", this.dao.getDefaultAuthor());
-    $("#buttonLoop").on("click", () => {
-      this.sequenciador.changeLoop();
-      $("#buttonLoop").toggleClass("active");
-    });
-    $("#buttonPlay").on("click", () => {
-      this.playMixagem();
-    });
-    $("#buttonPause").on("click", () => {
+    document.getElementById("buttonPause")?.addEventListener("click", () => {
       this.pauseMixagem();
     });
-    $("#buttonStop").on("click", () => {
+    document.getElementById("buttonStop")?.addEventListener("click", () => {
       this.stopMixagem();
     });
-    $("#cancelModal").on("click", () => {
-      $(".ui.modal").modal("hide");
-    });
-    $("#confirmRestartPanel").on("click", () => {
-      this.sequenciador.stop(function () {});
-      this.painel.restartMixing();
-      this.painel.reMake();
-      $(".ui.modal").modal("hide");
-    });
-    $("#buttonDownloadWav").on("click", () => {
-      this.sequenciador.startDownload(
-        this.closeModalDownload,
-        $("#nameFile").val()
-      );
-      // this.generateHTML();
-      this.atualizaTitulo();
-    });
-    $("#buttonCancelarDownload").on("click", () => {
-      this.closeModalDownload();
-    });
-    $("#buttonDownloadJson").on("click", () => {
-      this.dao.downloadJSON($("#nameFile").val(), $("#nameAuthor").val());
-      this.closeModalDownload();
-      // this.generateHTML();
-      this.atualizaTitulo();
-    });
-    $("#buttonDownloadJsonWav").on("click", () => {
-      this.dao.downloadJSON($("#nameFile").val(), $("#nameAuthor").val());
-      this.sequenciador.startDownload(
-        this.closeModalDownload,
-        $("#nameFile").val()
-      );
-      // this.generateHTML();
-      this.atualizaTitulo();
-    });
-    $("#buttonUploadWav").on("click", () => {
-      this.sequenciador.stop(function () {});
-      $("#filesWav").click();
-    });
-    $("#buttonInitialUploadWav").on("click", () => {
-      this.sequenciador.stop(function () {});
-      $("#filesWav").click();
-      this.closeModalInitial();
-    });
-    $("#buttonJson1Cancelar").on("click", () => {
-      this.closeModalJson1();
-      this.backToMainModal();
-    });
-    $("#buttonJson2Cancelar").on("click", () => {
-      this.closeModalJson2();
-      this.backToMainModal();
-    });
-
-    $("#buttonJson1SelctJson").on("click", () => {
-      $("#fileJSON").click();
-    });
-
-    $("#buttonJson2SelctWav").on("click", () => {
-      $("#fileHomeWav").click();
-    });
-    $("#buttonJson3ok").on("click", () => {
-      this.closeModalJson3();
-      this.reloadAlbum();
-      this.painel.reMake();
-    });
-    $("#buttonJson4ok").on("click", () => {
-      this.closeModalJson4();
-      $("#filesWav").click();
-    });
-    $("#buttonInitialContinue").on("click", () => {
-      this.showModalJson1();
-    });
-
-    this.generateActionsAlbum();
   }
 
-  backToMainModal() {
-    this.dao.eraserSoundSphereDB();
-    this.showModalInitial();
-  }
-  nextStepJson1To2() {
-    this.closeModalJson1();
-    this.showModalJson2();
-  }
-  nextStepJson1To4() {
-    this.closeModalJson1();
-    this.showModalJson4();
-  }
-  nextStepJson2To3() {
-    this.closeModalJson2();
-    this.showModalJson3();
-  }
-  closeModalJson2() {
-    $("#modalJson2").modal("hide");
-  }
-  closeModalJson3() {
-    $("#modalJson3").modal("hide");
-  }
-  closeModalJson4() {
-    $("#modalJson4").modal("hide");
-  }
-  closeModalJson1() {
-    $("#modalJson1").modal("hide");
-  }
-  closeModalDownload() {
-    $("#downloadModal").modal("hide");
-  }
-  closeModalInitial() {
-    $("#initialModal").modal("hide");
+  stopMixagem() {
+    this.stopActived = true;
+    this.sequenciador.stop(() => {
+      // $('img').attr('draggable');
+      document.getElementById("buttonPlay")!.classList.remove("active")!;
+      document.getElementById("buttonPause")!.classList.remove("active");
+      document.getElementById("buttonStop")!.classList.add("active");
+    });
   }
 
+  pauseMixagem() {
+    this.sequenciador.pause(
+      () => {
+        document.getElementById("buttonPause")!.classList.add("active");
+      },
+      () => {
+        document.getElementById("buttonPause")!.classList.remove("active");
+      }
+    );
+  }
   playMixagem() {
-    this.buttonRemoveStatus = false;
-    this.disableAlbum();
-    this.disableMenuDescriptiveIcon();
-    this.disableButtonTrash();
     this.sequenciador.play(
       () => {
-        $("#buttonPlay").toggleClass("active");
-        $("#buttonStop").removeClass("active");
-        $("#buttonRemove").removeClass("active");
-        $("#buttonPause").removeClass("active");
+        document.getElementById("buttonPause")!.classList.remove("active");
+        document.getElementById("buttonStop")!.classList.remove("active");
+        document.getElementById("buttonPlay")!.classList.toggle("active");
         this.stopActived = false;
         // this.pauseActived = false;
       },
       () => {
         //console.log("Terminou de executar")
-        $("#buttonPlay").removeClass("active");
-        if (this.stopActived) {
-          $("#buttonStop").addClass("active");
-          this.disableMainenu();
-        }
-        if (!this.sequenciador.activePause) {
-          this.disableMainenu();
-        }
+        document.getElementById("buttonPlay")!.classList.remove("active");
       }
     );
   }
-
-  pauseMixagem() {
-    this.buttonRemoveStatus = false;
-    this.painel.unsetCursorTrash();
-    this.disableAlbum();
-    this.disableMenuDescriptiveIcon();
-    this.sequenciador.pause(
-      () => {
-        //console.log("chamou  o cakkbacj do pause")
-        $("#buttonRemove").removeClass("active");
-        $("#buttonPause").addClass("active");
-        $("#buttonStop").removeClass("active");
-        //this.pauseActived = true
-        this.stopActived = false;
-      },
-      () => {
-        this.disableMainenu();
-
-        $("#buttonPause").removeClass("active");
-      }
-    );
+  render(): void {
+    this.loadContainerAudio();
+    this.loadContainerSemaitsDescriptors();
+    this.loadContainerActionDescriptiveIcons();
+    this.loadContainerDimension();
+    this.loadContainerIntensity();
+    this.addClickEventToItensModificadoresPanel();
+    this.addTooltipEvents();
   }
-  stopMixagem() {
-    this.buttonRemoveStatus = false;
-    this.disableMainenu();
-    this.stopActived = true;
-    this.stopStandard();
-  }
-  stopSimple() {
-    this.buttonRemoveStatus = false;
-    this.disableItemOption();
-    this.stopActived = true;
-    this.sequenciador.stopSimple(() => {
-      // $('img').attr('draggable');
-      $("#buttonPlay").removeClass("active");
-      $("#buttonRemove").removeClass("active");
-      $("#buttonPause").removeClass("active");
-      $("#buttonStop").addClass("active");
-    });
-  }
-  stopStandard() {
-    this.sequenciador.stop(() => {
-      // $('img').attr('draggable');
-      $("#buttonPlay").removeClass("active");
-      $("#buttonRemove").removeClass("active");
-      $("#buttonPause").removeClass("active");
-      $("#buttonStop").addClass("active");
-    });
-  }
-  stopTrash() {
-    this.sequenciador.stopSimple(() => {
-      // $('img').attr('draggable');
-      $("#buttonPlay").removeClass("active");
-      $("#buttonPause").removeClass("active");
-      $("#buttonStop").addClass("active");
-    });
-  }
+  loadContainerSemaitsDescriptors(): void {
+    this.listSemanticDescriptors = generatorSemanticDescriptors();
+    for (let index = 0; index < this.listSemanticDescriptors.length; index++) {
+      const botao = document.createElement("button");
 
-  //Função para gerenciar se ao clicar nos itens do album
-  //se esta selecionado ou liberando os itens
-  //itemOptionEnabled = true - OPções liberada
-  //itemOptionEnabled = false - Inserir amostras
-  generateActionsAlbum() {
-    $(".itemMenuAmostra").popup({
-      on: "hover",
-    });
-    $(".itemMenuDescriptiveIcon").popup({
-      on: "hover",
-    });
-    $(".mainmenu").popup({
-      on: "hover",
-    });
-    $(".itemMenuAmostra").on("mouseenter", (e: JQueryEventObject) => {
-      $(e.currentTarget).children("i").toggleClass("square play");
-      if (this.mouseInsideIconAlbum == undefined) {
-        this.mouseInsideIconAlbum = $(e.target).data("id");
-        this.tooltip.showMessageFixedId(
-          "Executando: " +
-            this.dao.listItemBuffer[$(e.currentTarget).data("id")].name,
-          $(e.currentTarget).data("id")
-        );
-        this.sequenciador.playOneSound($(e.target).data("id"), () => {
-          this.tooltip.removeMessageFixedId($(e.currentTarget).data("id"));
-          this.mouseInsideIconAlbum = undefined;
-          $(e.currentTarget).children("i.play").toggleClass("play square");
-        });
-      }
-    });
-    $(".itemMenuAmostra").on("mouseleave", (e: JQueryEventObject) => {
-      this.sequenciador.stopOneSound();
-      this.mouseInsideIconAlbum = undefined;
+      // Adicionando classes do Bootstrap
+      botao.classList.add("btn", "btn-light", "m-2", "btn-rounded");
+      botao.style.border = "2px solid white";
 
-      this.tooltip.removeMessageFixedId($(e.currentTarget).data("id"));
-      $(e.currentTarget).children("i.play").toggleClass("play square");
-    });
-    $(".itemMenuAmostra").on("click", (e: JQueryEventObject) => {
-      this.stopSimple();
-      if (this.buttonRemoveStatus) {
-        this.disableButtonTrash();
-      }
+      // Definindo o texto do botão
+      botao.textContent = `${this.listSemanticDescriptors[index].code} - ${this.listSemanticDescriptors[index].name}`;
+      botao.setAttribute("data-tag", this.listSemanticDescriptors[index].code);
+      botao.setAttribute("data-id", index.toString());
 
-      $("a.itemMenuAmostra").children("i.black").toggleClass("black white");
-      if (this.idSelectedIcomAlbum == $(e.currentTarget).data("id")) {
-        this.idSelectedIcomAlbum = undefined;
-        this.enableItemOption();
-      } else {
-        $(e.currentTarget).children("i").toggleClass("white black");
-        this.idSelectedIcomAlbum = $(e.currentTarget).data("id");
-        this.disableItemOption();
-      }
-    });
-
-    $(".itemMenuDescriptiveIcon").on("click", (e: JQueryEventObject) => {
-      this.stopSimple();
-      if (this.buttonRemoveStatus) {
-        this.disableButtonTrash();
-      }
-      $(".itemMenuDescriptiveIcon").removeClass(
-        "itemMenuDescriptiveIconSelected"
+      const menuContainer = document.getElementById(
+        "container-semaits-descriptors"
       );
-      if (this.descriptiveIcon == $(e.currentTarget).data("tag")) {
-        console.log($(e.currentTarget).data("tag"));
-        $(e.currentTarget).removeClass("itemMenuDescriptiveIconSelected");
-        this.descriptiveIcon = undefined;
-      } else {
-        $(e.currentTarget).addClass("itemMenuDescriptiveIconSelected");
-        this.descriptiveIcon = $(e.currentTarget).data("tag");
+      if (menuContainer) {
+        menuContainer.appendChild(botao);
       }
-    });
-    $(".button_dimension").on("click", (e: JQueryEventObject) => {
-      this.stopSimple();
-      if (this.buttonRemoveStatus) {
-        this.disableButtonTrash();
-      }
-      $(".button_dimension").removeClass("black");
-
-      if (this.selected_tag_dimension == $(e.currentTarget).data("tag")) {
-        console.log($(e.currentTarget).data("tag"));
-        $(e.currentTarget).removeClass("black");
-        this.selected_tag_dimension = undefined;
-      } else {
-        $(e.currentTarget).addClass("black");
-        this.selected_tag_dimension = $(e.currentTarget).data("tag");
-      }
-    });
-    $(".button_intensity").on("click", (e: JQueryEventObject) => {
-      this.stopSimple();
-      if (this.buttonRemoveStatus) {
-        this.disableButtonTrash();
-      }
-      $(".button_intensity").removeClass("black");
-
-      if (this.selected_tag_intensity == $(e.currentTarget).data("tag")) {
-        console.log($(e.currentTarget).data("tag"));
-        $(e.currentTarget).removeClass("black");
-        this.selected_tag_intensity = undefined;
-      } else {
-        $(e.currentTarget).addClass("black");
-        this.selected_tag_intensity = $(e.currentTarget).data("tag");
-      }
-    });
-  }
-
-  disableButtonTrash() {
-    this.buttonRemoveStatus = false;
-    $("#buttonRemove").removeClass("active");
-    this.painel.unsetCursorTrash();
-  }
-  protected renderAlbum() {
-    // console.log("render album")
-    // $("#contentAlbum").html(this.generateAlbum());
-    // this.generateActionsAlbum();
-  }
-
-  setSettingsAttributes(): void {}
-
-  generateHTML(): void {
-    let conoteudoHTML = `<br>
-              <h2 class="ui header centered">
-                <div style=" user-select: none;"  unselectable="on" id="titulo">
-                  <font color="${this.soundSphereInfo.getColorTitle()}">
-                  <p id="valuetitulo"  style="-moz-user-select:none;  user-select: none;" unselectable="on">
-                    ${this.soundSphereInfo.getFullName()}`;
-    conoteudoHTML +=
-      this.sessionControl.getLastEventNameValid() != undefined
-        ? " - " + this.sessionControl.getLastEventNameValid()
-        : "";
-    conoteudoHTML +=
-      `</p>
-                </div>
-              </h2>
-       ` +
-      this.generateAttributes() +
-      `
-       <br/>
-          <div id="divActions">` +
-      this.generateActions() +
-      `</div> <br/>` +
-      `<div id="contentAlbum">` +
-      this.generateAlbum() +
-      `</div>`;
-    this.containerElement.html(conoteudoHTML);
-    this.generateContentOfTheModals();
-    this.setSettingsActions();
-    this.setSettingsAttributes();
-  }
-
-  reloadAlbum() {
-    $("#divActions").html(this.generateActions());
-    $("#contentAlbum").html(this.generateAlbum());
-    this.generateContentOfTheModals();
-    this.setSettingsActions();
-    this.setSettingsAttributes();
-  }
-  atualizaTitulo(): void {
-    console.log(this.sessionControl);
-    console.log(this.sessionControl.getLastEventNameValid());
-    console.log("------");
-    $("#valuetitulo").html(
-      `${this.soundSphereInfo.getFullName()} ${
-        this.sessionControl.getLastEventNameValid() != undefined
-          ? " - " + this.sessionControl.getLastEventNameValid()
-          : ""
-      }`
-    );
-  }
-
-  generateContentOfTheModals() {
-    this.genrateContentofModalRestartPanel();
-    this.genrateContentofModalJson1();
-    this.genrateContentofModalJson2();
-    this.genrateContentofModalJson3();
-    this.genrateContentofModalJson4();
-    this.genrateContentofModalDownload();
-    this.genrateContentofModalInitial();
-  }
-  showModalOptions() {
-    this.genrateContentofModalOptions();
-    $("#modalOptions")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalInitial() {
-    $("#initialModal")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalRestartPanel() {
-    $("#restartModal")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalDownloads() {
-    $("#downloadModal")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalJson1() {
-    $("#modalJson1")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalJson2() {
-    $("#modalJson2")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalJson4() {
-    $("#modalJson4")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  showModalJson3() {
-    console.log("showModalJson3");
-    $("#modalJson3")
-      .modal({ closable: false })
-      .modal("setting", "transition", "horizontal flip")
-      .modal("show");
-  }
-  genrateContentofModalOptions() {
-    let conteudo = `
-  <div class="header">Options/Opções:</div>
-  <div class="content" id="corpoModal">
-    <form onsubmit="return false;" class="ui form" novalidate id="formOptions">
-      <div class="column">
-        <div class="ui error message"></div>
-        <div class="ui grid">
-          <div class="sixteen wide mobile six wide tablet four wide computer column">
-            <h4 class="ui left aligned header">Geral</h4>
-            <div class="ui labeled input field">
-              <div id="checkSoloMute" class="ui toggle checkbox checked">
-                <input type="checkbox" checked="checked" name="public">
-                <label id="solo">Ativo/Solo
-                  <i class="alarm icon"></i>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="sixteen wide mobile six wide tablet four wide computer column">
-            <div class="field">
-              <label><h3>Descritores</h3></label>
-              <div class="ui item">
-                <select id="select-filter" class="ui fluid  dropdown">
-                `;
-    if (this.itemMixOption!.getidSemanticDescriptor() == undefined) {
-      conteudo += `<option selected="selected" data-code="undefined" value="undefined">Nenhum</option>`;
-    } else {
-      conteudo += `<option data-code="undefined"  value="undefined">Nenhum</option>`;
     }
-    this.dao.listSemanticDescriptors.forEach((element, index) => {
-      if (this.itemMixOption!.getidSemanticDescriptor() == index) {
-        conteudo += `<option  selected="selected" data-code="${element.code}"  value="${index}" >${element.name}</option>`;
-      } else {
-        conteudo += `<option data-code="${element.code}"  value="${index}">${element.name}</option>`;
-      }
-    });
-    conteudo += `
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="sixteen wide mobile six wide tablet twelve wide computer column">
-            <h4 class="ui left aligned header">Tempo de:</h3>
-              <div class="two fields">
-                <div id="divStartTime" class="ui labeled input field">
-                  <div class="ui label green">
-                    Start/Inicío
-                  </div>
-                  <input id="startTime" value="${
-                    this.itemMixOption!.startTime
-                  }" type="number">
-                </div>
-                <div id="divEndTime" class="ui labeled input field">
-                  <div class="ui label red">
-                    End/Fim
-                  </div>
-                  <input id="endTime" value="${
-                    this.itemMixOption!.endTime
-                  }" type="number">
-                </div>
-              </div>
-          </div>
-        </div>
-        <h4 class="ui left aligned header">Volume</h4>
-        <div class="ui green progress" data-total="200" id="barVolume">
-          <div class="bar" >
-            <div class="progress"></div>
-          </div>
- 
-        </div>
-        <div class="ui centered grid">
-        <div class="label">
-          <div class="ui icon buttons ">
-            <button id="buttonMinus" class="ui basic button">
-              <i class="icon minus red"></i>
-            </button>
-            <button id="buttonPlus" class="ui basic button">
-              <i class="icon plus green"></i>
-            </button>
-          </div>
-        </div>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="actions">
-    <div id="buttonVoiceComandModal" class="ui blue right  icon button">
-    <i class="microphone icon"></i>
-    </div>
-    <div id="playAudioComOptions" class="ui blue right  icon button">
-      Com Modificadores
-    </div>
-    <div id="buttonPlayAudioSemEfeito" class="ui blue right  icon button">
-      Sem Modificadores
-    </div>
-    <div id="buttonDeleteModalOptions" class="ui red button">
-      Delete
-      <i class="trash icon"></i>
-    </div>
-
-    <div id="buttonCalcelModal" class="ui neutral right labeled icon button">Cancel</div>
-    <div  id="buttonOkModal"class="ui blue button ">Salvar</div>
-  </div>
-
-    `;
-    $("#modalOptions").html(conteudo);
-    this.generateSetingsOptionModal();
+    this.addClickSemaitsDescriptors();
   }
-  closeModalOptions() {
-    $("#modalOptions").modal("hide");
-    this.itemMixOption = undefined;
-  }
-  generateSetingsOptionModal(): void {
-    $("#buttonPlayAudioSemEfeito").on("mouseleave", () => {
-      this.sequenciador.stopOneSound();
-    });
-
-    $("#buttonPlayAudioSemEfeito").on("mouseenter", () => {
-      this.sequenciador.playOneSound(
-        this.itemMixOption!.idBuffer,
-        function () {}
-      );
-    });
-    $("#playAudioComOptions").on("mouseout", () => {
-      //console.log("mouse out")
-      this.sequenciador.stopOneSound();
-    });
-
-    $("#playAudioComOptions").on("mouseenter", () => {
-      this.sequenciador.playOneSoundOption(this.itemMixOption!);
-    });
-    $("#select-filter").on("change", (e: JQueryEventObject) => {
-      let selected = $(e.target).find("option:selected");
-      let code = selected.data("code");
-
-      if ($(e.target).val() == "undefined") {
-        this.itemMixOption!.setIdSemanticDescriptor(undefined);
-        this.itemMixOption!.setCodeSemanticDescriptor(undefined);
-      } else {
-        this.itemMixOption!.setIdSemanticDescriptor(<number>$(e.target).val());
-        this.itemMixOption!.setCodeSemanticDescriptor(code);
-      }
-    });
-
-    console.log("ABRIU");
-    console.log(
-      " this.itemMixOption!.getVolume();" + this.itemMixOption!.getVolume()
+  addClickSemaitsDescriptors(): void {
+    const dimensionSemanticDescriptor = document.querySelectorAll(
+      "#container-semaits-descriptors .btn"
     );
-    $("#barVolume").progress({
-      label: "ratio",
-      text: {
-        ratio: "{value}",
-      },
-    });
-    $("#barVolume").progress("set progress", this.itemMixOption!.getVolume());
-    if (this.itemMixOption!.solo) {
-      $("#checkSoloMute").checkbox("check");
-    } else {
-      $("#checkSoloMute").checkbox("uncheck");
+
+    if (dimensionSemanticDescriptor.length === 0) {
+      console.warn("Nenhum botão de dimensão encontrado.");
+      return;
     }
-    //Opções do checkbox
-    $("#checkSoloMute").checkbox({
-      beforeChecked: () => {
-        document.getElementById("solo")!.innerHTML = "Ativo/Solo ";
-        var i = document.createElement("i");
-        i.setAttribute("class", "alarm icon");
-        document.getElementById("solo")!.appendChild(i);
+    dimensionSemanticDescriptor.forEach((button) => {
+      button.addEventListener("click", () => {
+        this.idSemanticDescriptor = undefined;
+        this.codeSemanticDescriptor = undefined;
+        console.log("Semantic clicada:", button.textContent);
+        if (button.classList.contains("active")) {
+          button.classList.remove("active");
+        } else {
+          dimensionSemanticDescriptor.forEach((otherButton) => {
+            otherButton.classList.remove("active");
+          });
+          button.classList.add("active");
+          this.disableItensModificadoresPanel();
+          this.codeSemanticDescriptor =
+            button.getAttribute("data-tag") ?? undefined;
 
-        this.itemMixOption!.solo = true;
-      },
-      beforeUnchecked: () => {
-        document.getElementById("solo")!.innerHTML = "Mudo/Mute ";
-        var i = document.createElement("i");
-        i.setAttribute("class", "alarm slash icon");
-        document.getElementById("solo")!.appendChild(i);
-        this.itemMixOption!.solo = false;
-      },
+          const dataId: string | null = button.getAttribute("data-id"); // Obtém o data-id
+
+          let id = parseInt(dataId ?? "");
+          if (id != undefined) {
+            this.idSemanticDescriptor = id;
+          }
+          console.log("Semantic code:", this.codeSemanticDescriptor);
+          console.log("Semantic id:", this.idSemanticDescriptor);
+        }
+      });
     });
-    //Evento ao alterar o inicio
-    $("#startTime").on("keyup change", () => {
-      this.itemMixOption!.startTime = parseFloat(String($("#startTime").val()));
-      this.itemMixOption!.endTime =
-        this.itemMixOption!.startTime + this.itemMixOption!.seconds;
-      $("#endTime").val(
-        this.itemMixOption!.startTime + this.itemMixOption!.seconds
+  }
+  //Verifica se excluir está ativo
+  isDeleteButtonActive(): boolean {
+    if (this.buttonModificadorPainel == "remove") {
+      return true;
+    }
+    return false;
+  }
+  loadContainerIntensity(): void {
+    let conteudo = "";
+    this.listIntensity = generatorIntensity();
+    for (let index = 0; index < this.listIntensity.length; index++) {
+      const botao = document.createElement("button");
+
+      // Adicionando classes do Bootstrap
+      botao.classList.add("btn", "btn-light", "m-2", "btn-rounded");
+      botao.style.border = "2px solid white";
+
+      // Definindo o texto do botão
+      botao.textContent = `${this.listIntensity[index].name}`;
+      botao.setAttribute("data-tag", this.listIntensity[index].tag.toString());
+
+      const menuContainer = document.getElementById("container-intensity");
+      if (menuContainer) {
+        menuContainer.appendChild(botao);
+      }
+    }
+    this.addClickEventToInensity();
+  }
+  addClickEventToInensity(): void {
+    const dimensionIntensity = document.querySelectorAll(
+      "#container-intensity .btn"
+    );
+
+    if (dimensionIntensity.length === 0) {
+      console.warn("Nenhum botão de dimensão encontrado.");
+      return;
+    }
+    dimensionIntensity.forEach((button) => {
+      button.addEventListener("click", () => {
+        this.idIntensity = undefined;
+        console.log("Dimensão clicada:", button.textContent);
+        if (button.classList.contains("active")) {
+          button.classList.remove("active");
+        } else {
+          dimensionIntensity.forEach((otherButton) => {
+            otherButton.classList.remove("active");
+          });
+          this.disableItensModificadoresPanel();
+          button.classList.add("active");
+          this.idIntensity = button.getAttribute("data-tag") ?? undefined;
+
+          console.log("Dimensão selecionada:", this.idIntensity);
+        }
+      });
+    });
+  }
+  loadContainerDimension(): void {
+    let conteudo = "";
+    this.listDimension = generatorDimensions();
+    for (let index = 0; index < this.listDimension.length; index++) {
+      const botao = document.createElement("button");
+
+      // Adicionando classes do Bootstrap
+      botao.classList.add("btn", "btn-light", "m-2", "btn-rounded");
+      botao.style.border = "2px solid white";
+
+      // Definindo o texto do botão
+      botao.textContent = `${this.listDimension[index].name}`;
+      botao.setAttribute("data-tag", this.listDimension[index].tag);
+
+      const menuContainer = document.getElementById("container-dimensions");
+      if (menuContainer) {
+        menuContainer.appendChild(botao);
+      }
+    }
+    this.addClickEventToDimension();
+  }
+
+  addClickEventToDimension(): void {
+    const dimensionButtons = document.querySelectorAll(
+      "#container-dimensions .btn"
+    );
+
+    if (dimensionButtons.length === 0) {
+      console.warn("Nenhum botão de dimensão encontrado.");
+      return;
+    }
+    dimensionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        this.idDimension = undefined;
+        console.log("Dimensão clicada:", button.textContent);
+        if (button.classList.contains("active")) {
+          button.classList.remove("active");
+        } else {
+          dimensionButtons.forEach((otherButton) => {
+            otherButton.classList.remove("active");
+          });
+          this.disableItensModificadoresPanel();
+          button.classList.add("active");
+          this.idDimension = button.getAttribute("data-tag") ?? undefined;
+
+          console.log("Dimensão selecionada:", this.idDimension);
+        }
+      });
+    });
+  }
+  loadContainerActionDescriptiveIcons(): void {
+    let conteudo = "";
+    this.listActionDescriptiveIcons = generatorActionDescriptiveIcon();
+    for (
+      let index = 0;
+      index < this.listActionDescriptiveIcons.length;
+      index++
+    ) {
+      // Criação do elemento <a>
+      const linkElement = document.createElement("a");
+
+      linkElement.setAttribute(
+        "title",
+        `Ação: ${this.listActionDescriptiveIcons[index].name}`
       );
-      //console.log("startTime time p/: " + this.itemMixOption!.startTime);
-      $("#formOptions").form("validate form");
-    });
-    //Evento ao alterar o fim
-    $("#endTime").on("keyup change", () => {
-      this.itemMixOption!.endTime = parseFloat(String($("#endTime").val()));
-      this.itemMixOption!.startTime =
-        this.itemMixOption!.endTime - this.itemMixOption!.seconds;
-      $("#startTime").val(
-        this.itemMixOption!.endTime - this.itemMixOption!.seconds
+      linkElement.setAttribute("data-bs-toggle", "tooltip");
+
+      linkElement.style.border = "2px solid white";
+      linkElement.style.padding = "6px";
+
+      linkElement.style.margin = "5px";
+      // linkElement.style.padding = "6px"; // Usando padding diretamente no estilo
+      linkElement.classList.add("itemMenuDescriptiveIcon");
+      linkElement.setAttribute(
+        "data-html",
+        this.listActionDescriptiveIcons[index].name
       );
-      //console.log("end time p/: " + this.itemMixOption!.endTime);
-      $("#formOptions").form("validate form");
-    });
-
-    $("#buttonVoiceComandModal").on("click", () => {
-      $("#buttonVoiceComandModal").toggleClass("active");
-      this.voiceCommandModalOptions!.startRecognition(
-        this.onEndRecordModalOptions
+      linkElement.setAttribute(
+        "data-tag",
+        this.listActionDescriptiveIcons[index].tag
       );
-    });
-    $("#buttonCalcelModal").on("click", () => {
-      this.closeModalOptions();
-    });
+      linkElement.setAttribute("data-id", index.toString());
 
-    $("#buttonOkModal").on("click", () => {
-      if ($("#formOptions").form("is valid")) {
-        //console.log("Pode fechar");
-        this.painel.updateItemMixPanel(this.itemMixOption!);
-        this.closeModalOptions();
-        //painel.updateItem(this.itemMixOption);
-      } else {
-        //console.log(" n Pode fechar");
-        $("#formOptions").form("validate form");
-      }
-    });
-    $("#buttonDeleteModalOptions").on("click", () => {
-      this.painel.deleteItemMixPanel(this.itemMixOption!);
-      this.closeModalOptions();
-    });
-    // $('#buttonTesteModal').on('click', () => {
-    // this.sequenciador.downloadItemMixOption(this.itemMixOption!);
-    // });
-    $("#buttonMinus").on("click", () => {
-      $("#buttonMinus").prop("disabled", true);
-      $("#buttonPlus").prop("disabled", true);
-      if (this.itemMixOption!.getVolume() > 0) {
-        $("#barVolume").progress("set duration", 0).progress("decrement", 10);
-        this.itemMixOption!.setVolume(this.itemMixOption!.getVolume() - 10);
-        //console.log("Minus this.itemMixOption!.getVolume(): " + this.itemMixOption!.getVolume());
-      }
-      $("#buttonMinus").prop("disabled", false);
-      $("#buttonPlus").prop("disabled", false);
-    });
-    //Button plus
+      // Criação do elemento <img>
+      const imgElement = document.createElement("img");
+      imgElement.style.width = "40x"; // Definindo o tamanho da imagem
+      imgElement.style.height = "40px";
+      imgElement.textContent = "Elemento Dinâmico";
+      imgElement.setAttribute(
+        "src",
+        this.listActionDescriptiveIcons[index].url
+      );
+      // Adicionando a imagem ao link
+      linkElement.appendChild(imgElement);
 
-    $("#buttonPlus").on("click", () => {
-      $("#buttonPlus").prop("disabled", true);
-      $("#buttonMinus").prop("disabled", true);
-      if (this.itemMixOption!.getVolume() < 200) {
-        $("#barVolume").progress("set duration", 0).progress("increment", 10);
-        this.itemMixOption!.setVolume(this.itemMixOption!.getVolume() + 10);
-        //console.log("Plus this.itemMixOption!.getVolume(): " + this.itemMixOption!.getVolume());
+      // Inserir o link (linkElement) no DOM, supondo que você tenha um container onde os itens serão adicionados
+      // Vamos assumir que `menuContainer` é o ID do container onde você quer adicionar os elementos
+      const menuContainer = document.getElementById("container-alimentos");
+      if (menuContainer) {
+        menuContainer.appendChild(linkElement);
       }
-      $("#buttonPlus").prop("disabled", false);
-      $("#buttonMinus").prop("disabled", false);
-    });
-    $.fn.form.settings.rules.minZero = (value: any) => {
-      if (value < 0) {
-        return false;
-      } else {
-        return true;
-      }
-    };
-    $.fn.form.settings.rules.validEnd = (value: any) => {
-      if (value < this.itemMixOption!.seconds) {
-        return false;
-      } else {
-        return true;
-      }
-    };
-    $("#formOptions").form({
-      on: "blur",
-      fields: {
-        startTime: {
-          identifier: "startTime",
-          rules: [
-            {
-              type: "empty",
-              prompt: "Informe o início.",
-            },
-            {
-              type: "minZero",
-              prompt: "O valor de início minimo é 0.",
-            },
-          ],
-        },
-        endTime: {
-          identifier: "endTime",
-          rules: [
-            {
-              type: "empty",
-              prompt: "Informe o fim.",
-            },
-            {
-              type: "validEnd",
-              prompt:
-                "O tempo final deve ser maior ou igual ao tempo total da amostra. Tempo da amostras: " +
-                this.itemMixOption!.seconds +
-                ".",
-            },
-          ],
-        },
-      },
-    });
+    }
+    this.addClickEventToActionDescriptiveIcons();
   }
-  genrateContentofModalRestartPanel() {
-    let conteudoHTML = `
-      <div class="header">
-        Atenção!
-      </div>
-      <div class="content">
-        <p>Reiniciar a mixagem?</p>
-      </div>
+  loadContainerAudio(): void {
+    let conteudo = "";
+    if (this.dao.listItemBuffer.length != 0) {
+      let itens = "";
+      for (let index = 0; index < this.dao.listItemBuffer.length; index++) {
+        if (this.dao.listItemBuffer[index].show) {
+          let element = this.createSvgItem(
+            this.dao.listItemBuffer[index].name,
+            this.dao.listItemBuffer[index].timeDuration.toString(),
+            index.toString(),
+            this.dao.listItemBuffer[index].color,
+            `path${index.toString()}`
+          );
+          document
+            .getElementById("container-amostras-audio")
+            ?.appendChild(element);
+          // console.log(element);
+        }
+      }
+      this.addClickEventToAmostraAudio();
+    }
+  }
 
-      <div class="actions">
-        <div id="cancelModal" class="ui button">
-          Cancel
-        </div>
-        <div id="confirmRestartPanel" class="ui primary button">
-         Confirmar
-        </div>
-      </div>
-  `;
-    $("#restartModal").html(conteudoHTML);
-  }
-  genrateContentofModalDownload() {
-    let conteudoHTML = `
-    <i class="close icon"></i>
-      <div class="header">
-        Opções de Download
-      </div>
- 
-      <div class="content">
-      <div class="ui form">
-
-        <div class="field">
-          <label>Arquivo: </label>
-          <input id="nameFile" type="text"  >
-        </div>
-        <div class="field">
-          <label>Autor: </label>
-          <input id="nameAuthor" type="text" >
-        </div>
-      </div>
-      </div>
-      <div class="actions">
-        <div class="feature alternate ui stripe vertical segment">
-          <div class="ui four column center aligned divided relaxed stackable grid container">
-            <div class="row center">
-              <div class="column">
-                <div id="buttonDownloadJson" class="ui green large button">
-                JSON
-                </div>
-              </div>
-              <div class="column">
-                <div id="buttonDownloadJsonWav" class="ui primary view-ui large button">
-                JSON + WAVE
-                </div>
-              </div>
-              <div class="column">
-                <div  id="buttonDownloadWav" class="ui orange large button">
-                WAVE
-                </div>
-              </div>
-              <div class="column">
-                <div  id="buttonCancelarDownload" class="ui red large button">
-                Cancelar
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  `;
-    $("#downloadModal").html(conteudoHTML);
-  }
-  genrateContentofModalInitial() {
-    let conteudoHTML = `
-    <div class="header">
-    Bem vindo!
-  </div>
-  <div id="mensagem" class="content">
-    <div class="feature alternate ui stripe vertical segment">
-      <div class="ui two column center aligned divided relaxed stackable grid container">
-        <div class="row">
-        <div class="column">
-        <h2 class="ui icon header">
-          <i class="file outline icon"></i> Novo
-        </h2>
-        <p>Desejo iniciar um novo projeto.</p>
-        <div id="buttonInitialUploadWav" class="ui primary view-ui large button">Iniciar</div>
-      </div>
-          <div class="column">
-            <h2 class="ui icon header">
-              <i class="upload icon"></i> Abrir
-            </h2>
-            <p>Quero continuar um projeto do
-              <em>SoundSphere</em>.</p>
-            <div id="buttonInitialContinue" class="ui green large button">Continuar</div>
-          </div> 
-        </div>
-      </div>
-    </div>
-  </div>
-  `;
-    $("#initialModal").html(conteudoHTML);
-  }
-  genrateContentofModalJson2() {
-    let conteudoHTML = `
-    <div class="ui ordered top attached steps">
-    <div class="completed step">
-      <div class="content">
-        <div class="title">JSON</div>
-      </div>
-    </div>
-    <div class="active step">
-      <div class="content">
-        <div class="title">Amostras</div>
-      </div>
-    </div>
-    <div class=" step">
-      <div class="content">
-        <div class="title">Informações</div>
-      </div>
-    </div>
-  </div>
-  <div class="content">
-    <div id="errorMessageJson2"> </div>
-    <p id="mensagemModalJson2"></p>
-    <div id="filesRequireJSON" class="ui two column grid">
+  createSvgItem(
+    dataName: string,
+    dataDuration: string,
+    dataId: string,
+    color: string,
+    id: string
+  ): HTMLDivElement {
+    // Criação do div com classe 'svg-item' e estilo de fundo
+    const svgItemDiv = document.createElement("div");
+    svgItemDiv.classList.add("svg-item");
+    svgItemDiv.style.backgroundColor = color;
+    svgItemDiv.setAttribute("data-name", dataName);
+    svgItemDiv.setAttribute(
+      "data-duration",
+      this.painel.sec2time(dataDuration)
+    );
+    svgItemDiv.setAttribute(
+      "data-duration",
+      this.painel.sec2time(dataDuration)
+    );
+    svgItemDiv.setAttribute(
+      "title",
+      `Nome: ${dataName} \n Duração: ${this.painel.sec2time(dataDuration)} 
       
-    </div>
-  </div>
-  <div class="actions">
-    <div id="buttonJson2Cancelar" class="ui red button">Cancelar</div>
-    <div id="buttonJson2SelctWav"  class="ui green button">Selecionar</div>
-  </div>
-  `;
-    $("#modalJson2").html(conteudoHTML);
+      `
+    );
+
+    svgItemDiv.setAttribute("data-bs-toggle", "tooltip");
+
+    svgItemDiv.setAttribute("data-id", dataId);
+    svgItemDiv.setAttribute("id", id);
+
+    // Criação do elemento SVG
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "50");
+    svg.setAttribute("height", "50");
+    svg.setAttribute("viewBox", "0 0 50 50");
+
+    // Criação do círculo
+    const circle = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "circle"
+    );
+    circle.setAttribute("cx", "25");
+    circle.setAttribute("cy", "25");
+    circle.setAttribute("r", "10");
+    circle.setAttribute("fill", "white");
+    circle.classList.add("circle-svg");
+
+    // Criação do polígono (ícone de play)
+    const polygon = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "polygon"
+    );
+    polygon.setAttribute("points", "15,10 15,40 35,25");
+    polygon.setAttribute("fill", "white");
+    polygon.classList.add("play-icon");
+
+    // Anexando o círculo e o polígono ao SVG
+    svg.appendChild(circle);
+    svg.appendChild(polygon);
+
+    // Anexando o SVG ao div
+    svgItemDiv.appendChild(svg);
+
+    return svgItemDiv;
   }
-  showMessageJson2(mensagemPrincipal: string, listaRequire: any): void {
-    $("#mensagemModalJson2").html(mensagemPrincipal);
-    let contetesteudo = ``;
-    for (let index = 0; index < listaRequire.length; index++) {
-      contetesteudo += `
-        <div class="column">
-        <div class="ui bulleted list">
-          <div class="item">${listaRequire[index]}</div>
-        </div>
-      </div>
-        `;
-    }
-    $("#filesRequireJSON").html(contetesteudo);
-    this.nextStepJson1To2();
+  //Remove todos os itens ativos dos que podem ser  combinados
+  disableItensCumulative() {
+    const alimentosItems = document.querySelectorAll(
+      "#container-dimensions .btn, .itemMenuDescriptiveIcon, .svg-item, #container-semaits-descriptors .btn, #container-intensity .btn"
+    );
+    alimentosItems.forEach((item) => {
+      if (item.classList.contains("active")) {
+        item.classList.remove("active");
+      }
+    });
+    this.idSelectedIcomAlbum = undefined;
+    this.idActionDescriptiveIcon = undefined;
+    this.idDimension = undefined;
+    this.idIntensity = undefined;
+    this.idSemanticDescriptor = undefined;
+    this.codeSemanticDescriptor = undefined;
   }
 
-  genrateContentofModalJson3() {
-    // console.log("genrateContentofModalJson3 ")
-    let conteudoHTML = `
-    <div class="ui ordered top attached steps">
-    <div class="completed step">
-      <div class="content">
-        <div class="title">JSON</div>
-      </div>
-    </div>
-    <div class="completed step">
-      <div class="content">
-        <div class="title">Amostras</div>
-      </div>
-    </div>
-    <div class=" active step">
-      <div class="content">
-        <div class="title">Informações</div>
-      </div>
-    </div>
-  </div>
-  <div class="content">
-    <div id="errorMessageJson3"> </div>
-    <div>Clique em OK, para iniciar.</div>
-  </div>
-  <div class="actions">
-    <div id="buttonJson3ok"  class="ui green button">OK</div>
-  </div>
-    
-  `;
-    $("#modalJson3").html(conteudoHTML);
+  disableItensModificadoresPanel() {
+    const botoesModificadores = document.querySelectorAll(
+      "#container-modificadores .btn"
+    );
+    botoesModificadores.forEach((button) => {
+      if (button.classList.contains("active")) {
+        button.classList.remove("active");
+      }
+    });
+    this.buttonModificadorPainel = undefined;
   }
-  genrateContentofModalJson4() {
-    // console.log("genrateContentofModalJson3 ")
-    let conteudoHTML = `
-    <div class="ui ordered top attached steps">
-    <div class="completed step">
-      <div class="content">
-        <div class="title">JSON</div>
-      </div>
-    </div>
-    <div class="completed step">
-      <div class="content">
-        <div class="title">Amostras</div>
-      </div>
-    </div>
-    <div class=" active step">
-      <div class="content">
-        <div class="title">Informações</div>
-      </div>
-    </div>
-  </div>
-  <div class="content">
-    <div id="errorMessageJson3"> </div>
-    <div>Vocë carregou um arquivo JSON que contem apenas Descritores Semanticos, clique em carregar fazer o upload dos arquivos WAV que deseja utilizar.</div>
-  </div>
-  <div class="actions">
-    <div id="buttonJson4ok"  class="ui green button">Carregar</div>
-  </div>
-    
-  `;
-    $("#modalJson4").html(conteudoHTML);
-  }
-  genrateContentofModalJson1() {
-    let conteudoHTML = `
-    <div class="ui ordered top attached steps">
-    <div class="active step">
-      <div class="content">
-        <div class="title">JSON</div>
-      </div>
-    </div>
-    <div class=" step">
-      <div class="content">
-        <div class="title">Amostras</div>
-      </div>
-    </div>
-    <div class=" step">
-      <div class="content">
-        <div class="title">Informações</div>
-      </div>
-    </div>
-  </div>
-  <div class="content">
-    <div id="errorMessageJson1"></div>
-    <div> Selecione o arquivo JSON gerado pelo SoundSphere que você deseja dar continuidade.</div>
-  </div>
-  <div class="actions">
+  addClickEventToActionDescriptiveIcons(): void {
+    const alimentosItems = document.querySelectorAll(
+      ".itemMenuDescriptiveIcon"
+    );
 
-    <div  id="buttonJson1Cancelar" class="ui red button">Cancelar</div>
-    <div id="buttonJson1SelctJson" class="ui green button">Selecionar</div>
-  </div>
-  `;
-    $("#modalJson1").html(conteudoHTML);
-  }
-  setSemanticDescriptor(id: number | undefined) {
-    this.itemMixOption!.setIdSemanticDescriptor(id);
-    let selected = $("#select-filter").find("option:selected");
-    let code = selected.data("code");
-    this.itemMixOption!.setCodeSemanticDescriptor(code);
-  }
-  showErrorMessageJson1(mensagem: string) {
-    const conteudo = `
-    <div class="ui error message">
-      </i>
-      <div class="header">
-       Atenção!
-      </div>
-      <p>
-      ${mensagem}
-      </p>
-    </div>
-    `;
-    $("#errorMessageJson1").html(conteudo);
-  }
-  showErrorMessageJson2(listMensagens: any) {
-    let conteudo = `
-    <div class="ui error message">
-      </i>
-      <div class="header">
-       Atenção!
-      </div>`;
-    for (let index = 0; index < listMensagens.length; index++) {
-      conteudo += `<p> ${listMensagens[index]}</p>`;
+    if (alimentosItems.length === 0) {
+      console.warn("Nenhum item de alimento encontrado.");
+      return;
     }
-    conteudo += ` 
-    </div>
-    `;
-    $("#errorMessageJson2").html(conteudo);
+
+    alimentosItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        this.idActionDescriptiveIcon = undefined;
+
+        console.log("Item clicado:", item); // Teste para ver se o evento está funcionando
+        const dataId: string | null = item.getAttribute("data-id");
+        const data_tag: string | null = item.getAttribute("data-tag");
+
+        if (item.classList.contains("active")) {
+          item.classList.remove("active");
+        } else {
+          this.disableItensModificadoresPanel();
+          alimentosItems.forEach((otherItem) => {
+            otherItem.classList.remove("active");
+          });
+          item.classList.add("active");
+
+          let id = parseInt(dataId ?? "", 10);
+          if (!isNaN(id)) {
+            this.idActionDescriptiveIcon = data_tag ?? undefined;
+            console.log("ID do alimento selecionado:", id);
+          }
+        }
+      });
+    });
   }
-  showErrorMessageJson3(listMensagens: any) {
-    let conteudo = `
-    <div class="ui error message">
-      </i>
-      <div class="header">
-       Atenção!
-      </div>`;
-    for (let index = 0; index < listMensagens.length; index++) {
-      conteudo += `<p> ${listMensagens[index]}</p>`;
+  addTooltipEvents() {
+    // Inicializa os tooltips do Bootstrap
+    const tooltipTriggerList: NodeListOf<Element> = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
+    );
+    tooltipTriggerList.forEach((tooltipEl) => {
+      new (window as any).bootstrap.Tooltip(tooltipEl);
+    });
+  }
+  addClickEventToItensModificadoresPanel() {
+    const botoesModificadoresPanel = document.querySelectorAll(
+      "#container-modificadores .btn"
+    );
+
+    botoesModificadoresPanel.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (button.classList.contains("active")) {
+          button.classList.remove("active");
+        } else {
+          botoesModificadoresPanel.forEach((otherButton) => {
+            otherButton.classList.remove("active");
+          });
+          this.buttonModificadorPainel =
+            button.getAttribute("data-action") ?? undefined;
+
+          console.log(`Ação Modificadora: ${this.buttonModificadorPainel}`);
+          button.classList.add("active");
+          this.disableItensCumulative();
+        }
+      });
+    });
+  }
+  //Adiciona os eventos aos itens musicais
+  addClickEventToAmostraAudio() {
+    const svgItems = document.querySelectorAll(".svg-item");
+    svgItems.forEach((item) => {
+      //Configuração para selecionar e remover selecao dos itens svg-musicais
+      item.addEventListener("click", () => {
+        this.idSelectedIcomAlbum = undefined;
+        if (item.classList.contains("active")) {
+          item.classList.remove("active");
+        } else {
+          svgItems.forEach(function (otherItem) {
+            otherItem.classList.remove("active");
+          });
+          this.disableItensModificadoresPanel();
+          item.classList.add("active");
+          //Verificação para saber se não é vazio
+
+          const dataId: string | null = item.getAttribute("data-id"); // Obtém o data-id
+
+          let id = parseInt(dataId ?? "");
+          if (id != undefined) {
+            this.idSelectedIcomAlbum = id;
+          }
+        }
+      });
+
+      //Tocar ao passar o mouse por cima
+      item.addEventListener("mouseenter", () => {
+        const dataId = item.getAttribute("data-id");
+        console.log("Mouse entrou");
+        item.classList.add("playing_audio");
+        item.setAttribute(
+          "data-bs-original-title",
+
+          `Nome: ${item.getAttribute(
+            "data-name"
+          )} \n Duração: ${item.getAttribute("data-duration")}
+          ${
+            this.idSemanticDescriptor
+              ? "Descritor semantico: " +
+                this.listSemanticDescriptors[this.idSemanticDescriptor].name
+              : ""
+          }
+          `
+        );
+        console.warn(this.idSemanticDescriptor);
+        const id = this.idSemanticDescriptor;
+        const descriptor =
+          id !== undefined ? this.listSemanticDescriptors[id] : undefined;
+        if (descriptor) {
+          console.log("Chamou o play");
+
+          this.sequenciador.playOneSound(
+            dataId !== null ? parseInt(dataId) : 0,
+            function () {
+              item.classList.remove("playing_audio");
+            },
+            descriptor.getFilters()
+          );
+        } else {
+          this.sequenciador.playOneSound(
+            dataId !== null ? parseInt(dataId) : 0,
+            function () {
+              item.classList.remove("playing_audio");
+            },
+            []
+          );
+        }
+      });
+      //Tocar ao passar o mouse por cima
+      item.addEventListener("mouseleave", () => {
+        item.classList.remove("playing_audio");
+        this.sequenciador.stopOneSound();
+      });
+    });
+  }
+  activateModalLoading(): void {
+    // console.error(" abrir modal loading");
+    this.modal_loading = new (window as any).bootstrap.Modal(
+      document.getElementById("loadingModal")
+    );
+
+    this.modal_loading.show();
+  }
+  disableModalLoading(): void {
+    //se já tiver carregado ele fecha (porem quase sempre nao ta carregado), espera 1s e tenta fechar de novo
+    this.modal_loading.hide();
+    setTimeout(() => {
+      this.modal_loading.hide();
+    }, 1000);
+  }
+  getImgDescriptiveIcon(tag: string): string {
+    for (
+      let index = 0;
+      index < this.listActionDescriptiveIcons.length;
+      index++
+    ) {
+      if (tag == this.listActionDescriptiveIcons[index].tag) {
+        return this.listActionDescriptiveIcons[index].img;
+      }
     }
-    conteudo += ` 
-    </div>
-    `;
-    $("#errorMessageJson3").html(conteudo);
+    return "";
   }
 }

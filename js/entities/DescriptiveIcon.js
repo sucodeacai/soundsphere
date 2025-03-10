@@ -1,5 +1,5 @@
 "use strict";
-class DescriptiveIcon {
+class ActionDescriptiveIcon {
     constructor(id, url, name, tag) {
         this.id = id;
         this.url = url;

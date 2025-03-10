@@ -3,1090 +3,270 @@ Registrado sob a licença  Attribution-NonCommercial 4.0 International (CC BY-NC
 
 */
 class ControlFiles {
-    // listUploadedFileNames: string[] = [];
-    // listFilesInvalid: string[] = [];
-    listColors: string[] = [
-        "#D50000"
-        , "#C51162"
-        , "#AA00FF"
-        , "#6200EA"
-        , "#0091EA"
-        , "#00B8D4"
-        , "#00BFA5"
-        , "#00C853"
-        , "#AEEA00"
-        , "#FFD600"
-        , "#FFAB00"
-        , "#FF6D00"
-        , "#DD2C00"
-        , "#FFCDD2"
-        , "#f8bbd0"
-        , "#E1BEE7"
-        , "#D1C4E9"
-        , "#B3E5FC"
-        , "#B2EBF2"
-        , "#B2DFDB"
-        , "#C8E6C9"
-        , "#F0F4C3"
-        , "#FFF9C4"
-        , "#FFECB3"
-        , "#FFE0B2"
-        , "#FFCCBC"
-        , "#FF1744"
-        , "#F50057"
-        , "#D500F9"
-        , "#651FFF"
-        , "#00B0FF"
-        , "#00E5FF"
-        , "#1DE9B6"
-        , "#00E676"
-        , "#C6FF00"
-        , "#FFEA00"
-        , "#FFC400"
-        , "#FF9100"
-        , "#FF3D00"
-        , "#EF9A9A"
-        , "#F48FB1"
-        , "#CE93D8"
-        , "#B39DDB"
-        , "#81D4FA"
-        , "#80DEEA"
-        , "#80CBC4"
-        , "#A5D6A7"
-        , "#E6EE9C"
-        , "#FFF59D"
-        , "#FFE082"
-        , "#FFCC80"
-        , "#FFAB91"
-        , "#FF5252"
-        , "#FF4081"
-        , "#E040FB"
-        , "#7C4DFF"
-        , "#40C4FF"
-        , "#18FFFF"
-        , "#64FFDA"
-        , "#69F0AE"
-        , "#EEFF41"
-        , "#FFFF00"
-        , "#FFD740"
-        , "#FFAB40"
-        , "#FF6E40"
-        , "#E57373"
-        , "#F06292"
-        , "#BA68C8"
-        , "#9575CD"
-        , "#4FC3F7"
-        , "#4DD0E1"
-        , "#4DB6AC"
-        , "#81C784"
-        , "#DCE775"
-        , "#FFF176"
-        , "#FFD54F"
-        , "#FFB74D"
-        , "#FF8A65"
-        , "#FF8A80"
-        , "#FF80AB"
-        , "#EA80FC"
-        , "#B388FF"
-        , "#80D8FF"
-        , "#84FFFF"
-        , "#A7FFEB"
-        , "#B9F6CA"
-        , "#F4FF81"
-        , "#FFFF8D"
-        , "#FFE57F"
-        , "#FFD180"
-        , "#FF9E80"
-        , "#EF5350"
-        , "#EC407A"
-        , "#AB47BC"
-        , "#7E57C2"
-        , "#29B6F6"
-        , "#26C6DA"
-        , "#26A69A"
-        , "#66BB6A"
-        , "#D4E157"
-        , "#FFEE58"
-        , "#FFCA28"
-        , "#FFA726"
-        , "#FF7043"
-        , "#B71C1C"
-        , "#880E4F"
-        , "#4A148C"
-        , "#311B92"
-        , "#01579B"
-        , "#006064"
-        , "#004D40"
-        , "#1B5E20"
-        , "#827717"
-        , "#F57F17"
-        , "#FF6F00"
-        , "#E65100"
-        , "#BF360C"
-        , "#F44336"
-        , "#E91E63"
-        , "#9C27B0"
-        , "#673AB7"
-        , "#03A9F4"
-        , "#00BCD4"
-        , "#009688"
-        , "#4CAF50"
-        , "#CDDC39"
-        , "#FFEB3B"
-        , "#FFC107"
-        , "#FF9800"
-        , "#FF5722"
-        , "#C62828"
-        , "#AD1457"
-        , "#6A1B9A"
-        , "#4527A0"
-        , "#0277BD"
-        , "#00838F"
-        , "#00695C"
-        , "#2E7D32"
-        , "#9E9D24"
-        , "#F9A825"
-        , "#FF8F00"
-        , "#EF6C00"
-        , "#D84315"
-        , "#E53935"
-        , "#D81B60"
-        , "#8E24AA"
-        , "#5E35B1"
-        , "#039BE5"
-        , "#00ACC1"
-        , "#00897B"
-        , "#43A047"
-        , "#C0CA33"
-        , "#FDD835"
-        , "#FFB300"
-        , "#FB8C00"
-        , "#F4511E"
-        , "#D32F2F"
-        , "#C2185B"
-        , "#7B1FA2"
-        , "#512DA8"
-        , "#0288D1"
-        , "#0097A7"
-        , "#00796B"
-        , "#388E3C"
-        , "#AFB42B"
-        , "#FBC02D"
-        , "#FFA000"
-        , "#F57C00"
-        , "#E64A19"
-        ,"#D50000"
-        , "#C51162"
-        , "#AA00FF"
-        , "#6200EA"
-        , "#0091EA"
-        , "#00B8D4"
-        , "#00BFA5"
-        , "#00C853"
-        , "#AEEA00"
-        , "#FFD600"
-        , "#FFAB00"
-        , "#FF6D00"
-        , "#DD2C00"
-        , "#FFCDD2"
-        , "#f8bbd0"
-        , "#E1BEE7"
-        , "#D1C4E9"
-        , "#B3E5FC"
-        , "#B2EBF2"
-        , "#B2DFDB"
-        , "#C8E6C9"
-        , "#F0F4C3"
-        , "#FFF9C4"
-        , "#FFECB3"
-        , "#FFE0B2"
-        , "#FFCCBC"
-        , "#FF1744"
-        , "#F50057"
-        , "#D500F9"
-        , "#651FFF"
-        , "#00B0FF"
-        , "#00E5FF"
-        , "#1DE9B6"
-        , "#00E676"
-        , "#C6FF00"
-        , "#FFEA00"
-        , "#FFC400"
-        , "#FF9100"
-        , "#FF3D00"
-        , "#EF9A9A"
-        , "#F48FB1"
-        , "#CE93D8"
-        , "#B39DDB"
-        , "#81D4FA"
-        , "#80DEEA"
-        , "#80CBC4"
-        , "#A5D6A7"
-        , "#E6EE9C"
-        , "#FFF59D"
-        , "#FFE082"
-        , "#FFCC80"
-        , "#FFAB91"
-        , "#FF5252"
-        , "#FF4081"
-        , "#E040FB"
-        , "#7C4DFF"
-        , "#40C4FF"
-        , "#18FFFF"
-        , "#64FFDA"
-        , "#69F0AE"
-        , "#EEFF41"
-        , "#FFFF00"
-        , "#FFD740"
-        , "#FFAB40"
-        , "#FF6E40"
-        , "#E57373"
-        , "#F06292"
-        , "#BA68C8"
-        , "#9575CD"
-        , "#4FC3F7"
-        , "#4DD0E1"
-        , "#4DB6AC"
-        , "#81C784"
-        , "#DCE775"
-        , "#FFF176"
-        , "#FFD54F"
-        , "#FFB74D"
-        , "#FF8A65"
-        , "#FF8A80"
-        , "#FF80AB"
-        , "#EA80FC"
-        , "#B388FF"
-        , "#80D8FF"
-        , "#84FFFF"
-        , "#A7FFEB"
-        , "#B9F6CA"
-        , "#F4FF81"
-        , "#FFFF8D"
-        , "#FFE57F"
-        , "#FFD180"
-        , "#FF9E80"
-        , "#EF5350"
-        , "#EC407A"
-        , "#AB47BC"
-        , "#7E57C2"
-        , "#29B6F6"
-        , "#26C6DA"
-        , "#26A69A"
-        , "#66BB6A"
-        , "#D4E157"
-        , "#FFEE58"
-        , "#FFCA28"
-        , "#FFA726"
-        , "#FF7043"
-        , "#B71C1C"
-        , "#880E4F"
-        , "#4A148C"
-        , "#311B92"
-        , "#01579B"
-        , "#006064"
-        , "#004D40"
-        , "#1B5E20"
-        , "#827717"
-        , "#F57F17"
-        , "#FF6F00"
-        , "#E65100"
-        , "#BF360C"
-        , "#F44336"
-        , "#E91E63"
-        , "#9C27B0"
-        , "#673AB7"
-        , "#03A9F4"
-        , "#00BCD4"
-        , "#009688"
-        , "#4CAF50"
-        , "#CDDC39"
-        , "#FFEB3B"
-        , "#FFC107"
-        , "#FF9800"
-        , "#FF5722"
-        , "#C62828"
-        , "#AD1457"
-        , "#6A1B9A"
-        , "#4527A0"
-        , "#0277BD"
-        , "#00838F"
-        , "#00695C"
-        , "#2E7D32"
-        , "#9E9D24"
-        , "#F9A825"
-        , "#FF8F00"
-        , "#EF6C00"
-        , "#D84315"
-        , "#E53935"
-        , "#D81B60"
-        , "#8E24AA"
-        , "#5E35B1"
-        , "#039BE5"
-        , "#00ACC1"
-        , "#00897B"
-        , "#43A047"
-        , "#C0CA33"
-        , "#FDD835"
-        , "#FFB300"
-        , "#FB8C00"
-        , "#F4511E"
-        , "#D32F2F"
-        , "#C2185B"
-        , "#7B1FA2"
-        , "#512DA8"
-        , "#0288D1"
-        , "#0097A7"
-        , "#00796B"
-        , "#388E3C"
-        , "#AFB42B"
-        , "#FBC02D"
-        , "#FFA000"
-        , "#F57C00"
-        , "#E64A19"
-        , "#D50000"
-        , "#C51162"
-        , "#AA00FF"
-        , "#6200EA"
-        , "#0091EA"
-        , "#00B8D4"
-        , "#00BFA5"
-        , "#00C853"
-        , "#AEEA00"
-        , "#FFD600"
-        , "#FFAB00"
-        , "#FF6D00"
-        , "#DD2C00"
-        , "#FFCDD2"
-        , "#f8bbd0"
-        , "#E1BEE7"
-        , "#D1C4E9"
-        , "#B3E5FC"
-        , "#B2EBF2"
-        , "#B2DFDB"
-        , "#C8E6C9"
-        , "#F0F4C3"
-        , "#FFF9C4"
-        , "#FFECB3"
-        , "#FFE0B2"
-        , "#FFCCBC"
-        , "#FF1744"
-        , "#F50057"
-        , "#D500F9"
-        , "#651FFF"
-        , "#00B0FF"
-        , "#00E5FF"
-        , "#1DE9B6"
-        , "#00E676"
-        , "#C6FF00"
-        , "#FFEA00"
-        , "#FFC400"
-        , "#FF9100"
-        , "#FF3D00"
-        , "#EF9A9A"
-        , "#F48FB1"
-        , "#CE93D8"
-        , "#B39DDB"
-        , "#81D4FA"
-        , "#80DEEA"
-        , "#80CBC4"
-        , "#A5D6A7"
-        , "#E6EE9C"
-        , "#FFF59D"
-        , "#FFE082"
-        , "#FFCC80"
-        , "#FFAB91"
-        , "#FF5252"
-        , "#FF4081"
-        , "#E040FB"
-        , "#7C4DFF"
-        , "#40C4FF"
-        , "#18FFFF"
-        , "#64FFDA"
-        , "#69F0AE"
-        , "#EEFF41"
-        , "#FFFF00"
-        , "#FFD740"
-        , "#FFAB40"
-        , "#FF6E40"
-        , "#E57373"
-        , "#F06292"
-        , "#BA68C8"
-        , "#9575CD"
-        , "#4FC3F7"
-        , "#4DD0E1"
-        , "#4DB6AC"
-        , "#81C784"
-        , "#DCE775"
-        , "#FFF176"
-        , "#FFD54F"
-        , "#FFB74D"
-        , "#FF8A65"
-        , "#FF8A80"
-        , "#FF80AB"
-        , "#EA80FC"
-        , "#B388FF"
-        , "#80D8FF"
-        , "#84FFFF"
-        , "#A7FFEB"
-        , "#B9F6CA"
-        , "#F4FF81"
-        , "#FFFF8D"
-        , "#FFE57F"
-        , "#FFD180"
-        , "#FF9E80"
-        , "#EF5350"
-        , "#EC407A"
-        , "#AB47BC"
-        , "#7E57C2"
-        , "#29B6F6"
-        , "#26C6DA"
-        , "#26A69A"
-        , "#66BB6A"
-        , "#D4E157"
-        , "#FFEE58"
-        , "#FFCA28"
-        , "#FFA726"
-        , "#FF7043"
-        , "#B71C1C"
-        , "#880E4F"
-        , "#4A148C"
-        , "#311B92"
-        , "#01579B"
-        , "#006064"
-        , "#004D40"
-        , "#1B5E20"
-        , "#827717"
-        , "#F57F17"
-        , "#FF6F00"
-        , "#E65100"
-        , "#BF360C"
-        , "#F44336"
-        , "#E91E63"
-        , "#9C27B0"
-        , "#673AB7"
-        , "#03A9F4"
-        , "#00BCD4"
-        , "#009688"
-        , "#4CAF50"
-        , "#CDDC39"
-        , "#FFEB3B"
-        , "#FFC107"
-        , "#FF9800"
-        , "#FF5722"
-        , "#C62828"
-        , "#AD1457"
-        , "#6A1B9A"
-        , "#4527A0"
-        , "#0277BD"
-        , "#00838F"
-        , "#00695C"
-        , "#2E7D32"
-        , "#9E9D24"
-        , "#F9A825"
-        , "#FF8F00"
-        , "#EF6C00"
-        , "#D84315"
-        , "#E53935"
-        , "#D81B60"
-        , "#8E24AA"
-        , "#5E35B1"
-        , "#039BE5"
-        , "#00ACC1"
-        , "#00897B"
-        , "#43A047"
-        , "#C0CA33"
-        , "#FDD835"
-        , "#FFB300"
-        , "#FB8C00"
-        , "#F4511E"
-        , "#D32F2F"
-        , "#C2185B"
-        , "#7B1FA2"
-        , "#512DA8"
-        , "#0288D1"
-        , "#0097A7"
-        , "#00796B"
-        , "#388E3C"
-        , "#AFB42B"
-        , "#FBC02D"
-        , "#FFA000"
-        , "#F57C00"
-        , "#E64A19"
-        ,"#D50000"
-        , "#C51162"
-        , "#AA00FF"
-        , "#6200EA"
-        , "#0091EA"
-        , "#00B8D4"
-        , "#00BFA5"
-        , "#00C853"
-        , "#AEEA00"
-        , "#FFD600"
-        , "#FFAB00"
-        , "#FF6D00"
-        , "#DD2C00"
-        , "#FFCDD2"
-        , "#f8bbd0"
-        , "#E1BEE7"
-        , "#D1C4E9"
-        , "#B3E5FC"
-        , "#B2EBF2"
-        , "#B2DFDB"
-        , "#C8E6C9"
-        , "#F0F4C3"
-        , "#FFF9C4"
-        , "#FFECB3"
-        , "#FFE0B2"
-        , "#FFCCBC"
-        , "#FF1744"
-        , "#F50057"
-        , "#D500F9"
-        , "#651FFF"
-        , "#00B0FF"
-        , "#00E5FF"
-        , "#1DE9B6"
-        , "#00E676"
-        , "#C6FF00"
-        , "#FFEA00"
-        , "#FFC400"
-        , "#FF9100"
-        , "#FF3D00"
-        , "#EF9A9A"
-        , "#F48FB1"
-        , "#CE93D8"
-        , "#B39DDB"
-        , "#81D4FA"
-        , "#80DEEA"
-        , "#80CBC4"
-        , "#A5D6A7"
-        , "#E6EE9C"
-        , "#FFF59D"
-        , "#FFE082"
-        , "#FFCC80"
-        , "#FFAB91"
-        , "#FF5252"
-        , "#FF4081"
-        , "#E040FB"
-        , "#7C4DFF"
-        , "#40C4FF"
-        , "#18FFFF"
-        , "#64FFDA"
-        , "#69F0AE"
-        , "#EEFF41"
-        , "#FFFF00"
-        , "#FFD740"
-        , "#FFAB40"
-        , "#FF6E40"
-        , "#E57373"
-        , "#F06292"
-        , "#BA68C8"
-        , "#9575CD"
-        , "#4FC3F7"
-        , "#4DD0E1"
-        , "#4DB6AC"
-        , "#81C784"
-        , "#DCE775"
-        , "#FFF176"
-        , "#FFD54F"
-        , "#FFB74D"
-        , "#FF8A65"
-        , "#FF8A80"
-        , "#FF80AB"
-        , "#EA80FC"
-        , "#B388FF"
-        , "#80D8FF"
-        , "#84FFFF"
-        , "#A7FFEB"
-        , "#B9F6CA"
-        , "#F4FF81"
-        , "#FFFF8D"
-        , "#FFE57F"
-        , "#FFD180"
-        , "#FF9E80"
-        , "#EF5350"
-        , "#EC407A"
-        , "#AB47BC"
-        , "#7E57C2"
-        , "#29B6F6"
-        , "#26C6DA"
-        , "#26A69A"
-        , "#66BB6A"
-        , "#D4E157"
-        , "#FFEE58"
-        , "#FFCA28"
-        , "#FFA726"
-        , "#FF7043"
-        , "#B71C1C"
-        , "#880E4F"
-        , "#4A148C"
-        , "#311B92"
-        , "#01579B"
-        , "#006064"
-        , "#004D40"
-        , "#1B5E20"
-        , "#827717"
-        , "#F57F17"
-        , "#FF6F00"
-        , "#E65100"
-        , "#BF360C"
-        , "#F44336"
-        , "#E91E63"
-        , "#9C27B0"
-        , "#673AB7"
-        , "#03A9F4"
-        , "#00BCD4"
-        , "#009688"
-        , "#4CAF50"
-        , "#CDDC39"
-        , "#FFEB3B"
-        , "#FFC107"
-        , "#FF9800"
-        , "#FF5722"
-        , "#C62828"
-        , "#AD1457"
-        , "#6A1B9A"
-        , "#4527A0"
-        , "#0277BD"
-        , "#00838F"
-        , "#00695C"
-        , "#2E7D32"
-        , "#9E9D24"
-        , "#F9A825"
-        , "#FF8F00"
-        , "#EF6C00"
-        , "#D84315"
-        , "#E53935"
-        , "#D81B60"
-        , "#8E24AA"
-        , "#5E35B1"
-        , "#039BE5"
-        , "#00ACC1"
-        , "#00897B"
-        , "#43A047"
-        , "#C0CA33"
-        , "#FDD835"
-        , "#FFB300"
-        , "#FB8C00"
-        , "#F4511E"
-        , "#D32F2F"
-        , "#C2185B"
-        , "#7B1FA2"
-        , "#512DA8"
-        , "#0288D1"
-        , "#0097A7"
-        , "#00796B"
-        , "#388E3C"
-        , "#AFB42B"
-        , "#FBC02D"
-        , "#FFA000"
-        , "#F57C00"
-        , "#E64A19"
-        ,"#D50000"
-        , "#C51162"
-        , "#AA00FF"
-        , "#6200EA"
-        , "#0091EA"
-        , "#00B8D4"
-        , "#00BFA5"
-        , "#00C853"
-        , "#AEEA00"
-        , "#FFD600"
-        , "#FFAB00"
-        , "#FF6D00"
-        , "#DD2C00"
-        , "#FFCDD2"
-        , "#f8bbd0"
-        , "#E1BEE7"
-        , "#D1C4E9"
-        , "#B3E5FC"
-        , "#B2EBF2"
-        , "#B2DFDB"
-        , "#C8E6C9"
-        , "#F0F4C3"
-        , "#FFF9C4"
-        , "#FFECB3"
-        , "#FFE0B2"
-        , "#FFCCBC"
-        , "#FF1744"
-        , "#F50057"
-        , "#D500F9"
-        , "#651FFF"
-        , "#00B0FF"
-        , "#00E5FF"
-        , "#1DE9B6"
-        , "#00E676"
-        , "#C6FF00"
-        , "#FFEA00"
-        , "#FFC400"
-        , "#FF9100"
-        , "#FF3D00"
-        , "#EF9A9A"
-        , "#F48FB1"
-        , "#CE93D8"
-        , "#B39DDB"
-        , "#81D4FA"
-        , "#80DEEA"
-        , "#80CBC4"
-        , "#A5D6A7"
-        , "#E6EE9C"
-        , "#FFF59D"
-        , "#FFE082"
-        , "#FFCC80"
-        , "#FFAB91"
-        , "#FF5252"
-        , "#FF4081"
-        , "#E040FB"
-        , "#7C4DFF"
-        , "#40C4FF"
-        , "#18FFFF"
-        , "#64FFDA"
-        , "#69F0AE"
-        , "#EEFF41"
-        , "#FFFF00"
-        , "#FFD740"
-        , "#FFAB40"
-        , "#FF6E40"
-        , "#E57373"
-        , "#F06292"
-        , "#BA68C8"
-        , "#9575CD"
-        , "#4FC3F7"
-        , "#4DD0E1"
-        , "#4DB6AC"
-        , "#81C784"
-        , "#DCE775"
-        , "#FFF176"
-        , "#FFD54F"
-        , "#FFB74D"
-        , "#FF8A65"
-        , "#FF8A80"
-        , "#FF80AB"
-        , "#EA80FC"
-        , "#B388FF"
-        , "#80D8FF"
-        , "#84FFFF"
-        , "#A7FFEB"
-        , "#B9F6CA"
-        , "#F4FF81"
-        , "#FFFF8D"
-        , "#FFE57F"
-        , "#FFD180"
-        , "#FF9E80"
-        , "#EF5350"
-        , "#EC407A"
-        , "#AB47BC"
-        , "#7E57C2"
-        , "#29B6F6"
-        , "#26C6DA"
-        , "#26A69A"
-        , "#66BB6A"
-        , "#D4E157"
-        , "#FFEE58"
-        , "#FFCA28"
-        , "#FFA726"
-        , "#FF7043"
-        , "#B71C1C"
-        , "#880E4F"
-        , "#4A148C"
-        , "#311B92"
-        , "#01579B"
-        , "#006064"
-        , "#004D40"
-        , "#1B5E20"
-        , "#827717"
-        , "#F57F17"
-        , "#FF6F00"
-        , "#E65100"
-        , "#BF360C"
-        , "#F44336"
-        , "#E91E63"
-        , "#9C27B0"
-        , "#673AB7"
-        , "#03A9F4"
-        , "#00BCD4"
-        , "#009688"
-        , "#4CAF50"
-        , "#CDDC39"
-        , "#FFEB3B"
-        , "#FFC107"
-        , "#FF9800"
-        , "#FF5722"
-        , "#C62828"
-        , "#AD1457"
-        , "#6A1B9A"
-        , "#4527A0"
-        , "#0277BD"
-        , "#00838F"
-        , "#00695C"
-        , "#2E7D32"
-        , "#9E9D24"
-        , "#F9A825"
-        , "#FF8F00"
-        , "#EF6C00"
-        , "#D84315"
-        , "#E53935"
-        , "#D81B60"
-        , "#8E24AA"
-        , "#5E35B1"
-        , "#039BE5"
-        , "#00ACC1"
-        , "#00897B"
-        , "#43A047"
-        , "#C0CA33"
-        , "#FDD835"
-        , "#FFB300"
-        , "#FB8C00"
-        , "#F4511E"
-        , "#D32F2F"
-        , "#C2185B"
-        , "#7B1FA2"
-        , "#512DA8"
-        , "#0288D1"
-        , "#0097A7"
-        , "#00796B"
-        , "#388E3C"
-        , "#AFB42B"
-        , "#FBC02D"
-        , "#FFA000"
-        , "#F57C00"
-        , "#E64A19"
-        ,"#D50000"
-        , "#C51162"
-        , "#AA00FF"
-        , "#6200EA"
-        , "#0091EA"
-        , "#00B8D4"
-        , "#00BFA5"
-        , "#00C853"
-        , "#AEEA00"
-        , "#FFD600"
-        , "#FFAB00"
-        , "#FF6D00"
-        , "#DD2C00"
-        , "#FFCDD2"
-        , "#f8bbd0"
-        , "#E1BEE7"
-        , "#D1C4E9"
-        , "#B3E5FC"
-        , "#B2EBF2"
-        , "#B2DFDB"
-        , "#C8E6C9"
-        , "#F0F4C3"
-        , "#FFF9C4"
-        , "#FFECB3"
-        , "#FFE0B2"
-        , "#FFCCBC"
-        , "#FF1744"
-        , "#F50057"
-        , "#D500F9"
-        , "#651FFF"
-        , "#00B0FF"
-        , "#00E5FF"
-        , "#1DE9B6"
-        , "#00E676"
-        , "#C6FF00"
-        , "#FFEA00"
-        , "#FFC400"
-        , "#FF9100"
-        , "#FF3D00"
-        , "#EF9A9A"
-        , "#F48FB1"
-        , "#CE93D8"
-        , "#B39DDB"
-        , "#81D4FA"
-        , "#80DEEA"
-        , "#80CBC4"
-        , "#A5D6A7"
-        , "#E6EE9C"
-        , "#FFF59D"
-        , "#FFE082"
-        , "#FFCC80"
-        , "#FFAB91"
-        , "#FF5252"
-        , "#FF4081"
-        , "#E040FB"
-        , "#7C4DFF"
-        , "#40C4FF"
-        , "#18FFFF"
-        , "#64FFDA"
-        , "#69F0AE"
-        , "#EEFF41"
-        , "#FFFF00"
-        , "#FFD740"
-        , "#FFAB40"
-        , "#FF6E40"
-        , "#E57373"
-        , "#F06292"
-        , "#BA68C8"
-        , "#9575CD"
-        , "#4FC3F7"
-        , "#4DD0E1"
-        , "#4DB6AC"
-        , "#81C784"
-        , "#DCE775"
-        , "#FFF176"
-        , "#FFD54F"
-        , "#FFB74D"
-        , "#FF8A65"
-        , "#FF8A80"
-        , "#FF80AB"
-        , "#EA80FC"
-        , "#B388FF"
-        , "#80D8FF"
-        , "#84FFFF"
-        , "#A7FFEB"
-        , "#B9F6CA"
-        , "#F4FF81"
-        , "#FFFF8D"
-        , "#FFE57F"
-        , "#FFD180"
-        , "#FF9E80"
-        , "#EF5350"
-        , "#EC407A"
-        , "#AB47BC"
-        , "#7E57C2"
-        , "#29B6F6"
-        , "#26C6DA"
-        , "#26A69A"
-        , "#66BB6A"
-        , "#D4E157"
-        , "#FFEE58"
-        , "#FFCA28"
-        , "#FFA726"
-        , "#FF7043"
-        , "#B71C1C"
-        , "#880E4F"
-        , "#4A148C"
-        , "#311B92"
-        , "#01579B"
-        , "#006064"
-        , "#004D40"
-        , "#1B5E20"
-        , "#827717"
-        , "#F57F17"
-        , "#FF6F00"
-        , "#E65100"
-        , "#BF360C"
-        , "#F44336"
-        , "#E91E63"
-        , "#9C27B0"
-        , "#673AB7"
-        , "#03A9F4"
-        , "#00BCD4"
-        , "#009688"
-        , "#4CAF50"
-        , "#CDDC39"
-        , "#FFEB3B"
-        , "#FFC107"
-        , "#FF9800"
-        , "#FF5722"
-        , "#C62828"
-        , "#AD1457"
-        , "#6A1B9A"
-        , "#4527A0"
-        , "#0277BD"
-        , "#00838F"
-        , "#00695C"
-        , "#2E7D32"
-        , "#9E9D24"
-        , "#F9A825"
-        , "#FF8F00"
-        , "#EF6C00"
-        , "#D84315"
-        , "#E53935"
-        , "#D81B60"
-        , "#8E24AA"
-        , "#5E35B1"
-        , "#039BE5"
-        , "#00ACC1"
-        , "#00897B"
-        , "#43A047"
-        , "#C0CA33"
-        , "#FDD835"
-        , "#FFB300"
-        , "#FB8C00"
-        , "#F4511E"
-        , "#D32F2F"
-        , "#C2185B"
-        , "#7B1FA2"
-        , "#512DA8"
-        , "#0288D1"
-        , "#0097A7"
-        , "#00796B"
-        , "#388E3C"
-        , "#AFB42B"
-        , "#FBC02D"
-        , "#FFA000"
-        , "#F57C00"
-        , "#E64A19"
-
-
-
-
-
-
-
-    ];
-    //Verifica se o arquivoo já foi carregado
-    // fileLoaded(name: string): boolean {
-    //     for (var i = 0; i < this.listUploadedFileNames.length; i++) {
-    //         console.log(`Verificando nome: ${this.listUploadedFileNames[i]} se é igual a ${name}`)
-    //         if (this.listUploadedFileNames[i] == name) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+  // listUploadedFileNames: string[] = [];
+  // listFilesInvalid: string[] = [];
+  listColors: string[] = [
+    "#f44336",
+    "#4caf50",
+    "#2196f3",
+    "#ffeb3b",
+    "#9c27b0",
+    "#ff9800",
+    "#3f51b5",
+    "#00bcd4",
+    "#8bc34a",
+    "#ff5722",
+    "#607d8b",
+    "#e91e63",
+    "#673ab7",
+    "#cdcdcd",
+    "#795548",
+    "#9e9e9e",
+    "#c2185b",
+    "#00e5ff",
+    "#009688",
+    "#e57373",
+    "#81c784",
+    "#64b5f6",
+    "#ffb74d",
+    "#ba68c8",
+    "#d32f2f",
+    "#388e3c",
+    "#1976d2",
+    "#fbc02d",
+    "#7b1fa2",
+    "#0288d1",
+    "#ff7043",
+    "#c2185b",
+    "#f57c00",
+    "#0288d1",
+    "#7e57c2",
+    "#3949ab",
+    "#8e24aa",
+    "#0097a7",
+    "#f44336",
+    "#1976d2",
+    "#388e3c",
+    "#7b1fa2",
+    "#ffeb3b",
+    "#3f51b5",
+    "#ff9800",
+    "#795548",
+    "#8bc34a",
+    "#c2185b",
+    "#00bcd4",
+    "#607d8b",
+    "#f57c00",
+    "#2196f3",
+    "#9c27b0",
+    "#00e5ff",
+    "#ff5722",
+    "#4caf50",
+    "#009688",
+    "#00bcd4",
+    "#8bc34a",
+    "#ff9800",
+    "#673ab7",
+    "#00bcd4",
+    "#795548",
+    "#9c27b0",
+    "#f44336",
+    "#3f51b5",
+    "#ffeb3b",
+    "#e91e63",
+    "#ff5722",
+    "#00bcd4",
+    "#009688",
+    "#2196f3",
+    "#ffeb3b",
+    "#9c27b0",
+    "#4caf50",
+    "#ff9800",
+    "#2196f3",
+    "#ff5722",
+    "#4caf50",
+    "#9c27b0",
+    "#f44336",
+    "#ffeb3b",
+    "#3f51b5",
+    "#e91e63",
+    "#ff9800",
+    "#607d8b",
+    "#00e5ff",
+    "#8bc34a",
+    "#795548",
+    "#2196f3",
+    "#9c27b0",
+    "#ff5722",
+    "#388e3c",
+    "#ff9800",
+    "#ff7043",
+    "#673ab7",
+    "#3f51b5",
+    "#00e5ff",
+    "#f57c00",
+    "#8bc34a",
+    "#ffeb3b",
+    "#1976d2",
+    "#e91e63",
+    "#673ab7",
+    "#ff5722",
+    "#9c27b0",
+    "#c2185b",
+    "#8bc34a",
+    "#2196f3",
+    "#ff9800",
+    "#4caf50",
+    "#9c27b0",
+    "#9e9e9e",
+    "#f44336",
+    "#ff9800",
+    "#c2185b",
+    "#2196f3",
+    "#ff5722",
+    "#388e3c",
+    "#7e57c2",
+    "#8bc34a",
+    "#d32f2f",
+    "#1976d2",
+    "#00bcd4",
+    "#ff7043",
+    "#0288d1",
+    "#9c27b0",
+    "#8bc34a",
+    "#7b1fa2",
+    "#00e5ff",
+    "#f44336",
+    "#ffeb3b",
+    "#795548",
+    "#8bc34a",
+    "#ff9800",
+    "#ff5722",
+    "#9c27b0",
+    "#2196f3",
+    "#3f51b5",
+    "#e91e63",
+    "#8bc34a",
+    "#ff7043",
+    "#00bcd4",
+    "#0288d1",
+    "#ff5722",
+    "#9c27b0",
+    "#00bcd4",
+    "#4caf50",
+    "#3f51b5",
+    "#ff9800",
+    "#ff5722",
+    "#388e3c",
+    "#ff9800",
+    "#4caf50",
+    "#9c27b0",
+    "#00bcd4",
+    "#ff5722",
+    "#8bc34a",
+    "#2196f3",
+    "#3f51b5",
+    "#f44336",
+    "#e91e63",
+    "#ff9800",
+    "#4caf50",
+    "#7e57c2",
+    "#ff5722",
+    "#c2185b",
+    "#4caf50",
+    "#2196f3",
+    "#ff5722",
+    "#ff9800",
+    "#9c27b0",
+    "#8bc34a",
+    "#00bcd4",
+    "#795548",
+    "#e91e63",
+    "#9c27b0",
+    "#ff9800",
+    "#ff5722",
+    "#4caf50",
+    "#2196f3",
+    "#00bcd4",
+    "#ff9800",
+    "#9c27b0",
+    "#ff5722",
+    "#f44336",
+    "#ffeb3b",
+    "#8bc34a",
+    "#4caf50",
+    "#3f51b5",
+    "#00bcd4",
+    "#ff9800",
+    "#8bc34a",
+    "#673ab7",
+    "#ff5722",
+    "#9c27b0",
+    "#2196f3",
+    "#4caf50",
+    "#ff9800",
+    "#00bcd4",
+    "#9c27b0",
+    "#ffeb3b",
+    // Continue até completar 1000 cores
+  ];
+  //Verifica se o arquivoo já foi carregado
+  // fileLoaded(name: string): boolean {
+  //     for (var i = 0; i < this.listUploadedFileNames.length; i++) {
+  //         console.log(`Verificando nome: ${this.listUploadedFileNames[i]} se é igual a ${name}`)
+  //         if (this.listUploadedFileNames[i] == name) {
+  //             return true;
+  //         }
+  //     }
+  //     return false;
+  // }
+  //Adiciona a lista passada como parametro no final da lista existente
+  // addList(lista: any): void {
+  //     this.listUploadedFileNames = this.listUploadedFileNames.concat(lista.sort(sortByDataString));
+  // };
+  getColor(j: number): string {
+    return this.listColors[j];
+  }
+  orderListByName(lista: string[]): string[] {
+    // console.log("Order by name");
+    // console.log(lista);
     //Adiciona a lista passada como parametro no final da lista existente
-    // addList(lista: any): void {
-    //     this.listUploadedFileNames = this.listUploadedFileNames.concat(lista.sort(sortByDataString));
-    // };
-    getColor(j: number): string {
-        return this.listColors[j];
-    };
-    orderListByName(lista: string[]): string[] {
-        console.log("Order by name")
-        console.log(lista)
-        //Adiciona a lista passada como parametro no final da lista existente
-        return lista.sort(sortByDataString);
-    };
+    return lista.sort(sortByDataString);
+  }
 
-    //Funções para ordenação
-
-
+  //Funções para ordenação
 }
 function isNumber(n: any) {
-    "use strict";
-    return !isNaN(parseFloat(n)) && isFinite(n);
+  "use strict";
+  return !isNaN(parseFloat(n)) && isFinite(n);
 }
 // String sorting function
 function sortByDataString(a1: string, b2: string) {
-    let a = a1.toLowerCase();
-    let b = b2.toLowerCase();
-    console.log("A1 " + a1 + "a " + a)
-    if (a === null) {
-        return 1;
+  let a = a1.toLowerCase();
+  let b = b2.toLowerCase();
+  // console.log("A1 " + a1 + "a " + a);
+  if (a === null) {
+    return 1;
+  }
+  if (b === null) {
+    return -1;
+  }
+  if (isNumber(a) && isNumber(b)) {
+    if (parseInt(a, 10) === parseInt(b, 10)) {
+      return 0;
     }
-    if (b === null) {
-        return -1;
-    }
-    if (isNumber(a) && isNumber(b)) {
-        if (parseInt(a, 10) === parseInt(b, 10)) {
-            return 0;
-        }
-        return parseInt(a, 10) > parseInt(b, 10) ? 1 : -1;
-    }
-    if (isNumber(a)) {
-        return -1;
-    }
-    if (isNumber(b)) {
-        return 1;
-    }
-    if (a === b) {
-        return 0;
-    }
-    return a > b ? 1 : -1;
+    return parseInt(a, 10) > parseInt(b, 10) ? 1 : -1;
+  }
+  if (isNumber(a)) {
+    return -1;
+  }
+  if (isNumber(b)) {
+    return 1;
+  }
+  if (a === b) {
+    return 0;
+  }
+  return a > b ? 1 : -1;
 }
 
 //Função antiga para remvoer itens invalidos
@@ -1097,9 +277,6 @@ function sortByDataString(a1: string, b2: string) {
 //    node.style.display="none";
 //    listNamesInvalid.push(this.listUploadedFileNames[index] + ": só são permitidos arquivos mono, stereo, quad e 5.1  ");
 //}
-
-
-
 
 //Get tamanho
 // ControlColor.prototype.listUploadedFileNamesLenght = function (j) {

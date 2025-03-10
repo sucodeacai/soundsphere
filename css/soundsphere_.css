@@ -1,0 +1,135 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+.menu-botoes-painel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.option-itens {
+  width: 100vw;
+  margin-top: 5px !important;
+  padding: 0 15px;
+}
+
+.option-itens h2 {
+  font-size: 1.2rem;
+  margin: 0;
+  text-align: left;
+}
+
+.option-itens-itens {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  white-space: nowrap;
+  margin-top: 1px;
+  /* Reduzi o espaço acima */
+}
+
+.option-itens-itens button {
+  flex-shrink: 0;
+  margin: 2px;
+  /* Mantive o margin, mas pode ser ajustado conforme necessário */
+}
+
+.btn-secondary.active {
+  background-color: #ff6f00;
+  /* Cor laranja vibrante */
+  border-color: #e65100;
+  /* Cor de borda mais escura */
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  position: relative;
+}
+
+.navbar-nav {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.brand-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+#canva_painel_mixagem {
+  width: calc(100% - 20px);
+  /* Subtrai 10px de cada lado */
+  height: calc(40vh - 10px);
+  /* Subtrai 10px no topo */
+  display: block;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* Modal */
+
+/* Estilos do modal */
+.modal-dialog {
+  max-width: 500px;
+  width: 90%;
+  /* Modal ocupa 90% da largura da tela */
+}
+
+.modal-body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  gap: 20px;
+}
+
+.card {
+  width: 200px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  cursor: pointer;
+  /* Torna o card clicável */
+}
+
+.btn-large {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+/* Botão no canto superior esquerdo */
+.open-modal-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}

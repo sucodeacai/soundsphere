@@ -1,161 +1,529 @@
-﻿<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Language" content="pt-br" />
-    <title>SoundSphere</title>
-    <script>
-      var isChromium = window.chrome;
-      var winNav = window.navigator;
-      var vendorName = winNav.vendor;
-      var isOpera = typeof window.opr !== "undefined";
-      var isIEedge = winNav.userAgent.indexOf("Edg") > -1;
-      var isIOSChrome = winNav.userAgent.match("CriOS");
+<!DOCTYPE html>
+<html lang="pt-br">
 
-      if (isIOSChrome) {
-        // is Google Chrome on IOS
-      } else if (
-        isChromium !== null &&
-        typeof isChromium !== "undefined" &&
-        vendorName === "Google Inc." &&
-        isOpera === false &&
-        isIEedge === false
-      ) {
-        console.log("Utilizando o navegador Chrome");
-      } else {
-        alert(
-          "Atualmente o Soundsphere não é compatível com seu navegador, por favor utilizar o Google Chrome."
-        );
-      }
-    </script>
-    <script src="js/entities/SemanticDescriptor.js"></script>
-    <script src="js/display/SimplePage.js"></script>
-    <script src="js/entities/Filter.js"></script>
-    <script src="js/entities/SoundSphereInfo.js"></script>
-    <script src="js/entities/EventItemMixPanel.js"></script>
-    <script src="js/entities/SessionControl.js"></script>
-    <script src="js/entities/EventSession.js"></script>
-    <script src="js/display/ControlFiles.js"></script>
-    <script src="js/display/ControlFilters.js"></script>
-    <script src="js/display/painel.js"></script>
-    <script src="js/display/PageAdminDescriptors.js"></script>
-    <script src="js/display/PageSoundSphereHome.js"></script>
-    <script src="js/entities/Dimension.js"></script>
-    <script src="js/entities/Intensity.js"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soundsphere</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <script>
+    var isChromium = window.chrome;
+    var winNav = window.navigator;
+    var vendorName = winNav.vendor;
+    var isOpera = typeof window.opr !== "undefined";
+    var isIEedge = winNav.userAgent.indexOf("Edg") > -1;
+    var isIOSChrome = winNav.userAgent.match("CriOS");
 
-    <script src="js/display/Tooltip.js"></script>
-    <script src="js/vos/vos.js"></script>
-    <script src="js/vos/VoiceMenuBar.js"></script>
-    <script src="js/vos/VoiceModalOptions.js"></script>
-    <script src="js/entities/ItemMixPanel.js"></script>
-    <!-- <script src="js/display/controlSoundIcon.js"></script> -->
-    <script src="js/display/touchFunctions.js"></script>
-    <script src="js/recorderjs/recorderWorker.js"></script>
-
-    <!-- Materialize
-  <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
-  <script src="materialize/js/materialize.js"></script> -->
-    <!-- <script src="js/semantic/popup.js"></script> -->
-    <script src="js/sequencer/sequenciador.js"></script>
-    <script src="js/storage/FileAPI.js"></script>
-    <script src="js/storage/FileJson.js"></script>
-    <script src="js/storage/FileWav.js"></script>
-    <script src="js/storage/FileSemanticJson.js"></script>
-    <script src="js/storage/FileSemanticWav.js"></script>
-    <script src="js/storage/FileMenuBar.js"></script>
-    <script src="js/storage/FileHomeJson.js"></script>
-    <script src="js/storage/FileHomeWav.js"></script>
-
-    <script src="js/entities/DescriptiveIcon.js"></script>
-    <script src="js/entities/ItemBuffer.js"></script>
-    <script src="js/storage/DAO.js"></script>
-    <script src="js/storage/DAOAdminDescriptors.js"></script>
-    <script src="js/storage/DAOHome.js"></script>
-    <script src="js/storage/SoundSphereBD.js"></script>
-    <script src="js/semantic/jquery-3.1.1.min.js"></script>
-
-    <script src="js/start/startSoundSphere.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="css/soundsphere.css" />
-
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/semantic/semantic.min.css"
-    />
-
-    <script src="js/semantic/semantic.min.js"></script>
-    <style>
-      .center {
-        width: 800px;
-        margin: 0 auto;
-      }
-
-      .canvas {
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        display: block;
-      }
-    </style>
-  </head>
-
-  <body id="sink">
-    <div id="mainModal" class="ui modal"></div>
-    <div id="restartModal" class="ui modal"></div>
-    <div id="downloadModal" class="ui modal"></div>
-    <div id="initialModal" class="ui modal"></div>
-    <div id="modalJson1" class="ui small third coupled modal transition"></div>
-    <div id="modalJson2" class="ui small third coupled modal transition"></div>
-    <div id="modalJson3" class="ui small third coupled modal transition"></div>
-    <div id="modalJson4" class="ui small third coupled modal transition"></div>
-    <div id="modalOptions" class="ui modal"></div>
-    <div id="modalNewFilter" class="ui modal"></div>
-    <div id="mensagens"></div>
-
-    <!-- Google Analytics -->
-    <script>
-      (function (i, s, o, g, r, a, m) {
-        i["GoogleAnalyticsObject"] = r;
-        (i[r] =
-          i[r] ||
-          function () {
-            (i[r].q = i[r].q || []).push(arguments);
-          }),
-          (i[r].l = 1 * new Date());
-        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m);
-      })(
-        window,
-        document,
-        "script",
-        "https://www.google-analytics.com/analytics.js",
-        "ga"
+    if (isIOSChrome) {
+      // is Google Chrome on IOS
+    } else if (
+      isChromium !== null &&
+      typeof isChromium !== "undefined" &&
+      vendorName === "Google Inc." &&
+      isOpera === false &&
+      isIEedge === false
+    ) {
+      console.log("Utilizando o navegador Chrome");
+    } else {
+      alert(
+        "Atualmente o Soundsphere não é compatível com seu navegador, por favor utilizar o Google Chrome."
       );
+    }
+  </script>
+  <script src="js/entities/SemanticDescriptor.js"></script>
+  <script src="js/display/SimplePage.js"></script>
+  <script src="js/entities/Filter.js"></script>
+  <script src="js/entities/SoundSphereInfo.js"></script>
+  <script src="js/entities/EventItemMixPanel.js"></script>
+  <script src="js/entities/SessionControl.js"></script>
+  <script src="js/entities/EventSession.js"></script>
+  <script src="js/display/ControlFiles.js"></script>
+  <script src="js/display/ControlFilters.js"></script>
+  <script src="js/display/painel.js"></script>
+  <script src="js/display/PageAdminDescriptors.js"></script>
+  <script src="js/display/PageSoundSphereHome.js"></script>
+  <script src="js/entities/Dimension.js"></script>
+  <script src="js/entities/Intensity.js"></script>
 
-      ga("create", "UA-XXXXX-XX", "auto");
-      ga("send", "pageview");
-    </script>
-    <!-- Google Analytics -->
-    <br />
-    <div id="bodyAplication" style="padding-bottom: 10px"></div>
-    <!-- Div de carregamento  -->
-    <div id="divLoading" class="ui inverted dimmer">
-      <div class="ui text loader">Por favor aguarde...</div>
+  <script src="js/display/Tooltip.js"></script>
+  <script src="js/vos/vos.js"></script>
+  <script src="js/vos/VoiceMenuBar.js"></script>
+  <script src="js/vos/VoiceModalOptions.js"></script>
+  <script src="js/entities/ItemMixPanel.js"></script>
+  <script src="js/display/touchFunctions.js"></script>
+  <script src="js/recorderjs/recorderWorker.js"></script>
+  <script src="js/sequencer/sequenciador.js"></script>
+  <script src="js/storage/FileAPI.js"></script>
+  <script src="js/storage/FileJson.js"></script>
+  <script src="js/storage/FileWav.js"></script>
+  <script src="js/storage/FileSemanticJson.js"></script>
+  <script src="js/storage/FileSemanticWav.js"></script>
+  <script src="js/storage/FileMenuBar.js"></script>
+  <script src="js/storage/FileHomeJson.js"></script>
+  <script src="js/storage/FileHomeWav.js"></script>
+
+  <script src="js/entities/ActionDescriptiveIcon.js"></script>
+  <script src="js/entities/ItemBuffer.js"></script>
+  <script src="js/storage/DAO.js"></script>
+  <script src="js/storage/DAOAdminDescriptors.js"></script>
+  <script src="js/storage/DAOHome.js"></script>
+  <script src="js/storage/SoundSphereBD.js"></script>
+
+  <script src="js/start/startSoundSphere.js"></script>
+  <script src="js/features/useElementsHtml.js"></script>
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+    }
+
+
+
+
+
+    .option-itens {
+      width: 100vw;
+      margin-top: 5px !important;
+      padding: 0 15px;
+    }
+
+    .option-itens h2 {
+      font-size: 1.2rem;
+      margin: 0;
+      text-align: left;
+    }
+
+    .option-itens-itens {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      width: 100%;
+      white-space: nowrap;
+      margin-top: 1px;
+      /* Reduzi o espaço acima */
+    }
+
+    .option-itens-itens button {
+      flex-shrink: 0;
+      margin: 2px;
+      /* Mantive o margin, mas pode ser ajustado conforme necessário */
+    }
+
+    .btn-secondary.active {
+      background-color: #ff6f00;
+      /* Cor laranja vibrante */
+      border-color: #e65100;
+      /* Cor de borda mais escura */
+    }
+
+    .navbar-toggler:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      position: relative;
+    }
+
+    .navbar-nav {
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .brand-text {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: opacity 0.3s ease;
+    }
+
+    .hidden {
+      opacity: 0;
+    }
+
+    #canva_painel_mixagem {
+      width: calc(100% - 20px);
+      /* Subtrai 10px de cada lado */
+      height: calc(40vh - 10px);
+      /* Subtrai 10px no topo */
+      display: block;
+      margin-top: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    /* Modal */
+
+    /* Estilos do modal */
+    .modal-dialog {
+      max-width: 500px;
+      width: 90%;
+      /* Modal ocupa 90% da largura da tela */
+    }
+
+    .modal-body {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      gap: 20px;
+    }
+
+    .card {
+      width: 200px;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+      cursor: pointer;
+      /* Torna o card clicável */
+    }
+
+    .btn-large {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-content {
+      padding: 20px;
+    }
+
+    /* Botão no canto superior esquerdo */
+    .open-modal-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    /* Estilo dos itens SVG */
+    .svg-item {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border: 2px solid transparent;
+      /* Sem borda inicialmente */
+    }
+
+    .circle-svg {
+      transition: fill 0.3s ease;
+    }
+
+    .svg-item.active .circle-svg {
+      fill: black;
+      /* Interior do círculo preto quando ativo */
+    }
+
+    .svg-item.active .play-icon {
+      fill: black;
+      /* Interior do círculo preto quando ativo */
+    }
+
+    .svg-item.active {
+      border-color: black;
+      /* Adiciona a borda preta quando ativo */
+    }
+
+    /* Estilo de hover */
+    .svg-item.playing_audio .circle-svg {
+      fill: transparent;
+    }
+
+    .svg-item.playing_audio .play-icon {
+      opacity: 1;
+    }
+
+    .play-icon {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-content-loading {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* NOme */
+
+    .itemMenuDescriptiveIcon.active {
+      border: 2px solid black !important;
+      /* Borda preta */
+      border-radius: 12px;
+      background-color: #c5c7c9;
+      /* Bordas arredondadas */
+      /* Cor de fundo similar ao exemplo */
+    }
+
+    .btn-rounded.active {
+      border: 2px solid black !important;
+      /* Borda preta */
+      border-radius: 12px;
+    }
+
+    /* faz com o quebre linha no tooltip dos itens */
+    .tooltip-inner {
+      white-space: pre-line;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-dark fixed-top menu-principal">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="toggleBrandText()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
+              data-bs-target=".navbar-collapse.show">Novo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
+              data-bs-target=".navbar-collapse.show">Sobre</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
+              data-bs-target=".navbar-collapse.show">Contato</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <!-- Fim  -->
-    <!-- Inputs para carregamento de arquivos  -->
-    <input
-      style="display: none"
-      type="file"
-      id="filesWav"
-      name="files[]"
-      multiple
-    />
-    <input style="display: none" type="file" id="fileJSON" />
-    <input style="display: none" type="file" id="fileHomeWav" multiple />
-  </body>
+    <!-- Texto "Soundsphere" centralizado -->
+    <div class="brand-text" id="brandText">
+      Soundsphere
+    </div>
+  </nav>
+
+  <canvas id="canva_painel_mixagem"></canvas>
+
+  <!-- Menu de botões -->
+  <div id="menu-botoes-painel" class="container mt-4 d-flex justify-content-center">
+    <div class="btn-group">
+      <button type="button" id="buttonPlay" class="btn btn-secondary">
+        <i class="fas fa-play"></i>
+      </button>
+      <button type="button" id="buttonPause" class="btn btn-secondary">
+        <i class="fas fa-pause"></i>
+      </button>
+      <button type="button" id="buttonStop" class="btn btn-secondary active">
+        <i class="fas fa-stop"></i>
+      </button>
+    </div>
+  </div>
+
+
+  <div id="general-options-panel">
+    <div class="option-itens mt-4">
+      <h2>Modificadores</h2>
+      <div id="container-modificadores" class="option-itens-itens">
+        <button data-action="remove" id="modificador-excluir" class="btn btn-light m-2 btn-rounded">
+          <i class="fas fa-trash"></i> Excluir
+        </button>
+        <button data-action="move" id="modificador-mover" class="btn btn-light m-2 btn-rounded">
+          <i class="fas  fa-arrows-alt"></i> Mover
+        </button>
+      </div>
+    </div>
+    <div class="option-itens mt-4">
+      <h2>Amostras</h2>
+      <div id="container-amostras-audio" class="option-itens-itens">
+
+      </div>
+    </div>
+
+    <div class="option-itens mt-4">
+      <h2>Descritores Semanticos</h2>
+      <div id="container-semaits-descriptors" class="option-itens-itens">
+      </div>
+    </div>
+    <div class="option-itens mt-4">
+      <h2>Alimentos</h2>
+      <div id="container-alimentos" class="option-itens-itens">
+      </div>
+    </div>
+    <div class="option-itens mt-4">
+      <h2>Dimensão</h2>
+      <div id="container-dimensions" class="option-itens-itens">
+        <!-- <button class="btn btn-secondary m-2">Botão 1</button>
+        <button class="btn btn-secondary m-2">Botão 1</button>
+        <button class="btn btn-secondary m-2">Botão 1</button>
+        <button class="btn btn-secondary m-2">Botão 1</button>
+        <button class="btn btn-secondary m-2">Botão 1</button>
+        <button class="btn btn-secondary m-2">Botão 1</button> -->
+      </div>
+    </div>
+    <div class="option-itens mt-4">
+      <h2>Intensidade</h2>
+      <div id="container-intensity" class="option-itens-itens">
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Input do arquivo wav -->
+  <!-- <input style="display: none" type="file" id="filesWav" name="files[]" multiple /> -->
+  <input style="display: none" type="file" id="filesWav" name="files[]" multiple />
+
+  <!-- Modal de Loading -->
+
+  <div class="modal fade" id="loadingModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="welcomeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+
+      <!-- Cabeçalho do Modal -->
+      <div class="modal-content modal-content-loading d-flex flex-column justify-content-center align-items-center p-4">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+        <h5 class="mt-3 text-white">Carregando...</h5> <!-- Texto branco para contraste -->
+      </div>
+
+    </div>
+  </div>
+  <!-- Modal Iniciar -->
+  <div class="modal fade" id="welcomeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="welcomeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Cabeçalho do Modal -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="welcomeModalLabel">Bem-vindo!</h5>
+        </div>
+        <!-- Corpo do Modal -->
+        <div class="modal-body">
+          <!-- Card para "Iniciar novo projeto" como botão -->
+          <div id="button_iniciar_upload" class="card bg-success text-white">
+            <i class="fas fa-file-alt btn-large"></i>
+            <p>Iniciar novo projeto</p>
+          </div>
+
+          <!-- Card para "Continuar" como botão -->
+          <div class="card bg-secondary text-white">
+            <i class="fas fa-upload btn-large"></i>
+            <p>Continuar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal de error -->
+  <div class="modal fade" id="errorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="errorModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">Atenção!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="errorModalBody" class="modal-body-error">
+          <p class="d-block mb-2">Erro 1</p>
+          <p class="d-block mb-2">Erro 2</p>
+          <p class="d-block mb-2">Erro 3</p>
+          <p class="d-block mb-2">Erro 4</p>
+          <p class="d-block mb-2">Erro 5</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Área onde os Tooltips serão exibidos -->
+  <div id="tooltipContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+    <!-- Os tooltips serão adicionados dinamicamente aqui -->
+  </div>
+
+  <script>
+
+    //Fechar menu ao clicar fora dele
+    // Fechar menu ao clicar em um item ou fora do menu
+    document.addEventListener("DOMContentLoaded", function () {
+      const navLinks = document.querySelectorAll(".nav-link");
+      const navbarCollapse = document.querySelector(".navbar-collapse");
+      const navbarToggler = document.querySelector(".navbar-toggler");
+
+      // Fechar o menu ao clicar em um item
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (navbarCollapse.classList.contains("show")) {
+            new bootstrap.Collapse(navbarCollapse).hide();
+          }
+        });
+      });
+
+      // Fechar o menu ao clicar fora do menu
+      document.addEventListener("click", function (event) {
+        if (!navbarCollapse.contains(event.target) && !navbarToggler.contains(event.target)) {
+          if (navbarCollapse.classList.contains("show")) {
+            new bootstrap.Collapse(navbarCollapse).hide();
+          }
+        }
+      });
+    });
+    //Fim Fechar menu ao clicar fora dele
+
+    // Função para esconder/exibir o nome "Soundsphere" ao clicar no botão sandwich
+    function toggleBrandText() {
+      const brandText = document.getElementById('brandText');
+      brandText.classList.toggle('hidden');
+    }
+
+    // Fechar menu ao clicar em um item (caso necessário para navegadores específicos)
+    document.addEventListener("DOMContentLoaded", function () {
+      const navLinks = document.querySelectorAll(".nav-link");
+      const navbarCollapse = document.querySelector(".navbar-collapse");
+
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (navbarCollapse.classList.contains("show")) {
+            new bootstrap.Collapse(navbarCollapse).hide();
+          }
+        });
+      });
+    });
+    // Desenho do Canvas
+    const canvas = document.getElementById("canva_painel_mixagem");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth - 20;
+    canvas.height = window.innerHeight * 0.4 - 10;
+
+    // Ajustar o tamanho do canvas ao redimensionar a janela
+    function resizeCanvas() {
+      canvas.width = window.innerWidth - 20;
+      canvas.height = window.innerHeight * 0.4 - 10;
+    }
+    window.addEventListener("resize", resizeCanvas);
+
+
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</body>
+
 </html>

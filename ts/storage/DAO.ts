@@ -121,7 +121,7 @@ abstract class DAO {
   itemBufferHaveBufer(name: string) {
     for (let index = 0; index < this.listItemBuffer.length; index++) {
       if (this.listItemBuffer[index].name == name) {
-        //    console.log("XXXXXX - Nome repetido: "+name)
+        //    hamou o reset translate("XXXXXX - Nome repetido: "+name)
         if (this.listItemBuffer[index].buffer != undefined) {
           return true;
         }
@@ -259,7 +259,7 @@ abstract class DAO {
     // console.log(listItemBufferProv)
     // console.log(listItemBufferProv.length)
     for (let index = 0; index < listItemBufferProv.length; index++) {
-      console.log("Inseridno: " + listItemBufferProv[index].name);
+      // console.log("Inseridno: " + listItemBufferProv[index].name);
       listaNamesOk.push(listItemBufferProv[index].name);
     }
     // console.log("-------------------------listaNamesOk")

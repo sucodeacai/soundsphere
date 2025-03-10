@@ -3,7 +3,7 @@
 //servem para saber onde o canvas vai ser inserido. A medida que a tela de amostra
 //se move para a direita o canvas precisa ser desenhado mais a esquerda por isso o mesmo é
 //negativo e o translate também.
-class Painel {
+class PainelBkp {
     constructor(daoHome, ctxCanvas, canvas, pageSoundSphereHome, tooltip, pixelPerSecond) {
         this.drawGradient = true;
         this.drawDescritor = true;
@@ -57,7 +57,7 @@ class Painel {
         this.firstPositionY = 0;
         this.moved = false;
         this.pixelPerSecond = pixelPerSecond;
-        console.log("Pixel por segundo: " + pixelPerSecond);
+        console.log("CONSTRUTOR PAINEL: " + pixelPerSecond);
         this.DAOHome = daoHome;
         this.tooltip = tooltip;
         this.pageSoundSphereHome = pageSoundSphereHome;
@@ -118,7 +118,7 @@ class Painel {
         if (!this.moved) {
             console.log("Mouse up " + this.pageSoundSphereHome.idSelectedIcomAlbum);
             //Se o botão de exclusão estiver ativado
-            if (this.pageSoundSphereHome.isDeleteButtonActive()) {
+            if (this.pageSoundSphereHome.buttonRemoveStatus) {
                 console.log("Mouse up remove status");
                 let itemMixTemp = this.getItemMix();
                 if (itemMixTemp) {
@@ -130,25 +130,48 @@ class Painel {
                     this.tooltip.showMessage("Nenhum ítem de mixagem selecionado. 1");
                 }
                 //Se as opções estiverem ativadas
-                // } else if (this.pageSoundSphereHome.sequenciador.activePause) {
-                //   console.log("Mouse up remove pause");
-                //   let seconds = this.getSecondsByXPosition(
-                //     this.getPositionX(event) + this.displacingXAxis
-                //   );
-                //   if (seconds <= this.totalTime) {
-                //     this.xMarker = this.getPositionX(event) + this.displacingXAxis;
-                //     this.lastMakerX = this.xMarker;
-                //     this.pageSoundSphereHome.sequenciador.continueFrom = seconds;
+            }
+            else if (this.pageSoundSphereHome.itemOptionEnabled) {
+                console.log("Mouse up Option");
+                let itemMixTemp = this.getItemMix();
+                if (itemMixTemp) {
+                    this.setItemMixTemp(itemMixTemp);
+                    // this.pageSoundSphereHome.showModalOptions();
+                }
+                else {
+                    this.tooltip.showMessage("Nenhum ítem de mixagem selecionado. 2");
+                }
+                //Se o pause estiver ativado
+            }
+            if (this.pageSoundSphereHome.sequenciador.activePause) {
+                console.log("Mouse up remove pause");
+                let seconds = this.getSecondsByXPosition(this.getPositionX(event) + this.displacingXAxis);
+                if (seconds <= this.totalTime) {
+                    this.xMarker = this.getPositionX(event) + this.displacingXAxis;
+                    this.lastMakerX = this.xMarker;
+                    this.pageSoundSphereHome.sequenciador.continueFrom = seconds;
+                    this.reMake();
+                }
+                //se o icone descritivo for diferente de indefinido
+                // } else if (this.pageSoundSphereHome.descriptiveIcon != undefined) {
+                //   console.log("Mouse up remove descriptiveIcon");
+                //   let itemMixTemp = this.getItemMix();
+                //   if (itemMixTemp) {
+                //     this.setItemMixTemp(itemMixTemp);
+                //     this.pageSoundSphereHome.itemMixOption!.descriptiveIcon = this.pageSoundSphereHome.descriptiveIcon;
+                //     this.DAOHome.updateItemMixPane(this.pageSoundSphereHome.itemMixOption!, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.getNumberTrailByHeight(itemMixTemp.y) - 1, this.sizeTrail)
                 //     this.reMake();
+                //   } else {
+                //     this.tooltip.showMessage("O icone descritivo só pode ser inserido sobre um item de mixagem.");
                 //   }
+                //se o icone descritivo for diferente de indefinido
             }
             else if (this.pageSoundSphereHome.idSelectedIcomAlbum != undefined) {
                 console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
-                console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);
-                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor);
+                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.descriptiveIcon, this.pageSoundSphereHome.selected_tag_dimension, this.pageSoundSphereHome.selected_tag_intensity);
             }
             else {
-                this.tooltip.showMessage("Nenhum item de mixagem selecionado.");
+                console.log("nenhum");
             }
         }
         this.endMove();
@@ -224,7 +247,7 @@ class Painel {
                     this.firstPositionY = evt.offsetY - 1;
                     this.moveAction(e);
                 }
-                // console.error("moveu");
+                console.error("moveu");
                 this.moved = true;
             }
             else {
@@ -720,14 +743,12 @@ class Painel {
     }
     //Função que tentar inserir desenhar/inserir o item no Painel
     //caso não seja possivel ela da uma mensagem informando o usuario
-    insertItemMixPanel(idSoundIconSelect, descriptiveIcon, tag_dimension, tag_intensity, idSemanticDescriptor, codeSemanticDescriptor) {
+    insertItemMixPanel(idSoundIconSelect, descriptiveIcon, tag_dimension, tag_intensity) {
         let idBuffer = idSoundIconSelect;
         let itemMixPanel = new ItemMixPanel();
         itemMixPanel.descriptiveIcon = descriptiveIcon;
         itemMixPanel.tag_dimension = tag_dimension;
         itemMixPanel.tag_intensity = tag_intensity;
-        itemMixPanel.setIdSemanticDescriptor(idSemanticDescriptor);
-        itemMixPanel.setCodeSemanticDescriptor(codeSemanticDescriptor);
         itemMixPanel.seconds = this.DAOHome.listItemBuffer[idBuffer].timeDuration;
         itemMixPanel.color = this.DAOHome.listItemBuffer[idBuffer].color;
         itemMixPanel.idBuffer = idBuffer;
@@ -745,7 +766,7 @@ class Painel {
             this.pageSoundSphereHome.sequenciador.needGenerateBuffer = true;
             var linha = this.getNumberTrailByHeight(itemMixPanel.y) - 1;
             itemMixPanel.linha = linha;
-            this.tooltip.showMessage(`${this.DAOHome.listItemBuffer[itemMixPanel.idBuffer].name} inserido em: ${this.sec2time(itemMixPanel.startTime)}`);
+            this.tooltip.showMessage("Evento inserido em: " + this.sec2time(itemMixPanel.startTime));
             this.DAOHome.pushItemMixPanel(itemMixPanel);
             // if (this.displacingInsertY > 0 && this.getNumberTrailByHeight(itemMixPanel.y) - 2 > this.numberOfTrails) {
             if (this.displacingInsertY > 0 &&
@@ -949,7 +970,7 @@ class Painel {
     }
     // //Levar para o inicio do canvas
     resetTranslate() {
-        // console.log("chamou o reset translate");
+        console.log("chamou o reset translate");
         //console.log("xsxsxsxsResete")
         //console.log("xsxsxsxsResete :"+this.displacingXAxis)
         this.ctxCanvas.translate(this.displacingXAxis, this.displacingYAxis);

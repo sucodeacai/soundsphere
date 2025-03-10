@@ -21,11 +21,12 @@ class FileAPI {
             this.listNamesInvalid.push(lista[i]);
         }
     }
-    //função para desativar a tela de carregamento  
+    //função para desativar a tela de carregamento
     desativaModalLoad() {
-        let divLoading = document.getElementById('divLoading');
-        if (divLoading) {
-            divLoading.setAttribute('class', 'ui inverted dimmer desactive');
-        }
+        // let divLoading = document.getElementById('divLoading');
+        // if (divLoading) {
+        //     divLoading.setAttribute('class', 'ui inverted dimmer desactive');
+        // }
+        console.error("Atencao Loading deve passar para pagina gerenciar.");
     }
 }

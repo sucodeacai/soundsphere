@@ -13,7 +13,7 @@ class PageLeitor {
         $(".ui.modal").modal("hide");
     }
     showData() {
-        $("#content").css({ display: "block" });
+        document.getElementById("content").css({ display: "block" });
         this.showDataValues();
     }
     showDataValues() {
@@ -363,9 +363,12 @@ class PageLeitor {
         historicoDIV.innerHTML = historico;
     }
     setSettingsActions() {
-        $("#buttonIniciar").on("click", (e) => {
+        document
+            .getElementById("buttonIniciar")
+            .on("click", (e) => {
             this.closeModal();
-            $("#step1")
+            document
+                .getElementById("step1")
                 .modal({ closable: false })
                 .modal("setting", "transition", "horizontal flip")
                 .modal("show");
@@ -397,7 +400,7 @@ class PageLeitor {
     <h1>Dados Gerais</h1>
     <div id="dadosMixagem"></div>
     `;
-        $("#content").html(conteudoHTML);
+        document.getElementById("content").html(conteudoHTML);
     }
     generateContentofModalStep1() {
         let conteudoHTML = `
@@ -449,7 +452,7 @@ class PageLeitor {
       <div onclick="filesAudioToJson.click()" class="ui green button">Selecionar</div>
     </div>
 `;
-        $("#step1").html(conteudoHTML);
+        document.getElementById("step1").html(conteudoHTML);
     }
     generateContentofModalMessageInitial() {
         let conteudoHTML = `
@@ -470,10 +473,11 @@ class PageLeitor {
     </div>
   </div>
 `;
-        $("#messageInitial").html(conteudoHTML);
+        document.getElementById("messageInitial").html(conteudoHTML);
     }
     showModalMessageInitial() {
-        $("#messageInitial")
+        document
+            .getElementById("messageInitial")
             .modal({ closable: false })
             .modal("setting", "transition", "horizontal flip")
             .modal("show");
@@ -491,6 +495,6 @@ class PageLeitor {
       </ul>
     </div>
     `;
-        $("#mensageStep1JSON").html(message);
+        document.getElementById("mensageStep1JSON").html(message);
     }
 }

@@ -2,48 +2,50 @@
 class FileMenuBar extends FileWav {
     // simplapage2:PageSoundSphereHome;
     constructor(sequenciador, dao, tooltip, simplePage) {
+        var _a;
         super(sequenciador, dao);
         // this.simplapage2 = simplePage;
         this.simplePage = simplePage;
-        $('#filesWav').on('change', (evt) => {
+        (_a = document
+            .getElementById("filesWav")) === null || _a === void 0 ? void 0 : _a.addEventListener("change", (evt) => {
             "use strict";
-            console.log("Chamou handledFIleselect xx");
+            // console.log("Chamou handledFIleselect xx");
             this.listNamesInvalid = [];
-            let files = [], divLoading = document.getElementById('divLoading'), i, f, reader, audio, result;
+            let files = [], divLoading = null, i, f, reader, audio, result;
+            const target = evt.target;
             if (navigator.userAgent.match(/Android/i)) {
-                files = evt.target.files;
+                // files = target.files as FileList;
             }
             else {
-                for (i = 0; i < evt.target.files.length; i++) {
-                    if (evt.target.files[i].type == "audio/wav" && !(this.dao.isItemBufferLoadedByName(evt.target.files[i].name))) {
-                        files.push(evt.target.files[i]);
+                for (i = 0; i < target.files.length; i++) {
+                    if (target.files[i].type === "audio/wav" &&
+                        !this.dao.isItemBufferLoadedByName(target.files[i].name)) {
+                        files.push(target.files[i]);
                     }
-                    else if (evt.target.files[i].type == "audio/wav") {
-                        this.listNamesInvalid.push(evt.target.files[i].name + ": -Arquivo já carregado/ File already loaded");
+                    else if (target.files[i].type === "audio/wav") {
+                        this.listNamesInvalid.push(target.files[i].name +
+                            ": -Arquivo já carregado/ File already loaded");
                     }
                     else {
                         console.log("==Arquivo repetido");
-                        this.listNamesInvalid.push(evt.target.files[i].name + ": -Formanto inválido/ Invalid format");
+                        this.listNamesInvalid.push(target.files[i].name + ": -Formato inválido/ Invalid format");
                     }
                 }
             }
-            //Se os arquivos carregados tiver algum que pode ser utilizado e que atenda os requisitos
-            //ele entra no primeiro IF, se não é exibido logo a mensagem de erro  
+            // Se os arquivos carregados tiver algum que pode ser utilizado e que atendisableModalLoadingdisableModalLoadingda os requisitos
+            // entra no primeiro IF, se não é exibido logo a mensagem de erro
             if (files.length > 0) {
-                if (divLoading) {
-                    divLoading.setAttribute('class', 'ui inverted dimmer active');
-                }
+                this.simplePage.activateModalLoading();
                 this.loadFilesWav(files);
             }
             else {
-                this.desativaModalLoad();
                 this.showMessageErrorWav();
+                this.simplePage.disableModalLoading();
             }
         });
     }
     onReaderWav(bufferList) {
         let callBackToLoadWav = function () {
-            this.desativaModalLoad();
             this.showMessageErrorWav();
         }.bind(this);
         this.dao.loadBufferList(bufferList, callBackToLoadWav);
@@ -53,32 +55,15 @@ class FileMenuBar extends FileWav {
         console.log("Mensagens de erro");
         console.log(messages);
         if (messages.length > 0) {
-            let conteudoModal = `
-            <div class="header">Error!</div>
-            <div id="contentInvalidNames" class="content">`;
-            for (let index = 0; index < messages.length; index++) {
-                conteudoModal += `<p>${messages[index]}</p>`;
-            }
-            conteudoModal += `
-            </div>
-            <div class="actions">
-              <div id="closeModalMessage" class="ui approve button">Cancelar</div>
-            </div>
-         
-            `;
-            $('#mainModal').html(conteudoModal);
-            $('#mainModal').modal({ closable: false }).modal("show");
-            $('#closeModalMessage').on('click', (e) => {
-                $('.ui.modal').modal('hide');
-                // this.simplePage.generateHTML();
-                this.simplePage.generateContentOfTheModals();
-                this.simplePage.reloadAlbum();
-            });
+            this.simplePage.startErrorModal(messages);
+            this.simplePage.render();
         }
         else {
-            console.log("Verificando buffes disponiveis");
+            console.info("Nenhum arquivo encontrado com erro");
+            // console.log("Verificando buffes disponiveis");
             //         console.log(this.dao.listItembuffer)
-            this.simplePage.reloadAlbum();
+            this.simplePage.render();
         }
+        this.simplePage.disableModalLoading();
     }
 }

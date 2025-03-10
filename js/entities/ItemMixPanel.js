@@ -328,7 +328,7 @@ class ItemMixPanel {
             }
         }
         if (this.descriptiveIcon != undefined) {
-            console.log("******* desenhar food )");
+            // console.log("******* desenhar food )");
             if (painel.drawFood) {
                 painel.ctxCanvas.drawImage(painel.pageSoundSphereHome.getImgDescriptiveIcon(this.descriptiveIcon), this.x + 20, this.y - 15, 30, 30);
             }

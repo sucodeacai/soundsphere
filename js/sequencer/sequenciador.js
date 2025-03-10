@@ -56,7 +56,6 @@ class Sequenciador {
         }
         // }
     }
-    ;
     stopSimple(callback) {
         // if (this.activePlay || this.activePause) {
         if (!this.stopFlag) {
@@ -77,7 +76,6 @@ class Sequenciador {
         }
         // }
     }
-    ;
     changeLoop() {
         if (this.activeLoop) {
             this.activeLoop = false;
@@ -86,7 +84,6 @@ class Sequenciador {
             this.activeLoop = true;
         }
     }
-    ;
     getTotalTime() {
         var totalTime = 0;
         var l, o;
@@ -94,11 +91,15 @@ class Sequenciador {
             if (this.dao.listItemMixPanel[l]) {
                 for (o = 0; o < this.dao.listItemMixPanel[l].length; o = o + 1) {
                     if (!this.dao.listItemMixPanel[l][o].excluded) {
-                        if (this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].timeDuration + this.dao.listItemMixPanel[l][o].startTime > totalTime) {
+                        if (this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer]
+                            .timeDuration +
+                            this.dao.listItemMixPanel[l][o].startTime >
+                            totalTime) {
                             //console.log("Start time: " + this.dao.listItemMixPanel[l][o].startTime + " Duração: " + this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].timeDuration);
                             //console.log("Alterando total time p/ : " + (this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].timeDuration + this.dao.listItemMixPanel[l][o].startTime));
                             //console.log("Tipo do objeto: " + typeof (this.dao.listItemMixPanel[l][o].startTime));
-                            totalTime = this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].timeDuration + this.dao.listItemMixPanel[l][o].startTime;
+                            totalTime =
+                                this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].timeDuration + this.dao.listItemMixPanel[l][o].startTime;
                             //console.log("Total time alterado p/: " + totalTime);
                         }
                     }
@@ -108,7 +109,6 @@ class Sequenciador {
         //console.log("Total time final: " + totalTime);
         return totalTime;
     }
-    ;
     //Verifica se tem algum item no painel
     haveItemMix() {
         var possuiItemMix = false;
@@ -128,7 +128,6 @@ class Sequenciador {
         }
         return possuiItemMix;
     }
-    ;
     pause(callback, cancelPause) {
         if (this.activePlay) {
             callback();
@@ -156,7 +155,6 @@ class Sequenciador {
             this.painel.cancelPause();
         }
     }
-    ;
     //FUnção que starta e faz as verifcacoes
     // de requisitos para que se possa executar o play da aplicação
     play(onPlay, onEndPlayList) {
@@ -181,9 +179,9 @@ class Sequenciador {
                         this.painel.reMake();
                         this.onEndPlayDefault(onEndPlayList);
                     };
-                    console.log('activePause:  ' + this.activePause);
+                    console.log("activePause:  " + this.activePause);
                     // if (this.activePause) {
-                    this.startAt = Date.now() - (this.continueFrom * 1000);
+                    this.startAt = Date.now() - this.continueFrom * 1000;
                     if (!this.activePause) {
                         this.painel.drawStoppedMarker(this.getTotalTime());
                     }
@@ -214,21 +212,22 @@ class Sequenciador {
             this.tooltip.showMessage("Não existem itens no painel.");
         }
     }
-    ;
     //res
     unPause() {
         this.activePause = false;
         // this.pauseAt = 0;
     }
-    ;
     getMaxChannelsPlayList() {
         var maxChannels = 0;
         var l, o;
         for (l = 0; l < this.dao.listItemMixPanel.length; l = l + 1) {
             if (this.dao.listItemMixPanel[l]) {
                 for (o = 0; o < this.dao.listItemMixPanel[l].length; o = o + 1) {
-                    if (this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].numberOfChannels > maxChannels) {
-                        maxChannels = this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].numberOfChannels;
+                    if (this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer]
+                        .numberOfChannels > maxChannels) {
+                        maxChannels =
+                            this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer]
+                                .numberOfChannels;
                         //console.log("maximo de canais: " + maxChannels);
                     }
                 }
@@ -236,17 +235,21 @@ class Sequenciador {
         }
         return maxChannels;
     }
-    ;
     codeRegitred(list, codeEdited) {
         const codigoJaInserido = list.some((item) => {
-            return (item.idBuffer == codeEdited.idBuffer) && (item.volume == codeEdited.volume) && (item.idSemanticDescriptor == codeEdited.idSemanticDescriptor);
+            return (item.idBuffer == codeEdited.idBuffer &&
+                item.volume == codeEdited.volume &&
+                item.idSemanticDescriptor == codeEdited.idSemanticDescriptor);
         });
         console.log("---------codeRegitred: " + codigoJaInserido);
         return codigoJaInserido;
     }
     getIdBuffersEdited(codeSearsh) {
         for (let index = 0; index < this.listCodesBuffersEdited.length; index++) {
-            if ((this.listCodesBuffersEdited[index].idBuffer == codeSearsh.idBuffer) && (this.listCodesBuffersEdited[index].volume == codeSearsh.volume) && (this.listCodesBuffersEdited[index].idSemanticDescriptor == codeSearsh.idSemanticDescriptor)) {
+            if (this.listCodesBuffersEdited[index].idBuffer == codeSearsh.idBuffer &&
+                this.listCodesBuffersEdited[index].volume == codeSearsh.volume &&
+                this.listCodesBuffersEdited[index].idSemanticDescriptor ==
+                    codeSearsh.idSemanticDescriptor) {
                 return index;
             }
         }
@@ -262,7 +265,7 @@ class Sequenciador {
             //Se a linha tiver algo
             if (this.dao.listItemMixPanel[line]) {
                 for (let itemOfLine = 0; itemOfLine < this.dao.listItemMixPanel[line].length; itemOfLine++) {
-                    //Se os valores forem difrente dos iniciais volume==100 e 
+                    //Se os valores forem difrente dos iniciais volume==100 e
                     //idDescritor!= undefinide
                     //então vai ser preciso gerar o novo buffer dele
                     if (!this.dao.listItemMixPanel[line][itemOfLine].getStandardValues()) {
@@ -312,7 +315,7 @@ class Sequenciador {
         console.log("------------------ix(callback: (buffer: Buffer) => void) {");
         if (this.needGenerateBuffer) {
             console.log("------------------gera");
-            this.returnListBufferEdited().then(listAudioBufferPromisses => {
+            this.returnListBufferEdited().then((listAudioBufferPromisses) => {
                 //console.log("Mix then returnListBufferEdited")
                 let listBuffersSourceEdited = this.getListBuffersSourceEdited(listAudioBufferPromisses);
                 if (this.haveItemMix()) {
@@ -326,29 +329,36 @@ class Sequenciador {
                             for (var o = 0; o < this.dao.listItemMixPanel[l].length; o = o + 1) {
                                 //Percorrer os canais
                                 //Se for mute e  excluido não entra na mixagem
-                                if (this.dao.listItemMixPanel[l][o].solo && !this.dao.listItemMixPanel[l][o].excluded) {
+                                if (this.dao.listItemMixPanel[l][o].solo &&
+                                    !this.dao.listItemMixPanel[l][o].excluded) {
                                     for (var channel = 0; channel < maxChannels; channel++) {
-                                        if (channel <= (this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].numberOfChannels - 1)) {
+                                        if (channel <=
+                                            this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].numberOfChannels -
+                                                1) {
                                             var v = out.getChannelData(channel);
                                             //Verifica se os valores iniciais foram alterados ou não
                                             //se estiver sem alterações pega o valor do buffer
                                             //se tiver sido alterado faz a busca
                                             let mix;
                                             if (this.dao.listItemMixPanel[l][o].getStandardValues()) {
-                                                mix = this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].buffer.getChannelData(channel);
+                                                mix =
+                                                    this.dao.listItemBuffer[this.dao.listItemMixPanel[l][o].idBuffer].buffer.getChannelData(channel);
                                             }
                                             else {
                                                 //console.log("this.getIdBuffersEdited(listBuffersSourceEdited, this.dao.listItemMixPanel[l][o].getCodeIdentificationItemMixPanel())")
                                                 //console.log(this.getIdBuffersEdited(this.dao.listItemMixPanel[l][o].getCodeIdentificationItemMixPanel()))
                                                 //console.log(listBuffersSourceEdited)
-                                                mix = listBuffersSourceEdited[this.getIdBuffersEdited(this.dao.listItemMixPanel[l][o].getCodeIdentificationItemMixPanel())].buffer.getChannelData(channel);
+                                                mix =
+                                                    listBuffersSourceEdited[this.getIdBuffersEdited(this.dao.listItemMixPanel[l][o].getCodeIdentificationItemMixPanel())].buffer.getChannelData(channel);
                                             }
                                             for (var i = 0; i < mix.length; i++) {
-                                                var r = Math.floor(i + (this.audioCtx.sampleRate * this.dao.listItemMixPanel[l][o].startTime));
-                                                v[r] += (mix[i]);
+                                                var r = Math.floor(i +
+                                                    this.audioCtx.sampleRate *
+                                                        this.dao.listItemMixPanel[l][o].startTime);
+                                                v[r] += mix[i];
                                                 /*Antes quando o volume era editado sem o gainnode
-                                                v[r] += (mix[i] * (this.dao.listItemMixPanel[l][o].getVolume() / 100));
-                                                */
+                                                                         v[r] += (mix[i] * (this.dao.listItemMixPanel[l][o].getVolume() / 100));
+                                                                         */
                                             }
                                         }
                                     }
@@ -370,15 +380,16 @@ class Sequenciador {
             console.log("Não gera");
         }
     }
-    ;
     mixItemOption(itemMixOption) {
         let maxChannels = this.getMaxChannelsPlayList();
-        let frameCount = this.audioCtx.sampleRate * this.dao.listItemBuffer[itemMixOption.idBuffer].timeDuration;
+        let frameCount = this.audioCtx.sampleRate *
+            this.dao.listItemBuffer[itemMixOption.idBuffer].timeDuration;
         let out = this.audioCtx.createBuffer(maxChannels, frameCount, this.audioCtx.sampleRate);
         //Percorrer todos os buffers
         if (itemMixOption.solo) {
             for (var channel = 0; channel < maxChannels; channel++) {
-                if (channel <= (this.dao.listItemBuffer[itemMixOption.idBuffer].numberOfChannels - 1)) {
+                if (channel <=
+                    this.dao.listItemBuffer[itemMixOption.idBuffer].numberOfChannels - 1) {
                     var v = out.getChannelData(channel);
                     var mix = this.dao.listItemBuffer[itemMixOption.idBuffer].buffer.getChannelData(channel);
                     for (var i = 0; i < mix.length; i++) {
@@ -386,14 +397,13 @@ class Sequenciador {
                         //   v[r] += mix[i];
                         // //console.log("Volume"+itemMixOption.volume)
                         // v[r] += (mix[i] * (itemMixOption.volume / 100));
-                        v[r] += (mix[i]);
+                        v[r] += mix[i];
                     }
                 }
             }
         }
         return out;
     }
-    ;
     startDownload(onStartDownload, nameFileUser) {
         var index = 0, inputIndex = 0;
         var result = [];
@@ -423,13 +433,13 @@ class Sequenciador {
                 worker.record(buffer2);
                 var blob2 = worker.exportWAV();
                 var url = URL.createObjectURL(blob2);
-                var li = document.createElement('li');
-                var au = document.createElement('audio');
-                var hf = document.createElement('a');
+                var li = document.createElement("li");
+                var au = document.createElement("audio");
+                var hf = document.createElement("a");
                 au.controls = true;
                 au.src = url;
                 hf.href = url;
-                hf.download = nameFile + '.wav';
+                hf.download = nameFile + ".wav";
                 hf.innerHTML = hf.download;
                 li.appendChild(au);
                 li.appendChild(hf);
@@ -444,7 +454,7 @@ class Sequenciador {
         }
     }
     stopOneSound() {
-        this.tooltip.removeMessageFixed();
+        // this.tooltip.removeMessageFixed();
         //  if (this.activecurrentAudio) {
         //console.log("chamou stop one sound")
         //console.log(this.currentAudio.buffer)
@@ -455,7 +465,6 @@ class Sequenciador {
         this.activecurrentAudio = false;
         //}
     }
-    ;
     fomateFilters(filters, ctx) {
         let filtersList_1 = [];
         console.log("FOrmatated filter");
@@ -466,33 +475,36 @@ class Sequenciador {
                     let filter = ctx.createBiquadFilter();
                     filter.type = filters[index].type;
                     filter.name = filters[index].name;
-                    filters[index].frequency ? filter.frequency.value = filters[index].frequency : "";
-                    filters[index].Q ? filter.Q.value = filters[index].Q : "";
-                    filters[index].gain ? filter.gain.value = filters[index].gain : "";
+                    filters[index].frequency
+                        ? (filter.frequency.value = filters[index].frequency)
+                        : "";
+                    filters[index].Q ? (filter.Q.value = filters[index].Q) : "";
+                    filters[index].gain ? (filter.gain.value = filters[index].gain) : "";
                     filtersList_1.push(filter);
                 }
             }
         }
         return filtersList_1;
     }
-    getBufferOfItemMixPanel() {
-    }
+    getBufferOfItemMixPanel() { }
     //Função usada para fazer o download de um item mix de acordo
     //com as edições que foram realziados nele
     mixItemOption2(itemMixPanel) {
         //console.log("xxxxxxxxxxxxxxxxxxxxxxxxSize variable dao: " + roughSizeOfObject(this.dao))
         let maxChannels = this.getMaxChannelsPlayList();
         //console.log("TIME DURATION")
-        let frameCount = this.audioCtx.sampleRate * this.dao.listItemBuffer[itemMixPanel.idBuffer].timeDuration;
+        let frameCount = this.audioCtx.sampleRate *
+            this.dao.listItemBuffer[itemMixPanel.idBuffer].timeDuration;
         let out = this.audioCtx.createBuffer(maxChannels, frameCount, this.audioCtx.sampleRate);
         // this.activecurrentAudio = true;
         let offlineCtx = new OfflineAudioContext(maxChannels, frameCount, this.audioCtx.sampleRate);
         let currentAudio2 = offlineCtx.createBufferSource();
-        currentAudio2.buffer = this.dao.listItemBuffer[itemMixPanel.idBuffer].buffer;
+        currentAudio2.buffer =
+            this.dao.listItemBuffer[itemMixPanel.idBuffer].buffer;
         let gainNode = offlineCtx.createGain();
         let filtersList_1;
         //console.log("Volume: " + (itemMixPanel.volume / 100))
-        gainNode.gain.value = (itemMixPanel.getVolume() / 100);
+        gainNode.gain.value = itemMixPanel.getVolume() / 100;
         if (itemMixPanel.getidSemanticDescriptor() != undefined) {
             filtersList_1 = this.fomateFilters(this.dao.listSemanticDescriptors[itemMixPanel.getidSemanticDescriptor()].getFilters(), offlineCtx);
         }
@@ -525,9 +537,6 @@ class Sequenciador {
         // });
     }
     playOneSoundDescitor(id, callBack, filters) {
-        //console.log("sequenciador.playonesound")
-        //  if (!this.activecurrentAudio) {
-        //console.log("if (!this.activecurrentAudio) { sequenciador.playonesound")
         this.activecurrentAudio = true;
         this.currentAudio = this.audioCtx.createBufferSource();
         this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
@@ -554,34 +563,47 @@ class Sequenciador {
         }
         this.currentAudio.onended = (e) => {
             this.activecurrentAudio = false;
-            this.tooltip.removeMessageFixed();
+            //   this.tooltip.removeMessageFixed();
         };
         this.currentAudio.start(0);
         this.activecurrentAudio = true;
     }
-    ;
-    playOneSound(id, callBack) {
+    playOneSound(id, callBack, filters = []) {
+        console.warn(id);
         if (!this.activecurrentAudio) {
-            this.activecurrentAudio = true;
             this.currentAudio = this.audioCtx.createBufferSource();
             this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
             this.gainNodeAlbum = this.audioCtx.createGain();
             this.gainNodeAlbum.gain.value = 1;
-            this.currentAudio.connect(this.gainNodeAlbum);
+            let filtersList_1 = this.fomateFilters(filters, this.audioCtx);
+            if (filtersList_1.length) {
+                this.currentAudio.connect(filtersList_1[0]);
+                for (var index = 0; index < filtersList_1.length; index++) {
+                    if (index + 1 < filtersList_1.length) {
+                        // connections += " " + filtersList_1[index].name + " -> <br/>";
+                        filtersList_1[index].connect(filtersList_1[index + 1]);
+                    }
+                    else {
+                        filtersList_1[index].connect(this.gainNodeAlbum);
+                    }
+                }
+            }
+            else {
+                this.currentAudio.connect(this.gainNodeAlbum);
+            }
             this.gainNodeAlbum.connect(this.audioCtx.destination);
-            // this.currentAudio.connect(this.audioCtx.destination);
+            // this.gainNodeAlbum = this.audioCtx.createGain();
+            // this.gainNodeAlbum.gain.value = 1;
+            // this.currentAudio.connect(this.gainNodeAlbum);
+            // this.gainNodeAlbum.connect(this.audioCtx.destination);
             this.currentAudio.onended = (e) => {
-                //console.log("no end")
-                //console.log("callback activecurrentAudio")
-                //console.log(this.activecurrentAudio)
-                //console.log("acabou playOneSound")
                 callBack();
                 this.activecurrentAudio = false;
             };
             this.currentAudio.start(0);
+            this.activecurrentAudio = true;
         }
     }
-    ;
     playOneSoundOption(itemMixOption) {
         if (!this.activecurrentAudio) {
             this.activecurrentAudio = true;
@@ -627,11 +649,10 @@ class Sequenciador {
             });
         }
     }
-    ;
     onEndPlayDefault(callBack) {
         //console.log("onEndPlayDefault")
         this.activePlay = false;
-        if (this.activeLoop && (!this.stopFlag) && (!this.activePause)) {
+        if (this.activeLoop && !this.stopFlag && !this.activePause) {
             //console.log("LoopAtivo")
             this.play(undefined, callBack);
         }
@@ -647,17 +668,16 @@ function roughSizeOfObject(object) {
     var bytes = 0;
     while (stack.length) {
         var value = stack.pop();
-        if (typeof value === 'boolean') {
+        if (typeof value === "boolean") {
             bytes += 4;
         }
-        else if (typeof value === 'string') {
+        else if (typeof value === "string") {
             bytes += value.length * 2;
         }
-        else if (typeof value === 'number') {
+        else if (typeof value === "number") {
             bytes += 8;
         }
-        else if (typeof value === 'object'
-            && objectList.indexOf(value) === -1) {
+        else if (typeof value === "object" && objectList.indexOf(value) === -1) {
             objectList.push(value);
             for (var i in value) {
                 stack.push(value[i]);

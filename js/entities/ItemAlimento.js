@@ -1,6 +1,6 @@
 "use strict";
-// Classe que armazena os descritores semanticos, cada descritor semantico tem um conjunto de filtros
-class SemanticDescriptor {
+// Classe que armazena os alimentos, cada alimento tem seus svgs
+class ItemActionDescription {
     constructor(name, code, filters) {
         this.name = name;
         this._filters = filters;
@@ -171,14 +171,38 @@ function getFiltersStandard(position) {
     });
     return filtros;
 }
-function generatorSemanticDescriptors() {
+function generatorSemaitsDescriptors() {
+    // let filtros = [];
+    // let lowPass = new Filter("lowpass", "Low Pass", 1100, 10, undefined, true);
+    // let highPass = new Filter("highpass", "High Pass", 1200, 20, undefined, true);
+    // let bandpass = new Filter("bandpass", "Band Pass", 1300, 30, undefined, true);
+    // let lowshelf = new Filter("lowshelf", "Low Shelf", 1400, undefined, 140, true);
+    // let highshelf = new Filter("highshelf", "High Shelf", 1500, undefined, 150, true);
+    // let peaking = new Filter("peaking", "Peaking", 1600, 160, 1600, true);
+    // let notch = new Filter("notch", "Notch", 1700, 70, undefined, true);
+    // let allpass = new Filter("allpass", "All Pass", 1800, 80, undefined, true);
+    // filtros.push(lowPass);
     let descPesado = new SemanticDescriptor("Pesado", "PSD", getFiltersStandard(0));
+    // filtros = [];
+    // filtros.push(highPass);
     let descLeve = new SemanticDescriptor("Leve", "LV", getFiltersStandard(1));
+    // filtros = [];
+    // filtros.push(bandpass);
     let descGrande = new SemanticDescriptor("Grande", "GRD", getFiltersStandard(2));
+    // filtros = [];
+    // filtros.push(lowshelf);
     let descPequeno = new SemanticDescriptor("Pequeno", "PQN", getFiltersStandard(3));
+    // filtros = [];
+    // filtros.push(highshelf);
     let descEscuro = new SemanticDescriptor("Escuro", "ESR", getFiltersStandard(4));
+    // filtros = [];
+    // filtros.push( peaking);
     let descBrilhante = new SemanticDescriptor("Brilhante", "BRT", getFiltersStandard(5));
+    // filtros = [];
+    // filtros.push( notch);
     let descQuente = new SemanticDescriptor("Quente", "QNT", getFiltersStandard(6));
+    // filtros = [];
+    // filtros.push( allpass);
     let descFrio = new SemanticDescriptor("Frio", "FR", getFiltersStandard(7));
     return [
         descPesado,
