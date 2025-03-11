@@ -663,14 +663,23 @@ class Sequenciador {
     this.currentAudio.start(0);
     this.activecurrentAudio = true;
   }
-  playOneSound(id: number, callBack: any, filters: Filter[] = []) {
+  playOneSound(
+    id: number,
+    callBack: any,
+    filters: Filter[] = [],
+    volume: number | undefined
+  ) {
     console.warn(id);
     if (!this.activecurrentAudio) {
       this.currentAudio = this.audioCtx.createBufferSource();
       this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
 
       this.gainNodeAlbum = this.audioCtx.createGain();
-      this.gainNodeAlbum.gain.value = 1;
+      if (volume !== undefined || volume === 0) {
+        this.gainNodeAlbum.gain.value = volume / 100;
+      } else {
+        this.gainNodeAlbum.gain.value = 1;
+      }
 
       let filtersList_1: any[] = this.fomateFilters(filters, this.audioCtx);
       if (filtersList_1.length) {

@@ -6,6 +6,7 @@ class PageSoundSphereHome extends SimplePage {
     this.loadContainerDimension();
     this.loadContainerIntensity();
     this.addClickEventToItensModificadoresPanel();
+    this.addEventsVolume();
     this.addTooltipEvents();
   }
   generateActions(): string {
@@ -57,6 +58,7 @@ class PageSoundSphereHome extends SimplePage {
   voiceCommandMenuBar?: VoiceCommand;
   voiceCommandModalOptions?: VoiceCommand;
 
+  currentVolume: number = 100;
   mouseInsideIconAlbum: number | undefined = undefined;
 
   tooltip: Tooltip | undefined;
@@ -119,7 +121,22 @@ class PageSoundSphereHome extends SimplePage {
         document.getElementById("filesWav")!.click();
       });
   }
+  addEventsVolume(): void {
+    //Slicer
+    const volumeSlider = document.getElementById(
+      "volume-slider"
+    ) as HTMLInputElement;
+    const volumeLabel = document.getElementById("volume-label");
 
+    volumeSlider?.addEventListener("input", () => {
+      let volumeValue = volumeSlider.value.padStart(3, "0");
+      if (volumeLabel) {
+        volumeLabel.textContent = `Volume: ${volumeValue}%`;
+        this.currentVolume = parseInt(volumeValue);
+        console.warn(`Volume: ${volumeValue}%`);
+      }
+    });
+  }
   loadContainerSemaitsDescriptors(): void {
     this.listSemanticDescriptors = generatorSemanticDescriptors();
     for (let index = 0; index < this.listSemanticDescriptors.length; index++) {
@@ -386,11 +403,7 @@ class PageSoundSphereHome extends SimplePage {
       "data-duration",
       this.painel.sec2time(dataDuration)
     );
-    svgItemDiv.setAttribute(
-      "title",
-      `Nome: ${dataName} \n Duração: ${this.painel.sec2time(dataDuration)} 
-      
-      `
+  
     );
 
     svgItemDiv.setAttribute("data-bs-toggle", "tooltip");
@@ -601,20 +614,34 @@ class PageSoundSphereHome extends SimplePage {
   //Adiciona os eventos aos itens musicais
   addClickEventToAmostraAudio() {
     const svgItems = document.querySelectorAll(".svg-item");
+    const containerVoume = document.getElementById("container-volume");
+    const volume_slider = document.getElementById(
+      "volume-slider"
+    ) as HTMLInputElement;
     svgItems.forEach((item) => {
       //Configuração para selecionar e remover selecao dos itens svg-musicais
       item.addEventListener("click", () => {
         this.idSelectedIcomAlbum = undefined;
         if (item.classList.contains("active")) {
           item.classList.remove("active");
+          //E desabilita tbm o volume
+          containerVoume?.classList.remove("active");
+          if (volume_slider) {
+            volume_slider.disabled = true; // Agora o código não gera erro
+          }
         } else {
           svgItems.forEach(function (otherItem) {
             otherItem.classList.remove("active");
           });
+
           this.disableItensModificadoresPanel();
           item.classList.add("active");
           //Verificação para saber se não é vazio
-
+          // e ativa o valume
+          containerVoume?.classList.add("active");
+          if (volume_slider) {
+            volume_slider.disabled = false; // Agora o código não gera erro
+          }
           const dataId: string | null = item.getAttribute("data-id"); // Obtém o data-id
 
           let id = parseInt(dataId ?? "");
@@ -629,19 +656,17 @@ class PageSoundSphereHome extends SimplePage {
         const dataId = item.getAttribute("data-id");
         console.log("Mouse entrou");
         item.classList.add("playing_audio");
+        let name =  item.getAttribute("data-name");
+        let duracao = item.getAttribute("data-duration");
+        let text_volume = `Volume: ${this.currentVolume}`
+        let text_descritor = `${this.idSemanticDescriptor ? "Descritor semantico: " +
+            this.listSemanticDescriptors[this.idSemanticDescriptor].name
+          : ""}`
+      
         item.setAttribute(
           "data-bs-original-title",
-
-          `Nome: ${item.getAttribute(
-            "data-name"
-          )} \n Duração: ${item.getAttribute("data-duration")}
-          ${
-            this.idSemanticDescriptor
-              ? "Descritor semantico: " +
-                this.listSemanticDescriptors[this.idSemanticDescriptor].name
-              : ""
-          }
-          `
+          `Nome: ${name} \n Duração: ${duracao}\n ${text_volume}
+          ${text_descritor}`
         );
         console.warn(this.idSemanticDescriptor);
         const id = this.idSemanticDescriptor;
@@ -655,7 +680,8 @@ class PageSoundSphereHome extends SimplePage {
             function () {
               item.classList.remove("playing_audio");
             },
-            descriptor.getFilters()
+            descriptor.getFilters(),
+            this.currentVolume
           );
         } else {
           this.sequenciador.playOneSound(
@@ -663,7 +689,8 @@ class PageSoundSphereHome extends SimplePage {
             function () {
               item.classList.remove("playing_audio");
             },
-            []
+            [],
+            this.currentVolume
           );
         }
       });

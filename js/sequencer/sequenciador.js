@@ -570,13 +570,18 @@ class Sequenciador {
         this.currentAudio.start(0);
         this.activecurrentAudio = true;
     }
-    playOneSound(id, callBack, filters = []) {
+    playOneSound(id, callBack, filters = [], volume) {
         console.warn(id);
         if (!this.activecurrentAudio) {
             this.currentAudio = this.audioCtx.createBufferSource();
             this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
             this.gainNodeAlbum = this.audioCtx.createGain();
-            this.gainNodeAlbum.gain.value = 1;
+            if (volume !== undefined || volume === 0) {
+                this.gainNodeAlbum.gain.value = volume / 100;
+            }
+            else {
+                this.gainNodeAlbum.gain.value = 1;
+            }
             let filtersList_1 = this.fomateFilters(filters, this.audioCtx);
             if (filtersList_1.length) {
                 this.currentAudio.connect(filtersList_1[0]);

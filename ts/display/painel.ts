@@ -170,7 +170,8 @@ class Painel {
           this.pageSoundSphereHome.idDimension,
           this.pageSoundSphereHome.idIntensity,
           this.pageSoundSphereHome.idSemanticDescriptor,
-          this.pageSoundSphereHome.codeSemanticDescriptor
+          this.pageSoundSphereHome.codeSemanticDescriptor,
+          this.pageSoundSphereHome.currentVolume
         );
       } else {
         this.tooltip.showMessage("Nenhum item de mixagem selecionado.");
@@ -842,7 +843,8 @@ class Painel {
     tag_dimension: string | undefined,
     tag_intensity: string | undefined,
     idSemanticDescriptor: number | undefined,
-    codeSemanticDescriptor: string | undefined
+    codeSemanticDescriptor: string | undefined,
+    volume: number | undefined
   ) {
     let idBuffer = idSoundIconSelect;
     let itemMixPanel = new ItemMixPanel();
@@ -851,7 +853,10 @@ class Painel {
     itemMixPanel.tag_intensity = tag_intensity;
     itemMixPanel.setIdSemanticDescriptor(idSemanticDescriptor);
     itemMixPanel.setCodeSemanticDescriptor(codeSemanticDescriptor);
-
+    if (volume !== undefined || volume === 0) {
+      console.error("volume", volume);
+      itemMixPanel.setVolume(volume);
+    }
     itemMixPanel.seconds = this.DAOHome.listItemBuffer[idBuffer].timeDuration;
     itemMixPanel.color = this.DAOHome.listItemBuffer[idBuffer].color;
     itemMixPanel.idBuffer = idBuffer;

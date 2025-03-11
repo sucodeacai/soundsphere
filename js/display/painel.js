@@ -144,7 +144,7 @@ class Painel {
             else if (this.pageSoundSphereHome.idSelectedIcomAlbum != undefined) {
                 console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
                 console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);
-                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor);
+                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor, this.pageSoundSphereHome.currentVolume);
             }
             else {
                 this.tooltip.showMessage("Nenhum item de mixagem selecionado.");
@@ -719,7 +719,7 @@ class Painel {
     }
     //Função que tentar inserir desenhar/inserir o item no Painel
     //caso não seja possivel ela da uma mensagem informando o usuario
-    insertItemMixPanel(idSoundIconSelect, descriptiveIcon, tag_dimension, tag_intensity, idSemanticDescriptor, codeSemanticDescriptor) {
+    insertItemMixPanel(idSoundIconSelect, descriptiveIcon, tag_dimension, tag_intensity, idSemanticDescriptor, codeSemanticDescriptor, volume) {
         let idBuffer = idSoundIconSelect;
         let itemMixPanel = new ItemMixPanel();
         itemMixPanel.descriptiveIcon = descriptiveIcon;
@@ -727,6 +727,10 @@ class Painel {
         itemMixPanel.tag_intensity = tag_intensity;
         itemMixPanel.setIdSemanticDescriptor(idSemanticDescriptor);
         itemMixPanel.setCodeSemanticDescriptor(codeSemanticDescriptor);
+        if (volume !== undefined || volume === 0) {
+            console.error("volume", volume);
+            itemMixPanel.setVolume(volume);
+        }
         itemMixPanel.seconds = this.DAOHome.listItemBuffer[idBuffer].timeDuration;
         itemMixPanel.color = this.DAOHome.listItemBuffer[idBuffer].color;
         itemMixPanel.idBuffer = idBuffer;

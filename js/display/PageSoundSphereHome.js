@@ -7,6 +7,7 @@ class PageSoundSphereHome extends SimplePage {
         this.loadContainerDimension();
         this.loadContainerIntensity();
         this.addClickEventToItensModificadoresPanel();
+        this.addEventsVolume();
         this.addTooltipEvents();
     }
     generateActions() {
@@ -52,6 +53,7 @@ class PageSoundSphereHome extends SimplePage {
         //pauseActived = false
         this.itemMixOption = undefined;
         this.itemOptionEnabled = true;
+        this.currentVolume = 100;
         this.mouseInsideIconAlbum = undefined;
         // this.canvas = canvas;
         // this.contextCanvas = contextCanvas;
@@ -84,6 +86,19 @@ class PageSoundSphereHome extends SimplePage {
             this.sequenciador.stop(function () { });
             this.modal_welcome.hide();
             document.getElementById("filesWav").click();
+        });
+    }
+    addEventsVolume() {
+        //Slicer
+        const volumeSlider = document.getElementById("volume-slider");
+        const volumeLabel = document.getElementById("volume-label");
+        volumeSlider === null || volumeSlider === void 0 ? void 0 : volumeSlider.addEventListener("input", () => {
+            let volumeValue = volumeSlider.value.padStart(3, "0");
+            if (volumeLabel) {
+                volumeLabel.textContent = `Volume: ${volumeValue}%`;
+                this.currentVolume = parseInt(volumeValue);
+                console.warn(`Volume: ${volumeValue}%`);
+            }
         });
     }
     loadContainerSemaitsDescriptors() {
@@ -296,9 +311,7 @@ class PageSoundSphereHome extends SimplePage {
         svgItemDiv.setAttribute("data-name", dataName);
         svgItemDiv.setAttribute("data-duration", this.painel.sec2time(dataDuration));
         svgItemDiv.setAttribute("data-duration", this.painel.sec2time(dataDuration));
-        svgItemDiv.setAttribute("title", `Nome: ${dataName} \n Duração: ${this.painel.sec2time(dataDuration)} 
-      
-      `);
+        ;
         svgItemDiv.setAttribute("data-bs-toggle", "tooltip");
         svgItemDiv.setAttribute("data-id", dataId);
         svgItemDiv.setAttribute("id", id);
@@ -467,12 +480,19 @@ class PageSoundSphereHome extends SimplePage {
     //Adiciona os eventos aos itens musicais
     addClickEventToAmostraAudio() {
         const svgItems = document.querySelectorAll(".svg-item");
+        const containerVoume = document.getElementById("container-volume");
+        const volume_slider = document.getElementById("volume-slider");
         svgItems.forEach((item) => {
             //Configuração para selecionar e remover selecao dos itens svg-musicais
             item.addEventListener("click", () => {
                 this.idSelectedIcomAlbum = undefined;
                 if (item.classList.contains("active")) {
                     item.classList.remove("active");
+                    //E desabilita tbm o volume
+                    containerVoume === null || containerVoume === void 0 ? void 0 : containerVoume.classList.remove("active");
+                    if (volume_slider) {
+                        volume_slider.disabled = true; // Agora o código não gera erro
+                    }
                 }
                 else {
                     svgItems.forEach(function (otherItem) {
@@ -481,6 +501,11 @@ class PageSoundSphereHome extends SimplePage {
                     this.disableItensModificadoresPanel();
                     item.classList.add("active");
                     //Verificação para saber se não é vazio
+                    // e ativa o valume
+                    containerVoume === null || containerVoume === void 0 ? void 0 : containerVoume.classList.add("active");
+                    if (volume_slider) {
+                        volume_slider.disabled = false; // Agora o código não gera erro
+                    }
                     const dataId = item.getAttribute("data-id"); // Obtém o data-id
                     let id = parseInt(dataId !== null && dataId !== void 0 ? dataId : "");
                     if (id != undefined) {
@@ -493,12 +518,14 @@ class PageSoundSphereHome extends SimplePage {
                 const dataId = item.getAttribute("data-id");
                 console.log("Mouse entrou");
                 item.classList.add("playing_audio");
-                item.setAttribute("data-bs-original-title", `Nome: ${item.getAttribute("data-name")} \n Duração: ${item.getAttribute("data-duration")}
-          ${this.idSemanticDescriptor
-                    ? "Descritor semantico: " +
-                        this.listSemanticDescriptors[this.idSemanticDescriptor].name
-                    : ""}
-          `);
+                let name = item.getAttribute("data-name");
+                let duracao = item.getAttribute("data-duration");
+                let text_volume = `Volume: ${this.currentVolume}`;
+                let text_descritor = `${this.idSemanticDescriptor ? "Descritor semantico: " +
+                    this.listSemanticDescriptors[this.idSemanticDescriptor].name
+                    : ""}`;
+                item.setAttribute("data-bs-original-title", `Nome: ${name} \n Duração: ${duracao}\n ${text_volume}
+          ${text_descritor}`);
                 console.warn(this.idSemanticDescriptor);
                 const id = this.idSemanticDescriptor;
                 const descriptor = id !== undefined ? this.listSemanticDescriptors[id] : undefined;
@@ -506,12 +533,12 @@ class PageSoundSphereHome extends SimplePage {
                     console.log("Chamou o play");
                     this.sequenciador.playOneSound(dataId !== null ? parseInt(dataId) : 0, function () {
                         item.classList.remove("playing_audio");
-                    }, descriptor.getFilters());
+                    }, descriptor.getFilters(), this.currentVolume);
                 }
                 else {
                     this.sequenciador.playOneSound(dataId !== null ? parseInt(dataId) : 0, function () {
                         item.classList.remove("playing_audio");
-                    }, []);
+                    }, [], this.currentVolume);
                 }
             });
             //Tocar ao passar o mouse por cima

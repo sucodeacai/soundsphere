@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página Responsiva com Botões</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .option-itens {
+            width: 100vw;
+            margin-top: 5px !important;
+            padding: 0 15px;
+        }
+
+        .option-itens h2 {
+            font-size: 1.2rem;
+            margin: 0;
+            text-align: left;
+        }
+
+        .option-itens-itens {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            width: 100%;
+            white-space: nowrap;
+            margin-top: 1px;
+        }
+
+        .option-itens-itens button {
+            flex-shrink: 0;
+            margin: 2px;
+        }
+
+        /* Estilo dos itens SVG */
+        .svg-item {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: 2px solid transparent;
+            /* Sem borda inicialmente */
+        }
+
+        .circle-svg {
+            transition: fill 0.3s ease;
+        }
+
+        .svg-item.active .circle-svg {
+            fill: black;
+            /* Interior do círculo preto quando ativo */
+        }
+
+        .svg-item.active .play-icon {
+            fill: black;
+            /* Interior do círculo preto quando ativo */
+        }
+
+        .svg-item.active {
+            border-color: black;
+            /* Adiciona a borda preta quando ativo */
+        }
+
+        /* Estilo de hover */
+        .svg-item.playing_audio .circle-svg {
+            fill: transparent;
+        }
+
+        .svg-item.playing_audio .play-icon {
+            opacity: 1;
+        }
+
+        .play-icon {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="list-option-itens lista-de-itens">
+        <div class="option-itens mt-4">
+            <h2>Descritores</h2>
+            <div class="option-itens-itens">
+                <button class="btn btn-secondary m-2">Botão 1</button>
+                <button class="btn btn-secondary m-2">Botão 1</button>
+                <button class="btn btn-secondary m-2">Botão 1</button>
+                <button class="btn btn-secondary m-2">Botão 1</button>
+                <button class="btn btn-secondary m-2">Botão 1</button>
+                <button class="btn btn-secondary m-2">Botão 1</button>
+            </div>
+        </div>
+
+        <div class="option-itens mt-4">
+            <h2>Opções Extras</h2>
+            <div class="option-itens-itens">
+                <button class="btn btn-danger m-2">Botão 2</button>
+                <button class="btn btn-danger m-2">Botão 2</button>
+                <button class="btn btn-danger m-2">Botão 2</button>
+                <button class="btn btn-danger m-2">Botão 2</button>
+                <button class="btn btn-danger m-2">Botão 2</button>
+                <button class="btn btn-danger m-2">Botão 2</button>
+            </div>
+        </div>
+
+        <div class="option-itens mt-4">
+            <h2>Elementos SVG</h2>
+            <div class="option-itens-itens">
+                <div class="item-amostra-audio">
+                    <div class="svg-item" data-name="bongo-chime-peppy.wav" data-duration="00:00:02.339"
+                        data-bs-toggle="tooltip" data-id="4" id="path4" style="background-color: rgb(156, 39, 176);">
+                        <svg width="50" height="50" viewBox="0 0 50 50">
+                            <circle cx="25" cy="25" r="10" fill="white" class="circle-svg"></circle>
+                            <polygon points="15,10 15,40 35,25" fill="white" class="play-icon"></polygon>
+                        </svg>
+                    </div>
+                </div>
+                <div class="item-amostra-audio">
+
+                    <div class="svg-item" data-name="sound1.wav" data-duration="00:00:02.500"
+                        style="background-color: rgb(255, 87, 34);">
+                        <svg width="50" height="50" viewBox="0 0 50 50">
+                            <circle cx="25" cy="25" r="10" fill="white" class="circle-svg"></circle>
+                            <polygon points="15,10 15,40 35,25" fill="white" class="play-icon"></polygon>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
