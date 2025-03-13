@@ -276,7 +276,7 @@ class PageSoundSphereHome extends SimplePage {
     setSettingsActions() { }
     addEventsVolume() {
         //Slicer
-        const volumeSlider = document.getElementById("volume-slider");
+        const volumeSlider = document.getElementById("inputVolumeSlider");
         const volumeLabel = document.getElementById("volume-label");
         volumeSlider === null || volumeSlider === void 0 ? void 0 : volumeSlider.addEventListener("input", () => {
             let volumeValue = volumeSlider.value.padStart(3, "0");
