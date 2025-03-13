@@ -4,9 +4,10 @@ Registrado sob a licença  Attribution-NonCommercial 4.0 International (CC BY-NC
 teste
 */
 class Sequenciador {
-    constructor(controlFiles, tooltip, dao, audioCtx) {
+    constructor(controlFiles, dao, audioCtx) {
         this.testeThis = "This do sequenciador está ok";
         this.listCodesBuffersEdited = [];
+        this.listenersNotifyStatus = [];
         this.playedCurrentAudio = false;
         this.activePlay = false;
         this.activeLoop = false;
@@ -31,9 +32,14 @@ class Sequenciador {
         //counterListDecode do buffer list da funcao de loadBufferList
         this.counterListDecode = 0;
         this.controlFiles = controlFiles;
-        this.tooltip = tooltip;
         this.dao = dao;
         this.audioCtx = audioCtx;
+    }
+    onNotifyStatus(callback) {
+        this.listenersNotifyStatus.push(callback);
+    }
+    notifyStatus(message) {
+        this.listenersNotifyStatus.forEach((callback) => callback(message));
     }
     //Manda o traker lá para o começo e move o painel
     stop(callback) {
@@ -147,7 +153,7 @@ class Sequenciador {
                 callback();
             }
             else {
-                this.tooltip.showMessage("Não existem itens no painel.");
+                this.notifyStatus("Não existem itens no painel.");
             }
         }
         else if (this.activePause) {
@@ -211,7 +217,7 @@ class Sequenciador {
         }
         else {
             this.onEndPlayDefault(onEndPlayList);
-            this.tooltip.showMessage("Não existem itens no painel.");
+            this.notifyStatus("Não existem itens no painel.");
         }
     }
     //res
@@ -451,7 +457,7 @@ class Sequenciador {
             this.mix(callback);
         }
         else {
-            this.tooltip.showMessage("Nenhum item carregado na mixagem.");
+            this.notifyStatus("Nenhum item carregado na mixagem.");
             onStartDownload();
         }
     }
@@ -469,8 +475,8 @@ class Sequenciador {
     }
     fomateFilters(filters, ctx) {
         let filtersList_1 = [];
-        console.log("FOrmatated filter");
-        console.log(filters);
+        // console.log("FOrmatated filter");
+        // console.log(filters);
         if (filters != null) {
             for (let index = 0; index < filters.length; index++) {
                 if (filters[index].status) {
@@ -557,10 +563,10 @@ class Sequenciador {
                     filtersList_1[index].connect(this.audioCtx.destination);
                 }
             }
-            this.tooltip.showMessageFixed(connections);
+            this.notifyStatus(connections);
         }
         else {
-            this.tooltip.showMessageFixed("Nenhum filtro sendo utilizado!");
+            this.notifyStatus("Nenhum filtro sendo utilizado!");
             this.currentAudio.connect(this.audioCtx.destination);
         }
         this.currentAudio.onended = (e) => {
@@ -571,7 +577,7 @@ class Sequenciador {
         this.activecurrentAudio = true;
     }
     playOneSound(id, callBack, filters = [], volume) {
-        console.warn(id);
+        // console.warn(id);
         if (!this.activecurrentAudio) {
             this.currentAudio = this.audioCtx.createBufferSource();
             this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
@@ -630,7 +636,7 @@ class Sequenciador {
                         mensagem += `Decritor: nenhum </br>`;
                     }
                     mensagem += `Volume: ${itemMixOption.volume} </br>`;
-                    this.tooltip.showMessageFixed(mensagem);
+                    this.notifyStatus(mensagem);
                     //console.log("no callback")
                     //console.log("Antes")
                     //console.log(this.currentAudio.buffer)
@@ -644,7 +650,7 @@ class Sequenciador {
                         //console.log("callback activecurrentAudio")
                         //console.log(this.activecurrentAudio)
                         this.activecurrentAudio = false;
-                        this.tooltip.removeMessageFixed();
+                        this.notifyStatus("");
                     };
                     this.currentAudio.start(0);
                     //console.log("callback activecurrentAudio")

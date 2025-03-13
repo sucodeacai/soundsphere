@@ -6,9 +6,9 @@ teste
 class Sequenciador {
   testeThis: string = "This do sequenciador está ok";
   controlFiles: ControlFiles;
-  tooltip: Tooltip;
   listCodesBuffersEdited: any = [];
   onloadBufferList: any;
+  listenersNotifyStatus: Array<(mensagem: string) => void> = [];
   playedCurrentAudio: boolean = false;
   painel: Painel | undefined;
   activePlay: boolean = false;
@@ -43,16 +43,16 @@ class Sequenciador {
   //   playList = [];
   audioCtx: any;
 
-  constructor(
-    controlFiles: ControlFiles,
-    tooltip: Tooltip,
-    dao: DAO,
-    audioCtx: any
-  ) {
+  constructor(controlFiles: ControlFiles, dao: DAO, audioCtx: any) {
     this.controlFiles = controlFiles;
-    this.tooltip = tooltip;
     this.dao = dao;
     this.audioCtx = audioCtx;
+  }
+  onNotifyStatus(callback: (mensagem: string) => void) {
+    this.listenersNotifyStatus.push(callback);
+  }
+  notifyStatus(message: string): void {
+    this.listenersNotifyStatus.forEach((callback) => callback(message));
   }
   //Manda o traker lá para o começo e move o painel
   stop(callback: any) {
@@ -165,7 +165,7 @@ class Sequenciador {
         this.painel!.drawStoppedMarker(this.getTotalTime());
         callback();
       } else {
-        this.tooltip.showMessage("Não existem itens no painel.");
+        this.notifyStatus("Não existem itens no painel.");
       }
     } else if (this.activePause) {
       this.activePlay = false;
@@ -227,7 +227,7 @@ class Sequenciador {
       }
     } else {
       this.onEndPlayDefault(onEndPlayList);
-      this.tooltip.showMessage("Não existem itens no painel.");
+      this.notifyStatus("Não existem itens no painel.");
     }
   }
   //res
@@ -528,7 +528,7 @@ class Sequenciador {
       };
       this.mix(callback);
     } else {
-      this.tooltip.showMessage("Nenhum item carregado na mixagem.");
+      this.notifyStatus("Nenhum item carregado na mixagem.");
       onStartDownload();
     }
   }
@@ -551,8 +551,8 @@ class Sequenciador {
 
   fomateFilters(filters: Filter[], ctx: any): any {
     let filtersList_1: any[] = [];
-    console.log("FOrmatated filter");
-    console.log(filters);
+    // console.log("FOrmatated filter");
+    // console.log(filters);
     if (filters != null) {
       for (let index = 0; index < filters.length; index++) {
         if (filters[index].status) {
@@ -651,9 +651,9 @@ class Sequenciador {
           filtersList_1[index].connect(this.audioCtx.destination);
         }
       }
-      this.tooltip.showMessageFixed(connections);
+      this.notifyStatus(connections);
     } else {
-      this.tooltip.showMessageFixed("Nenhum filtro sendo utilizado!");
+      this.notifyStatus("Nenhum filtro sendo utilizado!");
       this.currentAudio.connect(this.audioCtx.destination);
     }
     this.currentAudio.onended = (e: any) => {
@@ -669,7 +669,7 @@ class Sequenciador {
     filters: Filter[] = [],
     volume: number | undefined
   ) {
-    console.warn(id);
+    // console.warn(id);
     if (!this.activecurrentAudio) {
       this.currentAudio = this.audioCtx.createBufferSource();
       this.currentAudio.buffer = this.dao.listItemBuffer[id].buffer;
@@ -738,7 +738,7 @@ class Sequenciador {
               mensagem += `Decritor: nenhum </br>`;
             }
             mensagem += `Volume: ${itemMixOption.volume} </br>`;
-            this.tooltip.showMessageFixed(mensagem);
+            this.notifyStatus(mensagem);
             //console.log("no callback")
             //console.log("Antes")
             //console.log(this.currentAudio.buffer)
@@ -752,7 +752,7 @@ class Sequenciador {
               //console.log("callback activecurrentAudio")
               //console.log(this.activecurrentAudio)
               this.activecurrentAudio = false;
-              this.tooltip.removeMessageFixed();
+              this.notifyStatus("");
             };
             this.currentAudio.start(0);
 

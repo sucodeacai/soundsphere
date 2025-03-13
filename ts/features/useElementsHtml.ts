@@ -14,3 +14,24 @@ function toggleClasses(selector: string, class1: string, class2: string) {
     element.classList.toggle(class2);
   });
 }
+
+function sec2time(timeInSeconds: any) {
+  let time: any = parseFloat(timeInSeconds).toFixed(3);
+  let hours = Math.floor(time / 60 / 60);
+  let minutes = Math.floor(time / 60) % 60;
+  let seconds = Math.floor(time - minutes * 60);
+  let milliseconds = time.slice(-3);
+
+  return (
+    pad(hours, 2) +
+    ":" +
+    pad(minutes, 2) +
+    ":" +
+    pad(seconds, 2) +
+    "." +
+    pad(milliseconds, 3)
+  );
+}
+function pad(num: any, size: any) {
+  return ("000" + num).slice(size * -1);
+}

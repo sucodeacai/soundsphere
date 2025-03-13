@@ -8,7 +8,9 @@ class PageSoundSphereHome extends SimplePage {
         this.loadContainerIntensity();
         this.addClickEventToItensModificadoresPanel();
         this.addEventsVolume();
+        this.addEventsMenuNav();
         this.addTooltipEvents();
+        this.updatePageWithLayers();
     }
     generateActions() {
         throw new Error("Method not implemented.");
@@ -30,12 +32,11 @@ class PageSoundSphereHome extends SimplePage {
     }
     //itemOptionitemOptionEnabled: boolean = true;
     // constructor(containerElement: JQuery, titulo: string, soundSphereInfo: SoundSphereInfo, dao: DAO, sequenciador: any, canvas: any, contextCanvas: any) {
-    constructor(containerElement, titulo, soundSphereInfo, dao, sequenciador, tooltip, sessionControl, pixelpersecond) {
+    constructor(containerElement, titulo, soundSphereInfo, dao, sequenciador, tooltip, sessionControl, painel) {
         super(containerElement, titulo, soundSphereInfo, dao, sequenciador);
         this.canvas = [];
-        this.buttonRemoveStatus = false;
         this.contextCanvas = [];
-        this.stopActived = true;
+        // stopActived = true;
         this.reloadPainel = false;
         this.listActionDescriptiveIcons = [];
         this.listDimension = [];
@@ -49,21 +50,212 @@ class PageSoundSphereHome extends SimplePage {
         this.codeSemanticDescriptor = undefined;
         this.idSelectedIcomAlbum = undefined;
         //Controlar Modificadores Painel
-        this.buttonModificadorPainel = [];
+        this.listButtonActiveModificadorPainel = [];
+        this.listLayerShow = {};
         //pauseActived = false
-        this.itemMixOption = undefined;
         this.itemOptionEnabled = true;
         this.currentVolume = 100;
         this.mouseInsideIconAlbum = undefined;
         // this.canvas = canvas;
         // this.contextCanvas = contextCanvas;
+        this.tooltip = tooltip;
         this.startWelcomeModal();
-        this.pixelpersecond = pixelpersecond;
         this.setSettingsActions();
+        this.painel = painel;
+        this.dependencyInjection();
+        //Pega  URL aprams e atualiza a a configuracao
+        let urlParams = getUrlParams();
+        // Defina os valores padrão aqui
+        const defaultValues = {
+            showVolum: true,
+            showDescriptor: true,
+            showFood: false,
+            showDimension: false,
+            showIntensity: false,
+        };
+        Object.keys(defaultValues).forEach((key) => {
+            if (urlParams[key] !== undefined) {
+                this.listLayerShow[key] = JSON.parse(urlParams[key].toLowerCase());
+            }
+            else {
+                this.listLayerShow[key] = defaultValues[key];
+            }
+        });
+    }
+    dependencyInjection() {
+        // Injeção de dependencia sequenciador
+        this.sequenciador.onNotifyStatus(this.showMessage.bind(this));
+        // Injeção de dependencia painel
+        this.painel.onNotifyStatus(this.showMessage.bind(this));
+    }
+    addEventsMenuNav() {
+        var _a, _b;
+        // botão de limpar painel
+        (_a = document
+            .querySelector("#buttonClearPanel")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", (event) => {
+            var _a;
+            event.preventDefault(); // Evita que o link tente navegar para "#"
+            console.log("Botão Limpar Painel clicado!");
+            event.preventDefault(); // Evita o comportamento padrão do link
+            document.getElementById;
+            this.sequenciador.stop(function () { });
+            this.painel.restartMixing();
+            this.painel.reMake();
+            (_a = this.tooltip) === null || _a === void 0 ? void 0 : _a.showMessage("Painel de mixagem reiniciado.");
+        });
+        (_b = document
+            .querySelector("#buttonUploadFileWav")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", (event) => {
+            event.preventDefault(); // Evita que o link tente navegar para "#"
+            console.log("Botão upload file Wav clicado!");
+            document.getElementById("filesWav").click();
+        });
+        this.onHideNavMenu();
+        this.addEventsModalSalvarProjectSoundSphere();
+        this.addEventModalExportWavFile();
+        this.addEventLayers();
+    }
+    onHideNavMenu() {
+        const navMenu = document.querySelector(".navbar-collapse");
+        // Verifica se o navMenu existe
+        if (navMenu) {
+            // Adiciona o evento de "transitionend" que será disparado quando a animação de transição terminar
+            navMenu.addEventListener("hidden.bs.collapse", () => {
+                console.log("O menu foi ocultado!");
+                this.updatePageWithLayers();
+                const brandText = document.getElementById("brandText");
+                if (brandText.classList.contains("hidden")) {
+                    brandText === null || brandText === void 0 ? void 0 : brandText.classList.remove("hidden");
+                }
+            });
+        }
+    }
+    updatePageWithLayers() {
+        Object.keys(this.listLayerShow).forEach((key) => {
+            // Substitui 'show' por 'container' para obter o id correspondente
+            const elementId = key.replace("show", "container");
+            console.warn(`Valor ${elementId} ${this.listLayerShow[key]}`);
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Se o valor da chave for true, remove a classe 'hidden'
+                if (this.listLayerShow[key]) {
+                    element.removeAttribute("hidden");
+                }
+                else {
+                    // Se o valor for false, adiciona a classe 'hidden'
+                    element.setAttribute("hidden", "");
+                }
+            }
+        });
+    }
+    addEventLayers() {
+        const divs = document.querySelectorAll(".input-layer"); // Seleciona todas as divs com a classe 'input-layer'
+        //atualiza os checkbox com os atributos que temos
+        divs.forEach((div) => {
+            var _a;
+            const checkbox = div.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                let data_name = (_a = checkbox.getAttribute("data-name")) !== null && _a !== void 0 ? _a : "";
+                if (data_name in this.listLayerShow) {
+                    checkbox.checked = this.listLayerShow[data_name]; // Atualiza o estado do checkbox
+                }
+            }
+        });
+        //ao alterar checkbox altera nossa listaShow
+        divs.forEach((div) => {
+            div.addEventListener("click", (event) => {
+                var _a;
+                // Verifica se o clique foi no checkbox diretamente, se sim, não faz nada
+                if (event.target.tagName === "INPUT")
+                    return;
+                const checkbox = div.querySelector('input[type="checkbox"]');
+                let data_name = (_a = checkbox.getAttribute("data-name")) !== null && _a !== void 0 ? _a : "";
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked; // Alterna o estado do checkbox
+                    console.warn(`Param ${checkbox.id}  Name: ${data_name} Value: ${checkbox.checked}`);
+                    this.listLayerShow[data_name] = checkbox.checked;
+                    updateUrlParam(data_name, checkbox.checked.toString());
+                }
+                else {
+                    console.warn("Checkbox não encontrado na div fornecida.");
+                }
+            }); // Adiciona o evento de clique
+        });
+    }
+    toggleCheckbox(event) {
+        const checkbox = event.target.previousElementSibling || event.target.nextElementSibling;
+        if (checkbox && checkbox.type === "checkbox") {
+            checkbox.checked = !checkbox.checked;
+        }
+    }
+    addEventModalExportWavFile() {
+        var _a, _b;
+        const modal = new window.bootstrap.Modal(document.getElementById("modalExporWav"), {
+            keyboard: false,
+        });
+        (_a = document
+            .querySelector("#buttonExportWavFile")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", (event) => {
+            event.preventDefault(); // Evita que o link tente navegar para "#"
+            console.log("Botão Save Projeto Soundsphere!");
+            document
+                .getElementById("inputNameFileExportWav")
+                .setAttribute("placeholder", this.dao.getDefaultName());
+            modal.show();
+        });
+        (_b = document
+            .getElementById("buttonDownloadWavFile")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
+            var _a;
+            console.warn("export wav file");
+            this.sequenciador.startDownload(() => {
+                modal.hide();
+            }, (_a = document.getElementById("nameFile")) === null || _a === void 0 ? void 0 : _a.value);
+            // this.generateHTML();
+        });
+    }
+    addEventsModalSalvarProjectSoundSphere() {
+        var _a, _b;
+        //Abre modal e seta os valores padrões de input
+        const modal = new window.bootstrap.Modal(document.getElementById("modalSaveProjectJson"), {
+            keyboard: false,
+        });
+        (_a = document
+            .querySelector("#buttonOpenModalSaveSoundsphereFormat")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", (event) => {
+            event.preventDefault(); // Evita que o link tente navegar para "#"
+            console.log("Botão Save Projeto Soundsphere!");
+            document
+                .getElementById("inputNameFileSaveProjectSoundsphere")
+                .setAttribute("placeholder", this.dao.getDefaultName());
+            document
+                .getElementById("inputAuthorProjectSoundsphere")
+                .setAttribute("placeholder", this.dao.getDefaultAuthor());
+            modal.show();
+        });
+        //Abribui funcao dos botoes
+        (_b = document
+            .getElementById("buttonSaveSoundSphereFormat")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
+            var _a, _b;
+            console.warn("save project soundsphere");
+            this.dao.downloadJSON((_a = document.getElementById("inputNameFileSaveProjectSoundsphere")) === null || _a === void 0 ? void 0 : _a.value, (_b = document.getElementById("inputAuthorProjectSoundsphere")) === null || _b === void 0 ? void 0 : _b.value);
+            modal.hide();
+        });
+        document;
     }
     startWelcomeModal() {
-        this.modal_welcome = new window.bootstrap.Modal(document.getElementById("welcomeModal"));
-        this.modal_welcome.show();
+        var _a;
+        const modal = new window.bootstrap.Modal(document.getElementById("welcomeModal"), {
+            keyboard: false,
+        });
+        (_a = document
+            .getElementById("button_iniciar_upload")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
+            this.sequenciador.stop(function () { });
+            modal.hide();
+            document.getElementById("filesWav").click();
+        });
+        modal.show();
+    }
+    showMessage(message) {
+        var _a;
+        console.log(message);
+        (_a = this.tooltip) === null || _a === void 0 ? void 0 : _a.showMessage(message);
     }
     startErrorModal(mensagens) {
         const errorModalBody = document.getElementById("errorModalBody");
@@ -75,19 +267,13 @@ class PageSoundSphereHome extends SimplePage {
             errorModalBody.appendChild(document.createElement("br"));
         });
         //Exibe modal com os erros
-        const modalElement = new window.bootstrap.Modal(document.getElementById("errorModal"));
+        const modalElement = new window.bootstrap.Modal(document.getElementById("errorModal"), {
+            keyboard: false,
+        });
         modalElement.show();
     }
     //Seta as configuracoes padroes da aplicacao
-    setSettingsActions() {
-        var _a;
-        (_a = document
-            .getElementById("button_iniciar_upload")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
-            this.sequenciador.stop(function () { });
-            this.modal_welcome.hide();
-            document.getElementById("filesWav").click();
-        });
-    }
+    setSettingsActions() { }
     addEventsVolume() {
         //Slicer
         const volumeSlider = document.getElementById("volume-slider");
@@ -97,7 +283,7 @@ class PageSoundSphereHome extends SimplePage {
             if (volumeLabel) {
                 volumeLabel.textContent = `Volume: ${volumeValue}%`;
                 this.currentVolume = parseInt(volumeValue);
-                console.warn(`Volume: ${volumeValue}%`);
+                // console.warn(`Volume: ${volumeValue}%`);
             }
         });
     }
@@ -122,7 +308,7 @@ class PageSoundSphereHome extends SimplePage {
     addClickSemaitsDescriptors() {
         const dimensionSemanticDescriptor = document.querySelectorAll("#container-semaits-descriptors .btn");
         if (dimensionSemanticDescriptor.length === 0) {
-            console.warn("Nenhum botão de dimensão encontrado.");
+            // console.warn("Nenhum botão de dimensão encontrado.");
             return;
         }
         dimensionSemanticDescriptor.forEach((button) => {
@@ -130,7 +316,7 @@ class PageSoundSphereHome extends SimplePage {
                 var _a;
                 this.idSemanticDescriptor = undefined;
                 this.codeSemanticDescriptor = undefined;
-                console.log("Semantic clicada:", button.textContent);
+                // console.log("Semantic clicada:", button.textContent);
                 if (button.classList.contains("active")) {
                     button.classList.remove("active");
                 }
@@ -147,24 +333,26 @@ class PageSoundSphereHome extends SimplePage {
                     if (id != undefined) {
                         this.idSemanticDescriptor = id;
                     }
-                    console.log("Semantic code:", this.codeSemanticDescriptor);
-                    console.log("Semantic id:", this.idSemanticDescriptor);
+                    // console.log("Semantic code:", this.codeSemanticDescriptor);
+                    // console.log("Semantic id:", this.idSemanticDescriptor);
                 }
             });
         });
     }
-    //Verifica se excluir está ativo
+    getSequenciador() {
+        return this.sequenciador;
+    }
     isDeleteButtonActive() {
         var _a;
-        return (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("remove");
+        return (_a = this.listButtonActiveModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("remove");
     }
     isPlayButtonActive() {
         var _a;
-        return (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("play");
+        return (_a = this.listButtonActiveModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("play");
     }
     isPauseButtonActive() {
         var _a;
-        return (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("pause");
+        return (_a = this.listButtonActiveModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes("pause");
     }
     loadContainerIntensity() {
         let conteudo = "";
@@ -187,14 +375,14 @@ class PageSoundSphereHome extends SimplePage {
     addClickEventToInensity() {
         const dimensionIntensity = document.querySelectorAll("#container-intensity .btn");
         if (dimensionIntensity.length === 0) {
-            console.warn("Nenhum botão de dimensão encontrado.");
+            // console.warn("Nenhum botão de dimensão encontrado.");
             return;
         }
         dimensionIntensity.forEach((button) => {
             button.addEventListener("click", () => {
                 var _a;
                 this.idIntensity = undefined;
-                console.log("Dimensão clicada:", button.textContent);
+                // console.log("Dimensão clicada:", button.textContent);
                 if (button.classList.contains("active")) {
                     button.classList.remove("active");
                 }
@@ -205,7 +393,7 @@ class PageSoundSphereHome extends SimplePage {
                     this.disableItensModificadoresPanel();
                     button.classList.add("active");
                     this.idIntensity = (_a = button.getAttribute("data-tag")) !== null && _a !== void 0 ? _a : undefined;
-                    console.log("Dimensão selecionada:", this.idIntensity);
+                    // console.log("Dimensão selecionada:", this.idIntensity);
                 }
             });
         });
@@ -231,14 +419,14 @@ class PageSoundSphereHome extends SimplePage {
     addClickEventToDimension() {
         const dimensionButtons = document.querySelectorAll("#container-dimensions .btn");
         if (dimensionButtons.length === 0) {
-            console.warn("Nenhum botão de dimensão encontrado.");
+            // console.warn("Nenhum botão de dimensão encontrado.");
             return;
         }
         dimensionButtons.forEach((button) => {
             button.addEventListener("click", () => {
                 var _a;
                 this.idDimension = undefined;
-                console.log("Dimensão clicada:", button.textContent);
+                // console.log("Dimensão clicada:", button.textContent);
                 if (button.classList.contains("active")) {
                     button.classList.remove("active");
                 }
@@ -249,7 +437,7 @@ class PageSoundSphereHome extends SimplePage {
                     this.disableItensModificadoresPanel();
                     button.classList.add("active");
                     this.idDimension = (_a = button.getAttribute("data-tag")) !== null && _a !== void 0 ? _a : undefined;
-                    console.log("Dimensão selecionada:", this.idDimension);
+                    // console.log("Dimensão selecionada:", this.idDimension);
                 }
             });
         });
@@ -289,6 +477,7 @@ class PageSoundSphereHome extends SimplePage {
     }
     loadContainerAudio() {
         var _a;
+        document.getElementById("container-amostras-audio").innerHTML = "";
         let conteudo = "";
         if (this.dao.listItemBuffer.length != 0) {
             let itens = "";
@@ -309,9 +498,8 @@ class PageSoundSphereHome extends SimplePage {
         svgItemDiv.classList.add("svg-item");
         svgItemDiv.style.backgroundColor = color;
         svgItemDiv.setAttribute("data-name", dataName);
-        svgItemDiv.setAttribute("data-duration", this.painel.sec2time(dataDuration));
-        svgItemDiv.setAttribute("data-duration", this.painel.sec2time(dataDuration));
-        ;
+        svgItemDiv.setAttribute("data-duration", sec2time(dataDuration));
+        svgItemDiv.setAttribute("data-duration", sec2time(dataDuration));
         svgItemDiv.setAttribute("data-bs-toggle", "tooltip");
         svgItemDiv.setAttribute("data-id", dataId);
         svgItemDiv.setAttribute("id", id);
@@ -355,31 +543,31 @@ class PageSoundSphereHome extends SimplePage {
         this.codeSemanticDescriptor = undefined;
     }
     disableItensModificadoresPanel() {
+        var _a;
         const botoesModificadores = document.querySelectorAll("#container-modificadores .btn");
+        (_a = document.getElementById("buttonStop")) === null || _a === void 0 ? void 0 : _a.classList.add("active");
         botoesModificadores.forEach((button) => {
             if (button.classList.contains("active") &&
                 button.getAttribute("data-action") != "stop") {
                 button.classList.remove("active");
-                console.log("Removeu classe active");
-            }
-            else {
-                console.log("Não removeu stop");
+                // console.log("Removeu classe active");
             }
         });
-        console.log("fim teste");
-        this.stopMixagem();
-        this.buttonModificadorPainel = [];
+        if (this.sequenciador.activePlay) {
+            this.stopMixagem();
+        }
+        this.listButtonActiveModificadorPainel = [];
     }
     addClickEventToActionDescriptiveIcons() {
         const alimentosItems = document.querySelectorAll(".itemMenuDescriptiveIcon");
         if (alimentosItems.length === 0) {
-            console.warn("Nenhum item de alimento encontrado.");
+            // console.warn("Nenhum item de alimento encontrado.");
             return;
         }
         alimentosItems.forEach((item) => {
             item.addEventListener("click", () => {
                 this.idActionDescriptiveIcon = undefined;
-                console.log("Item clicado:", item); // Teste para ver se o evento está funcionando
+                // console.log("Item clicado:", item); // Teste para ver se o evento está funcionando
                 const dataId = item.getAttribute("data-id");
                 const data_tag = item.getAttribute("data-tag");
                 if (item.classList.contains("active")) {
@@ -394,7 +582,7 @@ class PageSoundSphereHome extends SimplePage {
                     let id = parseInt(dataId !== null && dataId !== void 0 ? dataId : "", 10);
                     if (!isNaN(id)) {
                         this.idActionDescriptiveIcon = data_tag !== null && data_tag !== void 0 ? data_tag : undefined;
-                        console.log("ID do alimento selecionado:", id);
+                        // console.log("ID do alimento selecionado:", id);
                     }
                 }
             });
@@ -413,22 +601,27 @@ class PageSoundSphereHome extends SimplePage {
         //Confifuração dos botoes do menu-botoes-painel
         botoesModificadoresPanel.forEach((button) => {
             button.addEventListener("click", () => {
-                var _a;
+                var _a, _b;
                 if (button.classList.contains("active")) {
                     if (!this.sequenciador.activePlay &&
                         button.getAttribute("data-action") != "play") {
+                        console.warn("Removendo todas os botoes modificadores painel na funcaobotoesModificadoresPanel");
                         button.classList.remove("active");
+                        this.listButtonActiveModificadorPainel = [];
                     }
                 }
                 else {
                     botoesModificadoresPanel.forEach((otherButton) => {
                         otherButton.classList.remove("active");
                     });
+                    this.listButtonActiveModificadorPainel = [];
                     const action = button.getAttribute("data-action");
                     if (action) {
-                        (_a = this.buttonModificadorPainel) === null || _a === void 0 ? void 0 : _a.push(action);
+                        if (!((_a = this.listButtonActiveModificadorPainel) === null || _a === void 0 ? void 0 : _a.includes(action))) {
+                            (_b = this.listButtonActiveModificadorPainel) === null || _b === void 0 ? void 0 : _b.push(action);
+                        }
                     }
-                    console.log(`Ação Modificadora: ${this.buttonModificadorPainel[0]}`);
+                    console.log(`Ação Modificadora: ${this.listButtonActiveModificadorPainel}`);
                     button.classList.add("active");
                     this.disableItensCumulative();
                 }
@@ -437,22 +630,25 @@ class PageSoundSphereHome extends SimplePage {
         (_a = document.getElementById("buttonPlay")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
             if (!this.sequenciador.activePlay) {
                 this.sequenciador.play(() => {
-                    this.stopActived = false;
+                    // this.stopActived = false;
                     // this.pauseActived = false;
                 }, () => {
                     //console.log("Terminou de executar")
+                    console.warn("callback do botão play");
+                    console.log(this.listButtonActiveModificadorPainel);
                     document.getElementById("buttonPlay").classList.remove("active");
                     if (!this.isPauseButtonActive()) {
                         this.stopMixagem();
+                        this.listButtonActiveModificadorPainel = [];
                     }
-                    this.buttonModificadorPainel = [];
                 });
             }
             else {
-                console.warn("Play já está ativo");
+                // console.warn("Play já está ativo");
             }
         });
         (_b = document.getElementById("buttonPause")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
+            console.warn(`Dentro do pause do page: ${this.isPauseButtonActive()}`);
             this.sequenciador.pause(() => { }, () => {
                 this.stopMixagem();
             });
@@ -460,16 +656,17 @@ class PageSoundSphereHome extends SimplePage {
         (_c = document.getElementById("buttonStop")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => {
             this.stopMixagem();
         });
+        let button_element_excluir = document.getElementById("modificador-excluir");
         (_d = document
             .getElementById("modificador-excluir")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => {
             this.stopMixagem();
-            console.log("this.buttonModificadorPainel");
+            console.log("this.listButtonActiveModificadorPainel");
             document.getElementById("buttonStop").classList.add("active");
-            console.log(this.buttonModificadorPainel);
+            console.log(this.listButtonActiveModificadorPainel);
         });
     }
     stopMixagem() {
-        this.stopActived = true;
+        // this.stopActived = true;
         this.sequenciador.stopSimple(() => {
             // $('img').attr('draggable');
             document.getElementById("buttonPlay").classList.remove("active");
@@ -516,21 +713,22 @@ class PageSoundSphereHome extends SimplePage {
             //Tocar ao passar o mouse por cima
             item.addEventListener("mouseenter", () => {
                 const dataId = item.getAttribute("data-id");
-                console.log("Mouse entrou");
+                // console.log("Mouse entrou");
                 item.classList.add("playing_audio");
                 let name = item.getAttribute("data-name");
                 let duracao = item.getAttribute("data-duration");
                 let text_volume = `Volume: ${this.currentVolume}`;
-                let text_descritor = `${this.idSemanticDescriptor ? "Descritor semantico: " +
-                    this.listSemanticDescriptors[this.idSemanticDescriptor].name
+                let text_descritor = `${this.idSemanticDescriptor
+                    ? "Descritor semantico: " +
+                        this.listSemanticDescriptors[this.idSemanticDescriptor].name
                     : ""}`;
                 item.setAttribute("data-bs-original-title", `Nome: ${name} \n Duração: ${duracao}\n ${text_volume}
           ${text_descritor}`);
-                console.warn(this.idSemanticDescriptor);
+                // console.warn(this.idSemanticDescriptor);
                 const id = this.idSemanticDescriptor;
                 const descriptor = id !== undefined ? this.listSemanticDescriptors[id] : undefined;
                 if (descriptor) {
-                    console.log("Chamou o play");
+                    // console.log("Chamou o play");
                     this.sequenciador.playOneSound(dataId !== null ? parseInt(dataId) : 0, function () {
                         item.classList.remove("playing_audio");
                     }, descriptor.getFilters(), this.currentVolume);
@@ -550,7 +748,9 @@ class PageSoundSphereHome extends SimplePage {
     }
     activateModalLoading() {
         // console.error(" abrir modal loading");
-        this.modal_loading = new window.bootstrap.Modal(document.getElementById("loadingModal"));
+        this.modal_loading = new window.bootstrap.Modal(document.getElementById("loadingModal"), {
+            keyboard: false,
+        });
         this.modal_loading.show();
     }
     disableModalLoading() {

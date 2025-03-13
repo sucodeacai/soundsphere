@@ -7,6 +7,14 @@
   <title>Soundsphere</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="img/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="img/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="img/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="img/favicon/site.webmanifest" />
+
   <script>
     var isChromium = window.chrome;
     var winNav = window.navigator;
@@ -71,7 +79,9 @@
   <script src="js/storage/SoundSphereBD.js"></script>
 
   <script src="js/start/startSoundSphere.js"></script>
+
   <script src="js/features/useElementsHtml.js"></script>
+  <script src="js/features/useURL.js"></script>
   <style>
     body,
     html {
@@ -119,10 +129,7 @@
       /* Cor de borda mais escura */
     }
 
-    .navbar-toggler:focus {
-      outline: none;
-      box-shadow: none;
-    }
+    /* menu navbar */
 
     .navbar {
       display: flex;
@@ -130,6 +137,11 @@
       align-items: center;
       padding: 0.5rem 1rem;
       position: relative;
+    }
+
+    .navbar-toggler:focus {
+      outline: none;
+      box-shadow: none;
     }
 
     .navbar-nav {
@@ -147,10 +159,67 @@
       transition: opacity 0.3s ease;
     }
 
+    /* configuração menu */
     .hidden {
       opacity: 0;
     }
 
+    .nav-link {
+      color: white !important;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      margin-left: 30px;
+    }
+
+    .nav-link:hover {
+      color: #ff6f00 !important;
+    }
+
+    .input-layer {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .input-layer:hover label {
+      color: #ff6f00;
+      /* Altera a cor do texto para laranja ao passar o mouse */
+    }
+
+    .input-layer * {
+      cursor: pointer;
+    }
+
+    .nav-link i {
+      margin-right: 8px;
+    }
+
+    /* Estilo para o menu de layers */
+    #layersMenu {
+      margin-left: 30px;
+    }
+
+    .input-layer:hover {
+      color: #ff6f00 !important;
+    }
+
+
+    .layers-options {
+      display: block;
+      padding: 0px 10px 10px 10px;
+      border-radius: 5px;
+    }
+
+    .layers-options input {
+      margin-right: 10px;
+    }
+
+    .layers-options label {
+      font-size: 1rem;
+      color: white;
+    }
+
+    /* configuraçao painel de mixagem */
     #canva_painel_mixagem {
       width: calc(100% - 20px);
       /* Subtrai 10px de cada lado */
@@ -342,11 +411,30 @@
         margin: 5px 0;
       }
     }
+
+    /* tolltilp */
+    #tooltipContainer {
+
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      z-index: 1050;
+    }
+
+    /* .tooltip-inner.top-page {
+      background-color: #ff6f00;
+    } */
+
+    /* estilio do placeholder do salvar/exportar */
+    ::placeholder {
+      color: gray !important;
+    }
   </style>
 </head>
 
 <body>
   <!-- Navbar -->
+
   <nav class="navbar navbar-dark bg-dark fixed-top menu-principal">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -355,17 +443,65 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+
           <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
-              data-bs-target=".navbar-collapse.show">Novo</a>
+            <a id="buttonClearPanel" class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
+              data-bs-target=".navbar-collapse.show">
+              <i class="fas fa-eraser"></i> Limpar Painel
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
-              data-bs-target=".navbar-collapse.show">Sobre</a>
+            <a id="buttonUploadFileWav" class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
+              data-bs-target=".navbar-collapse.show">
+              <i class="bi bi-upload"></i>
+              Carregar arquivos Wav
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
-              data-bs-target=".navbar-collapse.show">Contato</a>
+            <a id="buttonOpenModalSaveSoundsphereFormat" class="nav-link" href="#" data-bs-toggle="collapse"
+              onclick="toggleBrandText()" data-bs-target=".navbar-collapse.show">
+              <i class="bi bi-floppy"></i>
+              Salvar Projeto SoundSphere
+            </a>
+          </li>
+          <li class="nav-item">
+            <a id="buttonExportWavFile" class="nav-link" href="#" data-bs-toggle="collapse" onclick="toggleBrandText()"
+              data-bs-target=".navbar-collapse.show">
+              <i class="bi bi-filetype-wav"></i>
+
+              Exportar arquivo Wav
+            </a>
+          </li>
+          <!-- Novo item "layers" com opções abertas -->
+          <li class="nav-item">
+            <span class="nav-link disable">
+              <i class="fas fa-layer-group"></i> Camadas
+            </span>
+            <div class="collapse show" id="layersMenu">
+              <div class="layers-options">
+
+                <div class="input-layer">
+                  <input type="checkbox" id="checkboxVolum" data-name="showVolum" checked />
+                  <label for="descritor">Amplitude</label>
+                </div>
+                <div class="input-layer">
+                  <input type="checkbox" id="checkboxDescriptor" data-name="showDescriptor" checked />
+                  <label for="descritor">Descritor</label>
+                </div>
+                <div class="input-layer">
+                  <input type="checkbox" id="checkboxFood" data-name="showFood" checked />
+                  <label for="alimentos">Alimentos</label>
+                </div>
+                <div class="input-layer">
+                  <input type="checkbox" id="checkboxDimension" data-name="showDimension" checked />
+                  <label for="dimensao">Dimensão</label>
+                </div>
+                <div class="input-layer">
+                  <input type="checkbox" id="checkboxIntensity" data-name="showIntensity" checked />
+                  <label for="intensidade">Intensidade</label>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
       </div>
@@ -408,28 +544,28 @@
       </div>
     </div>
 
-    <div class="option-itens mt-4">
-      <h2>Volume</h2>
+    <div id="containerVolum" hidden class="  option-itens mt-4">
+      <h2>Amplitude</h2>
       <div class="option-itens-itens">
         <div id="container-volume" class="volume-container ">
           <span id="volume-label">Volume: 100%</span>
-          <input type="range" id="volume-slider" disabled min="0" max="200" value="100" />
+          <input type="range" id="vocontainerFoodlume-slider" disabled min="0" max="200" value="100" />
         </div>
       </div>
     </div>
 
-    <div class="option-itens mt-4">
+    <div id="containerDescriptor" hidden class="  option-itens mt-4">
       <h2>Descritores Semanticos</h2>
       <div id="container-semaits-descriptors" class="option-itens-itens">
 
       </div>
     </div>
-    <div class="option-itens mt-4">
+    <div id="containerFood" hidden class="  option-itens mt-4">
       <h2>Alimentos</h2>
       <div id="container-alimentos" class="option-itens-itens">
       </div>
     </div>
-    <div class="option-itens mt-4">
+    <div id="containerDimension" hidden class="  option-itens mt-4">
       <h2>Dimensão</h2>
       <div id="container-dimensions" class="option-itens-itens">
         <!-- <button class="btn btn-secondary m-2">Botão 1</button>
@@ -440,7 +576,7 @@
         <button class="btn btn-secondary m-2">Botão 1</button> -->
       </div>
     </div>
-    <div class="option-itens mt-4">
+    <div id="containerIntensity" hidden class=" option-itens mt-4">
       <h2>Intensidade</h2>
       <div id="container-intensity" class="option-itens-itens">
       </div>
@@ -515,9 +651,73 @@
       </div>
     </div>
   </div>
+  <!-- modal salvar projeto json -->
+  <div class="modal fade" id="modalSaveProjectJson" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">Salvando projeto Soundsphere</h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+          <div class="d-flex flex-column gap-2 w-100">
+            <div class="mb-3 w-100">
+              <label for="inputAuthorProjectSoundsphere" class="form-label">Nome do autor</label>
+              <input type="text" class="form-control w-100" id="inputAuthorProjectSoundsphere" placeholder="Soundsphere"
+                style="color: black;" onfocus="this.style.color='black'"
+                onblur="if(this.value=='')this.style.color='black'" />
+            </div>
+            <div class="mb-3 w-100">
+              <label for="inputNameFileSaveProjectSoundsphere" class="form-label">Nome do arquivo</label>
+              <input type="text" class="form-control w-100" id="inputNameFileSaveProjectSoundsphere"
+                placeholder="Soundsphere" style="color: black;" onfocus="this.style.color='black'"
+                onblur="if(this.value=='')this.style.color='black'" />
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer d-flex flex-column gap-2 w-100">
+          <button type="button" class="btn btn-primary w-100" id="buttonSaveSoundSphereFormat">Salvar</button>
+
+          <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal exportar wav file -->
+  <div class="modal fade" id="modalExporWav" data-bs-backdrop="static" tabindex="-1" aria-labelledby="errorModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">Exportando arquivo WAV</h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+          <div class="d-flex flex-column gap-2 w-100">
+            <div class="mb-3 w-100">
+              <label for="inputNameFileExportWav" class="form-label">Nome do arquivo</label>
+              <input type="text" class="form-control w-100" id="inputNameFileExportWav" placeholder="Soundsphere"
+                style="color: black;" onfocus="this.style.color='black'"
+                onblur="if(this.value=='')this.style.color='black'" />
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer d-flex flex-column gap-2 w-100">
+          <button type="button" class="btn btn-primary w-100" id="buttonDownloadWavFile">Salvar</button>
+
+          <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- Área onde os Tooltips serão exibidos -->
-  <div id="tooltipContainer" style="position: fixed; top: 20px; right: 20px; z-index: 1050;">
+  <div id="tooltipContainer">
     <!-- Os tooltips serão adicionados dinamicamente aqui -->
   </div>
 
@@ -582,6 +782,8 @@
       canvas.height = window.innerHeight * 0.4 - 10;
     }
     window.addEventListener("resize", resizeCanvas);
+
+
 
   </script>
 

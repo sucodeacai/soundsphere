@@ -5,15 +5,7 @@ Registrado sob a licença  Attribution-NonCommercial 4.0 International (CC BY-NC
 
 document.addEventListener("DOMContentLoaded", function () {
   //pega parametros da url da pagina
-  var query = location.search.slice(1);
-  var partes = query.split("&");
-  var data: any = {};
-  partes.forEach(function (parte) {
-    var chaveValor = parte.split("=");
-    var chave = chaveValor[0];
-    var valor = chaveValor[1];
-    data[chave] = valor;
-  });
+  let data = getUrlParams();
   let pixelpersecond =
     data.pixelpersecond != undefined ? +data.pixelpersecond : 20;
   //fim pega parametros
@@ -33,7 +25,18 @@ document.addEventListener("DOMContentLoaded", function () {
     controlFiles,
     sessionControl
   );
-  let sequenciador = new Sequenciador(controlFiles, tooltip, daoHome, audioCtx);
+  let sequenciador = new Sequenciador(controlFiles, daoHome, audioCtx);
+  let canvas: any = document.getElementById("canva_painel_mixagem");
+  let contextCanvas = canvas.getContext("2d");
+
+  let painel = new Painel(
+    daoHome,
+    contextCanvas,
+    canvas,
+    pixelpersecond,
+    sequenciador
+  );
+
   let pageSoundSphereHome = new PageSoundSphereHome(
     document.getElementById("bodyAplication"),
     " ",
@@ -42,8 +45,9 @@ document.addEventListener("DOMContentLoaded", function () {
     sequenciador,
     tooltip,
     sessionControl,
-    pixelpersecond
+    painel
   );
+  painel.pageSoundSphereHome = pageSoundSphereHome;
   let fileMenuBar = new FileMenuBar(
     sequenciador,
     daoHome,
@@ -63,18 +67,8 @@ document.addEventListener("DOMContentLoaded", function () {
     pageSoundSphereHome
   );
 
-  let canvas: any = document.getElementById("canva_painel_mixagem");
-  let contextCanvas = canvas.getContext("2d");
-  let painel = new Painel(
-    daoHome,
-    contextCanvas,
-    canvas,
-    pageSoundSphereHome,
-    tooltip,
-    pixelpersecond
-  );
   sequenciador.painel = painel;
-  pageSoundSphereHome.painel = painel;
+
   if (daoHome.listItemBuffer.length > 0) {
     painel.reMake();
   }

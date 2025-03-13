@@ -36,6 +36,7 @@ class Tooltip {
     // $(`#messageAdmin${id}`).remove();
   }
   showMessage(mensagem: string): void {
+    console.log(mensagem);
     var tooltipContainer = document.getElementById("tooltipContainer");
 
     const tooltipElement = document.createElement("div");
@@ -44,7 +45,7 @@ class Tooltip {
 
     // Remover o triângulo (a seta)
     tooltipElement.innerHTML = `
-      <div class="tooltip-inner">${mensagem}</div>
+      <div class="tooltip-inner top-page">${mensagem}</div>
     `;
 
     // Adicionar o tooltip ao container

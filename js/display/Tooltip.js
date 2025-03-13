@@ -37,13 +37,14 @@ class Tooltip {
         // $(`#messageAdmin${id}`).remove();
     }
     showMessage(mensagem) {
+        console.log(mensagem);
         var tooltipContainer = document.getElementById("tooltipContainer");
         const tooltipElement = document.createElement("div");
         tooltipElement.classList.add("tooltip", "bs-tooltip-top", "show");
         tooltipElement.setAttribute("role", "tooltip");
         // Remover o triângulo (a seta)
         tooltipElement.innerHTML = `
-      <div class="tooltip-inner">${mensagem}</div>
+      <div class="tooltip-inner top-page">${mensagem}</div>
     `;
         // Adicionar o tooltip ao container
         tooltipContainer.appendChild(tooltipElement);

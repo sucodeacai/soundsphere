@@ -27,7 +27,7 @@ class FileMenuBar extends FileWav {
                             ": -Arquivo já carregado/ File already loaded");
                     }
                     else {
-                        console.log("==Arquivo repetido");
+                        console.log("Arquivo repetido");
                         this.listNamesInvalid.push(target.files[i].name + ": -Formato inválido/ Invalid format");
                     }
                 }
