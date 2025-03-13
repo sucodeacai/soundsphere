@@ -678,7 +678,7 @@ class PageSoundSphereHome extends SimplePage {
     addClickEventToAmostraAudio() {
         const svgItems = document.querySelectorAll(".svg-item");
         const containerVoume = document.getElementById("container-volume");
-        const volume_slider = document.getElementById("volume-slider");
+        const volume_slider = document.getElementById("inputVolumeSlider");
         svgItems.forEach((item) => {
             //Configuração para selecionar e remover selecao dos itens svg-musicais
             item.addEventListener("click", () => {
