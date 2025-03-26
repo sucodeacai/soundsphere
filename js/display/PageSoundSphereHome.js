@@ -541,6 +541,7 @@ class PageSoundSphereHome extends SimplePage {
         linkElement.style.margin = "5px";
         linkElement.id = "button-edit";
         linkElement.classList.add("button-edit");
+        linkElement.classList.add("active");
         linkElement.setAttribute("data-html", `Editar Itens de Mixagem`);
         linkElement.setAttribute("data-id", "id-button-edit");
         // Criação do elemento <img>
