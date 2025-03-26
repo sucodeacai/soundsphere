@@ -37,7 +37,7 @@ class Tooltip {
         // $(`#messageAdmin${id}`).remove();
     }
     showMessage(mensagem) {
-        console.log(mensagem);
+        // console.log(mensagem);
         var tooltipContainer = document.getElementById("tooltipContainer");
         const tooltipElement = document.createElement("div");
         tooltipElement.classList.add("tooltip", "bs-tooltip-top", "show");

@@ -30,7 +30,6 @@ class PageSoundSphereHome extends SimplePage {
     startTemplate() {
         throw new Error("Method not implemented.");
     }
-    //itemOptionitemOptionEnabled: boolean = true;
     // constructor(containerElement: JQuery, titulo: string, soundSphereInfo: SoundSphereInfo, dao: DAO, sequenciador: any, canvas: any, contextCanvas: any) {
     constructor(containerElement, titulo, soundSphereInfo, dao, sequenciador, tooltip, sessionControl, painel) {
         super(containerElement, titulo, soundSphereInfo, dao, sequenciador);
@@ -52,13 +51,12 @@ class PageSoundSphereHome extends SimplePage {
         //Controlar Modificadores Painel
         this.listButtonActiveModificadorPainel = [];
         this.listLayerShow = {};
-        //pauseActived = false
-        this.itemOptionEnabled = true;
         this.currentVolume = 100;
         this.mouseInsideIconAlbum = undefined;
         // this.canvas = canvas;
         // this.contextCanvas = contextCanvas;
         this.tooltip = tooltip;
+        this.setVersionSoundSphere();
         this.startWelcomeModal();
         this.setSettingsActions();
         this.painel = painel;
@@ -69,9 +67,9 @@ class PageSoundSphereHome extends SimplePage {
         const defaultValues = {
             showVolum: true,
             showDescriptor: true,
-            showFood: false,
-            showDimension: false,
-            showIntensity: false,
+            showFood: true,
+            showDimension: true,
+            showIntensity: true,
         };
         Object.keys(defaultValues).forEach((key) => {
             if (urlParams[key] !== undefined) {
@@ -81,6 +79,13 @@ class PageSoundSphereHome extends SimplePage {
                 this.listLayerShow[key] = defaultValues[key];
             }
         });
+    }
+    setVersionSoundSphere() {
+        // console.log("Teste....");
+        const divTitleSoundSphere = document.getElementById("brandText");
+        if (divTitleSoundSphere) {
+            divTitleSoundSphere.textContent = `SoundSphere ${this.soundSphereInfo.version}`;
+        }
     }
     dependencyInjection() {
         // Injeção de dependencia sequenciador
@@ -120,6 +125,7 @@ class PageSoundSphereHome extends SimplePage {
         if (navMenu) {
             // Adiciona o evento de "transitionend" que será disparado quando a animação de transição terminar
             navMenu.addEventListener("hidden.bs.collapse", () => {
+                this.disableItensCumulative();
                 console.log("O menu foi ocultado!");
                 this.updatePageWithLayers();
                 const brandText = document.getElementById("brandText");
@@ -129,11 +135,22 @@ class PageSoundSphereHome extends SimplePage {
             });
         }
     }
+    resetSlicerVolum() {
+        const slider = document.getElementById("inputVolumeSlider");
+        const label = document.getElementById("volume-label");
+        this.currentVolume = 100;
+        if (slider) {
+            slider.value = "100"; // Define o valor do range
+        }
+        if (label) {
+            label.textContent = `Volume: 100%`; // Atualiza o texto visível
+        }
+    }
     updatePageWithLayers() {
         Object.keys(this.listLayerShow).forEach((key) => {
             // Substitui 'show' por 'container' para obter o id correspondente
             const elementId = key.replace("show", "container");
-            console.warn(`Valor ${elementId} ${this.listLayerShow[key]}`);
+            // console.warn(`Valor ${elementId} ${this.listLayerShow[key]}`);
             const element = document.getElementById(elementId);
             if (element) {
                 // Se o valor da chave for true, remove a classe 'hidden'
@@ -142,6 +159,9 @@ class PageSoundSphereHome extends SimplePage {
                 }
                 else {
                     // Se o valor for false, adiciona a classe 'hidden'
+                    if (key == "showVolum") {
+                        this.resetSlicerVolum();
+                    }
                     element.setAttribute("hidden", "");
                 }
             }
@@ -284,6 +304,30 @@ class PageSoundSphereHome extends SimplePage {
                 volumeLabel.textContent = `Volume: ${volumeValue}%`;
                 this.currentVolume = parseInt(volumeValue);
                 // console.warn(`Volume: ${volumeValue}%`);
+            }
+        });
+        volumeSlider === null || volumeSlider === void 0 ? void 0 : volumeSlider.addEventListener("input", () => {
+            let volumeValue = volumeSlider.value.padStart(3, "0");
+            if (volumeLabel) {
+                volumeLabel.textContent = `Volume: ${volumeValue}%`;
+                this.currentVolume = parseInt(volumeValue);
+                // console.warn(`Volume: ${volumeValue}%`);
+            }
+        });
+        volumeSlider === null || volumeSlider === void 0 ? void 0 : volumeSlider.addEventListener("click", (event) => {
+            event.stopPropagation();
+        });
+        const containerVolume = document.getElementById("container-volume");
+        const volume_slider = document.getElementById("inputVolumeSlider");
+        containerVolume === null || containerVolume === void 0 ? void 0 : containerVolume.addEventListener("click", () => {
+            const isActive = containerVolume.classList.contains("active");
+            if (isActive) {
+                containerVolume === null || containerVolume === void 0 ? void 0 : containerVolume.classList.remove("active");
+                volume_slider.disabled = true;
+            }
+            else {
+                containerVolume === null || containerVolume === void 0 ? void 0 : containerVolume.classList.add("active");
+                volume_slider.disabled = false;
             }
         });
     }
@@ -455,6 +499,7 @@ class PageSoundSphereHome extends SimplePage {
             linkElement.style.margin = "5px";
             // linkElement.style.padding = "6px"; // Usando padding diretamente no estilo
             linkElement.classList.add("itemMenuDescriptiveIcon");
+            // linkElement.style.backgroundColor = "rgb(248, 249, 250)";
             linkElement.setAttribute("data-html", this.listActionDescriptiveIcons[index].name);
             linkElement.setAttribute("data-tag", this.listActionDescriptiveIcons[index].tag);
             linkElement.setAttribute("data-id", index.toString());
@@ -462,6 +507,7 @@ class PageSoundSphereHome extends SimplePage {
             const imgElement = document.createElement("img");
             imgElement.style.width = "40x"; // Definindo o tamanho da imagem
             imgElement.style.height = "40px";
+            // imgElement.style.backgroundColor = "rgb(248, 249, 250)";
             imgElement.textContent = "Elemento Dinâmico";
             imgElement.setAttribute("src", this.listActionDescriptiveIcons[index].url);
             // Adicionando a imagem ao link
@@ -475,9 +521,41 @@ class PageSoundSphereHome extends SimplePage {
         }
         this.addClickEventToActionDescriptiveIcons();
     }
+    addButtonEditMenu() {
+        // Criação do elemento <a>
+        const linkElement = document.createElement("a");
+        linkElement.addEventListener("click", () => {
+            if (!linkElement.classList.contains("active")) {
+                linkElement.classList.toggle("active");
+                this.disableAmostraAudio();
+            }
+        });
+        linkElement.setAttribute("title", `Editar Itens de Mixagem`);
+        linkElement.setAttribute("data-bs-toggle", "tooltip");
+        linkElement.style.border = "2px solid white";
+        linkElement.style.padding = "6px";
+        linkElement.style.margin = "5px";
+        linkElement.id = "button-edit";
+        linkElement.classList.add("button-edit");
+        linkElement.setAttribute("data-html", `Editar Itens de Mixagem`);
+        linkElement.setAttribute("data-id", "id-button-edit");
+        // Criação do elemento <img>
+        const imgElement = document.createElement("img");
+        imgElement.style.width = "35x"; // Definindo o tamanho da imagem
+        imgElement.style.height = "35px";
+        imgElement.textContent = "Elemento Dinâmico";
+        imgElement.setAttribute("src", "img/icons/edit_pencil.png");
+        // Adicionando a imagem ao link
+        linkElement.appendChild(imgElement);
+        const container_amostras = document.getElementById("container-amostras-audio");
+        if (container_amostras) {
+            container_amostras.appendChild(linkElement);
+        }
+    }
     loadContainerAudio() {
         var _a;
         document.getElementById("container-amostras-audio").innerHTML = "";
+        this.addButtonEditMenu();
         let conteudo = "";
         if (this.dao.listItemBuffer.length != 0) {
             let itens = "";
@@ -656,7 +734,6 @@ class PageSoundSphereHome extends SimplePage {
         (_c = document.getElementById("buttonStop")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => {
             this.stopMixagem();
         });
-        let button_element_excluir = document.getElementById("modificador-excluir");
         (_d = document
             .getElementById("modificador-excluir")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", () => {
             this.stopMixagem();
@@ -675,21 +752,34 @@ class PageSoundSphereHome extends SimplePage {
         });
     }
     //Adiciona os eventos aos itens musicais
+    disableAmostraAudio() {
+        const items = document.querySelectorAll(".svg-item");
+        items.forEach((item) => {
+            if (item.classList.contains("active")) {
+                item.classList.remove("active");
+            }
+        });
+        this.idSelectedIcomAlbum = undefined;
+    }
     addClickEventToAmostraAudio() {
         const svgItems = document.querySelectorAll(".svg-item");
         const containerVoume = document.getElementById("container-volume");
         const volume_slider = document.getElementById("inputVolumeSlider");
+        console.log("Svg Itens");
+        console.log(svgItems);
         svgItems.forEach((item) => {
             //Configuração para selecionar e remover selecao dos itens svg-musicais
             item.addEventListener("click", () => {
+                var _a, _b;
                 this.idSelectedIcomAlbum = undefined;
                 if (item.classList.contains("active")) {
+                    (_a = document.getElementById("button-edit")) === null || _a === void 0 ? void 0 : _a.classList.add("active");
                     item.classList.remove("active");
                     //E desabilita tbm o volume
-                    containerVoume === null || containerVoume === void 0 ? void 0 : containerVoume.classList.remove("active");
-                    if (volume_slider) {
-                        volume_slider.disabled = true; // Agora o código não gera erro
-                    }
+                    // containerVoume?.classList.remove("active");
+                    // if (volume_slider) {
+                    //   volume_slider.disabled = true; // Agora o código não gera erro
+                    // }
                 }
                 else {
                     svgItems.forEach(function (otherItem) {
@@ -697,12 +787,13 @@ class PageSoundSphereHome extends SimplePage {
                     });
                     this.disableItensModificadoresPanel();
                     item.classList.add("active");
+                    (_b = document.getElementById("button-edit")) === null || _b === void 0 ? void 0 : _b.classList.remove("active");
                     //Verificação para saber se não é vazio
                     // e ativa o valume
-                    containerVoume === null || containerVoume === void 0 ? void 0 : containerVoume.classList.add("active");
-                    if (volume_slider) {
-                        volume_slider.disabled = false; // Agora o código não gera erro
-                    }
+                    // containerVoume?.classList.add("active");
+                    // if (volume_slider) {
+                    //   volume_slider.disabled = false; // Agora o código não gera erro
+                    // }
                     const dataId = item.getAttribute("data-id"); // Obtém o data-id
                     let id = parseInt(dataId !== null && dataId !== void 0 ? dataId : "");
                     if (id != undefined) {
@@ -717,7 +808,7 @@ class PageSoundSphereHome extends SimplePage {
                 item.classList.add("playing_audio");
                 let name = item.getAttribute("data-name");
                 let duracao = item.getAttribute("data-duration");
-                let text_volume = `Volume: ${this.currentVolume}`;
+                let text_volume = `Volume: ${this.getSlicerVolume()}%`;
                 let text_descritor = `${this.idSemanticDescriptor
                     ? "Descritor semantico: " +
                         this.listSemanticDescriptors[this.idSemanticDescriptor].name
@@ -731,12 +822,12 @@ class PageSoundSphereHome extends SimplePage {
                     // console.log("Chamou o play");
                     this.sequenciador.playOneSound(dataId !== null ? parseInt(dataId) : 0, function () {
                         item.classList.remove("playing_audio");
-                    }, descriptor.getFilters(), this.currentVolume);
+                    }, descriptor.getFilters(), this.getSlicerVolume());
                 }
                 else {
                     this.sequenciador.playOneSound(dataId !== null ? parseInt(dataId) : 0, function () {
                         item.classList.remove("playing_audio");
-                    }, [], this.currentVolume);
+                    }, [], this.getSlicerVolume());
                 }
             });
             //Tocar ao passar o mouse por cima
@@ -745,6 +836,15 @@ class PageSoundSphereHome extends SimplePage {
                 this.sequenciador.stopOneSound();
             });
         });
+    }
+    getSlicerVolume() {
+        const containerVolume = document.getElementById("container-volume");
+        const isActiveVolume = containerVolume === null || containerVolume === void 0 ? void 0 : containerVolume.classList.contains("active");
+        if (isActiveVolume) {
+            return this.currentVolume;
+        }
+        //Se o volume nao for ativo retorna 0
+        return 0;
     }
     activateModalLoading() {
         // console.error(" abrir modal loading");

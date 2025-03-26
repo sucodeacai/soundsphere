@@ -367,14 +367,14 @@ class ItemMixPanel {
         painel.ctxCanvas.shadowBlur = 0;
         painel.ctxCanvas.lineWidth = 4;
         painel.ctxCanvas.strokeText(
-          1,
+          this.tag_intensity,
           this.x + 52,
           yDescritor + verticalSpacing + 22
         );
         painel.ctxCanvas.shadowBlur = 0;
         painel.ctxCanvas.fillStyle = "white";
         painel.ctxCanvas.fillText(
-          1,
+          this.tag_intensity,
           this.x + 52,
           yDescritor + verticalSpacing + 22
         );

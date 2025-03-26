@@ -75,6 +75,20 @@ class Painel {
     actionMouseLeave(event) {
         this.reMake();
     }
+    actionMouseEnter(event) {
+        var _a, _b, _c, _d, _e;
+        console.log(`---Button SelctedId ${(_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.idSelectedIcomAlbum} isDeleteButton  ${(_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.isDeleteButtonActive()}`);
+        if ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.isDeleteButtonActive()) {
+            this.setCursorTrash();
+        }
+        else if (((_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum) == undefined) {
+            this.setCursorEdit();
+            // console.log("set cursor lixo");
+        }
+        else {
+            (_e = document.getElementById("canva_painel_mixagem")) === null || _e === void 0 ? void 0 : _e.classList.add("default");
+        }
+    }
     actionMouseDown(event) {
         //console.log("actionMouseDown")
         this.mouseDown = true;
@@ -87,45 +101,36 @@ class Painel {
     actionMouseOut(event) {
         //console.log("actionMouseOut")
         this.endMove();
+        this.removeClassCanvas();
     }
     setCursorTrash() {
+        this.removeClassCanvas();
         document
             .getElementById("canva_painel_mixagem")
             .classList.add("cursorTrash");
-    }
-    unsetCursorTrash() {
-        document
-            .getElementById("canva_painel_mixagem")
-            .classList.remove("cursorTrash");
     }
     setCursorEdit() {
         document
             .getElementById("canva_painel_mixagem")
             .classList.add("cursorEdit");
     }
-    unsetCursorEdit() {
-        document
-            .getElementById("canva_painel_mixagem")
-            .classList.remove("cursorEdit");
-    }
     //O evento ocorre quando o usuário libera um botão do mouse sobre um elemento
     //O movimento do painel só e realizado enquanto se esitver preciosando a tecla
     //ao soltar é desfeita a ação independente se ele soltar no canvas ou não
     actionMouseUp(event) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
         this.deltaX = 0;
         this.deltaY = 0;
         this.mouseDown = false;
         console.log("dentro action mouse up");
+        let itemMixTemp = this.getItemMix();
         //Ele só vai verificar as opções no painel se não houver um movimento
         if (!this.moved) {
             // console.log("Mouse up " + this.pageSoundSphereHome.idSelectedIcomAlbum);
             //Se o botão de exclusão estiver ativado
             if ((_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.isDeleteButtonActive()) {
                 console.warn("Excluir dentro painel.");
-                let itemMixTemp = this.getItemMix();
                 if (itemMixTemp) {
-                    this.setItemMixTemp(itemMixTemp);
                     this.deleteItemMixPanel(itemMixTemp);
                     this.reMake();
                 }
@@ -148,7 +153,24 @@ class Painel {
                 console.warn("Inserir dentro do painel");
                 // console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
                 // console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);
-                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor, this.pageSoundSphereHome.currentVolume);
+                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor, this.pageSoundSphereHome.getSlicerVolume());
+            }
+            else if (itemMixTemp) {
+                itemMixTemp.descriptiveIcon =
+                    (_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idActionDescriptiveIcon;
+                itemMixTemp.tag_dimension = (_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idDimension;
+                itemMixTemp.tag_intensity = (_f = this.pageSoundSphereHome) === null || _f === void 0 ? void 0 : _f.idIntensity;
+                itemMixTemp.setIdSemanticDescriptor((_g = this.pageSoundSphereHome) === null || _g === void 0 ? void 0 : _g.idSemanticDescriptor);
+                itemMixTemp.setCodeSemanticDescriptor((_h = this.pageSoundSphereHome) === null || _h === void 0 ? void 0 : _h.codeSemanticDescriptor);
+                if (((_j = this.pageSoundSphereHome) === null || _j === void 0 ? void 0 : _j.getSlicerVolume()) !== undefined ||
+                    ((_k = this.pageSoundSphereHome) === null || _k === void 0 ? void 0 : _k.getSlicerVolume()) === 0) {
+                    // console.error("volume", volume);
+                    itemMixTemp.setVolume((_l = this.pageSoundSphereHome) === null || _l === void 0 ? void 0 : _l.getSlicerVolume());
+                }
+                this.updateItemMixPanel(itemMixTemp);
+                this.reMake();
+                // this.pageSoundSphereHome.showModalOptions();
+                this.notifyStatus("Item de mixagem alterado.");
             }
             else {
                 console.warn("Nem excluir, nem pause, nem inserir amostra");
@@ -262,7 +284,7 @@ class Painel {
         }
     }
     removeClassCanvas() {
-        document.getElementById("canva_painel_mixagem").classList.remove();
+        document.getElementById("canva_painel_mixagem").className = "";
         document.getElementById("canva_painel_mixagem").classList.add("canvas");
     }
     changeCursorCanvas(e) {
@@ -380,7 +402,7 @@ class Painel {
         }
     }
     moveAction(e) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e, _f;
         //Verifica a mudança do cursor
         if (this.deltaX != 0 || this.deltaY != 0) {
             this.changeCursorCanvas(e);
@@ -428,16 +450,18 @@ class Painel {
         else {
             this.removeClassCanvas();
             this.lastClassCursor = "";
-            console.log("---Default");
-            if ((_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.itemOptionEnabled) {
-                this.setCursorEdit();
-            }
-            else if ((_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.buttonRemoveStatus) {
+            console.log(`---Button SelctedId ${(_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.idSelectedIcomAlbum} isDeleteButton  ${(_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.isDeleteButtonActive()}`);
+            if ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.isDeleteButtonActive()) {
                 this.setCursorTrash();
             }
+            else if (!((_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum)) {
+                console.log((_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idSelectedIcomAlbum);
+                this.setCursorEdit();
+                // console.log("set cursor lixo");
+            }
             else {
-                (_c = document
-                    .getElementById("canva_painel_mixagem")) === null || _c === void 0 ? void 0 : _c.classList.add("default");
+                (_f = document
+                    .getElementById("canva_painel_mixagem")) === null || _f === void 0 ? void 0 : _f.classList.add("default");
             }
         }
     }
@@ -450,6 +474,7 @@ class Painel {
         this.canvas.addEventListener("mouseup", (evt) => this.actionMouseUp(evt));
         this.canvas.addEventListener("mousemove", (evt) => this.actionMouseMove(evt));
         this.canvas.addEventListener("mouseleave", (evt) => this.actionMouseLeave(evt));
+        this.canvas.addEventListener("mouseenter", (evt) => this.actionMouseEnter(evt));
     }
     reMake() {
         //Limpa tela para excluir os rastros

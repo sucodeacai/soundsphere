@@ -95,6 +95,21 @@ class Painel {
   actionMouseLeave(event: any) {
     this.reMake();
   }
+  actionMouseEnter(event: any) {
+    console.log(
+      `---Button SelctedId ${
+        this.pageSoundSphereHome?.idSelectedIcomAlbum
+      } isDeleteButton  ${this.pageSoundSphereHome?.isDeleteButtonActive()}`
+    );
+    if (this.pageSoundSphereHome?.isDeleteButtonActive()) {
+      this.setCursorTrash();
+    } else if (this.pageSoundSphereHome?.idSelectedIcomAlbum == undefined) {
+      this.setCursorEdit();
+      // console.log("set cursor lixo");
+    } else {
+      document.getElementById("canva_painel_mixagem")?.classList.add("default");
+    }
+  }
   actionMouseDown(event: any) {
     //console.log("actionMouseDown")
     this.mouseDown = true;
@@ -107,27 +122,20 @@ class Painel {
   actionMouseOut(event: any) {
     //console.log("actionMouseOut")
     this.endMove();
+    this.removeClassCanvas();
   }
   setCursorTrash() {
+    this.removeClassCanvas();
     document
       .getElementById("canva_painel_mixagem")!
       .classList.add("cursorTrash");
-  }
-  unsetCursorTrash() {
-    document
-      .getElementById("canva_painel_mixagem")!
-      .classList.remove("cursorTrash");
   }
   setCursorEdit() {
     document
       .getElementById("canva_painel_mixagem")!
       .classList.add("cursorEdit");
   }
-  unsetCursorEdit() {
-    document
-      .getElementById("canva_painel_mixagem")!
-      .classList.remove("cursorEdit");
-  }
+
   //O evento ocorre quando o usuário libera um botão do mouse sobre um elemento
   //O movimento do painel só e realizado enquanto se esitver preciosando a tecla
   //ao soltar é desfeita a ação independente se ele soltar no canvas ou não
@@ -136,16 +144,15 @@ class Painel {
     this.deltaY = 0;
     this.mouseDown = false;
     console.log("dentro action mouse up");
-
+    let itemMixTemp = this.getItemMix();
     //Ele só vai verificar as opções no painel se não houver um movimento
     if (!this.moved) {
       // console.log("Mouse up " + this.pageSoundSphereHome.idSelectedIcomAlbum);
       //Se o botão de exclusão estiver ativado
       if (this.pageSoundSphereHome?.isDeleteButtonActive()) {
         console.warn("Excluir dentro painel.");
-        let itemMixTemp = this.getItemMix();
+
         if (itemMixTemp) {
-          this.setItemMixTemp(itemMixTemp);
           this.deleteItemMixPanel(itemMixTemp);
           this.reMake();
         } else {
@@ -177,11 +184,32 @@ class Painel {
           this.pageSoundSphereHome.idIntensity,
           this.pageSoundSphereHome.idSemanticDescriptor,
           this.pageSoundSphereHome.codeSemanticDescriptor,
-          this.pageSoundSphereHome.currentVolume
+          this.pageSoundSphereHome.getSlicerVolume()
         );
+      } else if (itemMixTemp) {
+        itemMixTemp.descriptiveIcon =
+          this.pageSoundSphereHome?.idActionDescriptiveIcon;
+        itemMixTemp.tag_dimension = this.pageSoundSphereHome?.idDimension;
+        itemMixTemp.tag_intensity = this.pageSoundSphereHome?.idIntensity;
+        itemMixTemp.setIdSemanticDescriptor(
+          this.pageSoundSphereHome?.idSemanticDescriptor
+        );
+        itemMixTemp.setCodeSemanticDescriptor(
+          this.pageSoundSphereHome?.codeSemanticDescriptor
+        );
+        if (
+          this.pageSoundSphereHome?.getSlicerVolume() !== undefined ||
+          this.pageSoundSphereHome?.getSlicerVolume() === 0
+        ) {
+          // console.error("volume", volume);
+          itemMixTemp.setVolume(this.pageSoundSphereHome?.getSlicerVolume());
+        }
+        this.updateItemMixPanel(itemMixTemp);
+        this.reMake();
+        // this.pageSoundSphereHome.showModalOptions();
+        this.notifyStatus("Item de mixagem alterado.");
       } else {
         console.warn("Nem excluir, nem pause, nem inserir amostra");
-
         this.notifyStatus("Nenhuma amostra de audio selecionada.");
       }
     }
@@ -310,7 +338,7 @@ class Painel {
     }
   }
   removeClassCanvas() {
-    document.getElementById("canva_painel_mixagem")!.classList.remove();
+    document.getElementById("canva_painel_mixagem")!.className = "";
     document.getElementById("canva_painel_mixagem")!.classList.add("canvas");
   }
   changeCursorCanvas(e: any) {
@@ -486,11 +514,17 @@ class Painel {
     } else {
       this.removeClassCanvas();
       this.lastClassCursor = "";
-      console.log("---Default");
-      if (this.pageSoundSphereHome?.itemOptionEnabled) {
-        this.setCursorEdit();
-      } else if (this.pageSoundSphereHome?.buttonRemoveStatus) {
+      console.log(
+        `---Button SelctedId ${
+          this.pageSoundSphereHome?.idSelectedIcomAlbum
+        } isDeleteButton  ${this.pageSoundSphereHome?.isDeleteButtonActive()}`
+      );
+      if (this.pageSoundSphereHome?.isDeleteButtonActive()) {
         this.setCursorTrash();
+      } else if (!this.pageSoundSphereHome?.idSelectedIcomAlbum) {
+        console.log(this.pageSoundSphereHome?.idSelectedIcomAlbum);
+        this.setCursorEdit();
+        // console.log("set cursor lixo");
       } else {
         document
           .getElementById("canva_painel_mixagem")
@@ -521,6 +555,9 @@ class Painel {
     );
     this.canvas.addEventListener("mouseleave", (evt: any) =>
       this.actionMouseLeave(evt)
+    );
+    this.canvas.addEventListener("mouseenter", (evt: any) =>
+      this.actionMouseEnter(evt)
     );
   }
 
