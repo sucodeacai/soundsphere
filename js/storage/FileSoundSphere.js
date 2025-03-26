@@ -1,5 +1,5 @@
 "use strict";
-class FileMenuBar extends FileWav {
+class FileSoundSphere extends FileWav {
     // simplapage2:PageSoundSphereHome;
     constructor(sequenciador, dao, tooltip, simplePage) {
         var _a;
@@ -52,7 +52,7 @@ class FileMenuBar extends FileWav {
     }
     showMessageErrorWav() {
         var messages = this.listNamesInvalid.concat(this.dao.listMessagesError);
-        console.log("Mensagens de erro");
+        console.log("showMessageErrorWav Mensagens de erro");
         console.log(messages);
         if (messages.length > 0) {
             this.simplePage.startErrorModal(messages);

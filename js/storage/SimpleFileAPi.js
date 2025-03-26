@@ -29,6 +29,7 @@ class SimpleFileAPi extends FileApi {
             console.log(messages);
             this.tooltip.showMessages(messages);
         }
+        console.warn("simple page");
         this.simplePage.render();
     }
     onReaderJson(evt) {

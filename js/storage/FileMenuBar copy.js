@@ -1,5 +1,5 @@
 "use strict";
-class FileMenuBar extends FileWav {
+class FileMenuBar_bkp extends FileWav {
     // simplapage2:PageSoundSphereHome;
     constructor(sequenciador, dao, tooltip, simplePage) {
         super(sequenciador, dao);

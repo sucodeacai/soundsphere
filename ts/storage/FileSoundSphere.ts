@@ -1,4 +1,4 @@
-class FileMenuBar extends FileWav {
+class FileSoundSphere extends FileWav {
   simplePage: PageSoundSphereHome;
   // simplapage2:PageSoundSphereHome;
 
@@ -64,7 +64,7 @@ class FileMenuBar extends FileWav {
   }
 
   onReaderWav(bufferList: any[]): void {
-    let callBackToLoadWav = function (this: FileMenuBar) {
+    let callBackToLoadWav = function (this: FileSoundSphere) {
       this.showMessageErrorWav();
     }.bind(this);
     this.dao.loadBufferList(bufferList, callBackToLoadWav);
@@ -72,7 +72,7 @@ class FileMenuBar extends FileWav {
 
   showMessageErrorWav(): void {
     var messages = this.listNamesInvalid.concat(this.dao.listMessagesError);
-    console.log("Mensagens de erro");
+    console.log("showMessageErrorWav Mensagens de erro");
     console.log(messages);
     if (messages.length > 0) {
       this.simplePage.startErrorModal(messages);

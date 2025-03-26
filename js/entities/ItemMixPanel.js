@@ -232,6 +232,7 @@ class ItemMixPanel {
         this.style = "black";
     }
     calculaHSLbyVolume(volume) {
+        console.warn(`Volume dentro do calcula HSL ${volume}`);
         if (volume != 200) {
             let a = [];
             for (let i = 100; i >= 1; i--) {
@@ -250,7 +251,9 @@ class ItemMixPanel {
                 var my_gradient = painel.ctxCanvas.createLinearGradient(this.x + this.width / 2, y, this.x + this.width / 2, y + height);
                 var my_gradient = painel.ctxCanvas.createLinearGradient(this.x + this.width / 2, y, this.x + this.width / 2, y + height);
                 //  console.log(`this.x + (this.width / 2)) ${this.x + (this.width / 2)} y ${y}  (this.x + (this.width / 2)) ${(this.x + (this.width / 2))}  y + (height) ${ y + (height)}`)
-                my_gradient.addColorStop(0, `hsl(0, 0%, ${this.calculaHSLbyVolume(this.volume)}%)`);
+                if (this.volume != 100) {
+                    my_gradient.addColorStop(0, `hsl(0, 0%, ${this.calculaHSLbyVolume(this.volume)}%)`);
+                }
                 my_gradient.addColorStop(1, `${this.color}`);
                 //Gradiente duas cores
                 // my_gradient.addColorStop(0, `hsl(0, 0%, ${(this.volume/2)}%)`);

@@ -48,24 +48,24 @@ document.addEventListener("DOMContentLoaded", function () {
     painel
   );
   painel.pageSoundSphereHome = pageSoundSphereHome;
-  let fileMenuBar = new FileMenuBar(
+  let fileSoundSphere = new FileSoundSphere(
     sequenciador,
     daoHome,
     tooltip,
     pageSoundSphereHome
   );
-  let fileHomeJson = new FileHomeJson(
-    sequenciador,
-    daoHome,
-    tooltip,
-    pageSoundSphereHome
-  );
-  let fileHomeWav = new FileHomeWav(
-    sequenciador,
-    daoHome,
-    tooltip,
-    pageSoundSphereHome
-  );
+  // let fileHomeJson = new FileHomeJson(
+  //   sequenciador,
+  //   daoHome,
+  //   tooltip,
+  //   pageSoundSphereHome
+  // );
+  // let fileHomeWav = new FileHomeWav(
+  //   sequenciador,
+  //   daoHome,
+  //   tooltip,
+  //   pageSoundSphereHome
+  // );
 
   sequenciador.painel = painel;
 

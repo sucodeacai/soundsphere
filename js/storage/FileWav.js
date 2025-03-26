@@ -9,7 +9,7 @@ class FileWav extends FileAPI {
     }
     //Função setada no botao do FileWav, para ser chamada toda vez que ele for clicado
     //Quando a função  handle termina de carregar os arquivos é chamado a função load files
-    //para fazer o processamento 
+    //para fazer o processamento
     loadFilesWav(files) {
         var listNames = [], bufferList = [], nameList = [], contador = 0;
         //Nome dos arquivos que vao ser carregados

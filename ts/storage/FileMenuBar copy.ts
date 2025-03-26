@@ -1,4 +1,4 @@
-class FileMenuBar extends FileWav {
+class FileMenuBar_bkp extends FileWav {
   simplePage: PageSoundSphereHome;
   // simplapage2:PageSoundSphereHome;
 

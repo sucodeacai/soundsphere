@@ -23,9 +23,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let painel = new Painel(daoHome, contextCanvas, canvas, pixelpersecond, sequenciador);
     let pageSoundSphereHome = new PageSoundSphereHome(document.getElementById("bodyAplication"), " ", soundSphereInfo, daoHome, sequenciador, tooltip, sessionControl, painel);
     painel.pageSoundSphereHome = pageSoundSphereHome;
-    let fileMenuBar = new FileMenuBar(sequenciador, daoHome, tooltip, pageSoundSphereHome);
-    let fileHomeJson = new FileHomeJson(sequenciador, daoHome, tooltip, pageSoundSphereHome);
-    let fileHomeWav = new FileHomeWav(sequenciador, daoHome, tooltip, pageSoundSphereHome);
+    let fileSoundSphere = new FileSoundSphere(sequenciador, daoHome, tooltip, pageSoundSphereHome);
+    // let fileHomeJson = new FileHomeJson(
+    //   sequenciador,
+    //   daoHome,
+    //   tooltip,
+    //   pageSoundSphereHome
+    // );
+    // let fileHomeWav = new FileHomeWav(
+    //   sequenciador,
+    //   daoHome,
+    //   tooltip,
+    //   pageSoundSphereHome
+    // );
     sequenciador.painel = painel;
     if (daoHome.listItemBuffer.length > 0) {
         painel.reMake();

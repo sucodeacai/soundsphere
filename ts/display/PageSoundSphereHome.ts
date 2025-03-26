@@ -1,16 +1,20 @@
 class PageSoundSphereHome extends SimplePage {
   render(): void {
     this.loadContainerAudio();
-    this.loadContainerSemaitsDescriptors();
-    this.loadContainerActionDescriptiveIcons();
-    this.loadContainerDimension();
-    this.loadContainerIntensity();
-    this.addClickEventToItensModificadoresPanel();
-    this.addEventsVolume();
-    this.addEventsMenuNav();
-    this.addTooltipEvents();
-    this.updatePageWithLayers();
+    if (this.firstRender) {
+      this.loadContainerSemaitsDescriptors();
+      this.loadContainerActionDescriptiveIcons();
+      this.loadContainerDimension();
+      this.loadContainerIntensity();
+      this.addClickEventToItensModificadoresPanel();
+      this.addEventsVolume();
+      this.addEventsMenuNav();
+      this.addTooltipEvents();
+      this.updatePageWithLayers();
+      this.firstRender = false;
+    }
   }
+
   generateActions(): string {
     throw new Error("Method not implemented.");
   }
@@ -35,6 +39,7 @@ class PageSoundSphereHome extends SimplePage {
   contextCanvas: any = [];
   // stopActived = true;
   reloadPainel = false;
+  firstRender = true;
 
   listActionDescriptiveIcons: ActionDescriptiveIcon[] = [];
   listDimension: Dimension[] = [];
@@ -765,6 +770,7 @@ class PageSoundSphereHome extends SimplePage {
         item.classList.remove("active");
       }
     });
+    document.getElementById("button-edit")?.classList.add("active");
     this.idSelectedIcomAlbum = undefined;
     this.idActionDescriptiveIcon = undefined;
     this.idDimension = undefined;
@@ -1050,7 +1056,7 @@ class PageSoundSphereHome extends SimplePage {
       return this.currentVolume;
     }
     //Se o volume nao for ativo retorna 0
-    return 0;
+    return 100;
   }
   activateModalLoading(): void {
     // console.error(" abrir modal loading");

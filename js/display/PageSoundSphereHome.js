@@ -2,15 +2,18 @@
 class PageSoundSphereHome extends SimplePage {
     render() {
         this.loadContainerAudio();
-        this.loadContainerSemaitsDescriptors();
-        this.loadContainerActionDescriptiveIcons();
-        this.loadContainerDimension();
-        this.loadContainerIntensity();
-        this.addClickEventToItensModificadoresPanel();
-        this.addEventsVolume();
-        this.addEventsMenuNav();
-        this.addTooltipEvents();
-        this.updatePageWithLayers();
+        if (this.firstRender) {
+            this.loadContainerSemaitsDescriptors();
+            this.loadContainerActionDescriptiveIcons();
+            this.loadContainerDimension();
+            this.loadContainerIntensity();
+            this.addClickEventToItensModificadoresPanel();
+            this.addEventsVolume();
+            this.addEventsMenuNav();
+            this.addTooltipEvents();
+            this.updatePageWithLayers();
+            this.firstRender = false;
+        }
     }
     generateActions() {
         throw new Error("Method not implemented.");
@@ -37,6 +40,7 @@ class PageSoundSphereHome extends SimplePage {
         this.contextCanvas = [];
         // stopActived = true;
         this.reloadPainel = false;
+        this.firstRender = true;
         this.listActionDescriptiveIcons = [];
         this.listDimension = [];
         this.listIntensity = [];
@@ -607,12 +611,14 @@ class PageSoundSphereHome extends SimplePage {
     }
     //Remove todos os itens ativos dos que podem ser  combinados
     disableItensCumulative() {
+        var _a;
         const alimentosItems = document.querySelectorAll("#container-dimensions .btn, .itemMenuDescriptiveIcon, .svg-item, #container-semaits-descriptors .btn, #container-intensity .btn");
         alimentosItems.forEach((item) => {
             if (item.classList.contains("active")) {
                 item.classList.remove("active");
             }
         });
+        (_a = document.getElementById("button-edit")) === null || _a === void 0 ? void 0 : _a.classList.add("active");
         this.idSelectedIcomAlbum = undefined;
         this.idActionDescriptiveIcon = undefined;
         this.idDimension = undefined;
@@ -844,7 +850,7 @@ class PageSoundSphereHome extends SimplePage {
             return this.currentVolume;
         }
         //Se o volume nao for ativo retorna 0
-        return 0;
+        return 100;
     }
     activateModalLoading() {
         // console.error(" abrir modal loading");
