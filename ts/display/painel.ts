@@ -521,7 +521,7 @@ class Painel {
       );
       if (this.pageSoundSphereHome?.isDeleteButtonActive()) {
         this.setCursorTrash();
-      } else if (!this.pageSoundSphereHome?.idSelectedIcomAlbum) {
+      } else if (this.pageSoundSphereHome?.idSelectedIcomAlbum == undefined) {
         console.log(this.pageSoundSphereHome?.idSelectedIcomAlbum);
         this.setCursorEdit();
         // console.log("set cursor lixo");

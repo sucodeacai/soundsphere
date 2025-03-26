@@ -454,7 +454,7 @@ class Painel {
             if ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.isDeleteButtonActive()) {
                 this.setCursorTrash();
             }
-            else if (!((_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum)) {
+            else if (((_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum) == undefined) {
                 console.log((_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idSelectedIcomAlbum);
                 this.setCursorEdit();
                 // console.log("set cursor lixo");
