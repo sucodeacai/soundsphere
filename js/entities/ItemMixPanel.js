@@ -248,20 +248,16 @@ class ItemMixPanel {
         //Desenhar gradient
         if (this.solo) {
             if (painel.drawGradient) {
-                var my_gradient = painel.ctxCanvas.createLinearGradient(this.x + this.width / 2, y, this.x + this.width / 2, y + height);
-                var my_gradient = painel.ctxCanvas.createLinearGradient(this.x + this.width / 2, y, this.x + this.width / 2, y + height);
-                //  console.log(`this.x + (this.width / 2)) ${this.x + (this.width / 2)} y ${y}  (this.x + (this.width / 2)) ${(this.x + (this.width / 2))}  y + (height) ${ y + (height)}`)
-                if (this.volume != 100) {
-                    my_gradient.addColorStop(0, `hsl(0, 0%, ${this.calculaHSLbyVolume(this.volume)}%)`);
-                }
-                my_gradient.addColorStop(1, `${this.color}`);
-                //Gradiente duas cores
-                // my_gradient.addColorStop(0, `hsl(0, 0%, ${(this.volume/2)}%)`);
-                // my_gradient.addColorStop(0.45, this.color);
-                // my_gradient.addColorStop(0.5, this.color);
-                // my_gradient.addColorStop(0.55, this.color);
-                // my_gradient.addColorStop(1, `hsl(0, 0%, ${(this.volume/2)}%)`);
-                painel.ctxCanvas.fillStyle = my_gradient;
+                console.warn(`Volume desenho: ${this.volume}`);
+                const [hue, saturation, lightnessValue] = this.hexToHsl(this.color);
+                const lightnessFinal = this.getLightnessByVolume(this.volume);
+                console.log(`valor ${lightnessFinal}`);
+                const gradiente = painel.ctxCanvas.createLinearGradient(this.x + this.width / 2, y, this.x + this.width / 2, y + height);
+                gradiente.addColorStop(0, `hsl(${hue}, ${saturation}%, ${lightnessFinal}%)`);
+                gradiente.addColorStop(0.5, `hsl(${hue}, ${saturation}%, ${50}%)`);
+                painel.ctxCanvas.fillStyle = gradiente;
+                gradiente.addColorStop(1, `${this.color}`);
+                painel.ctxCanvas.fillStyle = gradiente;
             }
             else {
                 painel.ctxCanvas.fillStyle = this.color;
@@ -410,6 +406,24 @@ class ItemMixPanel {
         painel.ctxCanvas.globalCompositeOperation = "source-over";
         //Converte os segundos no tamanho a ser inserid
     }
+    getLightnessByVolume(porcentagem) {
+        const porcentagens = [0, 50, 100, 150, 200];
+        const valores = [100, 75, 50, 25, 0];
+        // Encontrar os dois pontos próximos
+        for (let i = 0; i < porcentagens.length - 1; i++) {
+            if (porcentagem >= porcentagens[i] &&
+                porcentagem <= porcentagens[i + 1]) {
+                const p1 = porcentagens[i];
+                const p2 = porcentagens[i + 1];
+                const v1 = valores[i];
+                const v2 = valores[i + 1];
+                // Fórmula linear
+                const valorProporcional = v1 + ((porcentagem - p1) / (p2 - p1)) * (v2 - v1);
+                return valorProporcional;
+            }
+        }
+        return null; // Caso a porcentagem esteja fora do intervalo
+    }
     setVolume(volume) {
         this.volume = volume;
         this.changeStardValues();
@@ -459,6 +473,45 @@ class ItemMixPanel {
     }
     colidiu() {
         //console.log('Colidiu');
+    }
+    hexToHsl(hex) {
+        // Remove o '#' se existir no início da string hex
+        if (hex.startsWith("#")) {
+            hex = hex.slice(1);
+        }
+        // Extrai os valores de RGB e normaliza para o intervalo [0, 1]
+        let r = parseInt(hex.slice(0, 2), 16) / 255;
+        let g = parseInt(hex.slice(2, 4), 16) / 255;
+        let b = parseInt(hex.slice(4, 6), 16) / 255;
+        let max = Math.max(r, g, b);
+        let min = Math.min(r, g, b);
+        let h = 0, // Inicializa h com um valor padrão
+        s, l = (max + min) / 2;
+        if (max === min) {
+            s = 0; // Sem saturação
+        }
+        else {
+            let d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r:
+                    h = (g - b) / d + (g < b ? 6 : 0);
+                    break;
+                case g:
+                    h = (b - r) / d + 2;
+                    break;
+                case b:
+                    h = (r - g) / d + 4;
+                    break;
+            }
+            h /= 6;
+        }
+        // Converter para grau e valor de saturação
+        h = Math.round(h * 360);
+        s = Math.round(s * 100);
+        l = Math.round(l * 100);
+        // Retorna o valor como um array de [h, s, l]
+        return [h, s, l];
     }
     getCodeIdentificationItemMixPanel() {
         return {

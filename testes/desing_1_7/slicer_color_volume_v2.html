@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas com Gradiente</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        input {
+            margin-top: 10px;
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="meuCanvas_fixo" width="250" height="250"></canvas>
+    <br>
+    <canvas id="meuCanvas" width="250" height="250"></canvas>
+
+    <input type="range" id="lightnessSlider" min="0" max="200" value="100">
+    <p id="value">100</p>
+    <p id="value_edit">50</p>
+    <input type="text" id="colorTextInput" value="ff0000" placeholder="Digite a cor base (ex: ff0000)">
+    <script>
+        const canvas = document.getElementById("meuCanvas");
+        const ctx = canvas.getContext("2d");
+        const meuCanvas_fixo = document.getElementById("meuCanvas_fixo");
+        const ctx2 = meuCanvas_fixo.getContext("2d");
+        const lightnessSlider = document.getElementById("lightnessSlider");
+        const colorTextInput = document.getElementById("colorTextInput");
+
+        // Função para converter hex para hsl
+        function hexToHsl(hex) {
+            let r = parseInt(hex.slice(0, 2), 16) / 255;
+            let g = parseInt(hex.slice(2, 4), 16) / 255;
+            let b = parseInt(hex.slice(4, 6), 16) / 255;
+
+            let max = Math.max(r, g, b);
+            let min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // sem saturação
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            // Converter para grau e valor de saturação
+            h = Math.round(h * 360);
+            s = Math.round(s * 100);
+            l = Math.round(l * 100);
+            return [h, s, l];
+        }
+
+        function desenharGradiente(lightness, corBase) {
+            const [hue, saturation, lightnessValue] = hexToHsl(corBase);
+
+            // Criando um efeito de transição mais suave
+            const lightnessFinal = calcularValorProporcional(parseInt(lightness));
+            console.log(`valor ${lightnessFinal}`)
+            const gradiente = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradiente.addColorStop(0, `hsl(${hue}, ${saturation}%, ${lightnessFinal}%)`);
+            gradiente.addColorStop(0.5, `hsl(${hue}, ${saturation}%, ${50}%)`);
+
+            ctx.fillStyle = gradiente;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        function desenharGradienteFixo(corBase) {
+            console.log(`corBase ${corBase}`)
+            const [hue, saturation, lightnessValue] = hexToHsl(corBase);
+
+            // Criando um efeito de transição mais suave
+            // const lightnessFinal = calcularValorProporcional(parseInt(lightness));
+
+            const gradiente = ctx2.createLinearGradient(0, 0, 0, meuCanvas_fixo.height);
+            gradiente.addColorStop(0, `hsl(${hue}, ${saturation}%, ${100}%)`);
+            gradiente.addColorStop(0.5, `hsl(${hue}, ${saturation}%, ${50}%)`);
+            gradiente.addColorStop(1, `hsl(${hue}, ${saturation}%, 50%)`);
+
+            ctx2.fillStyle = gradiente;
+            ctx2.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function calcularValorProporcional(porcentagem) {
+            const porcentagens = [0, 50, 100, 150, 200];
+            const valores = [100, 75, 50, 25, 0];
+            // Encontrar os dois pontos próximos
+            for (let i = 0; i < porcentagens.length - 1; i++) {
+                if (porcentagem >= porcentagens[i] && porcentagem <= porcentagens[i + 1]) {
+                    const p1 = porcentagens[i];
+                    const p2 = porcentagens[i + 1];
+                    const v1 = valores[i];
+                    const v2 = valores[i + 1];
+
+                    // Fórmula linear
+                    const valorProporcional = v1 + ((porcentagem - p1) / (p2 - p1)) * (v2 - v1);
+                    return valorProporcional;
+                }
+            }
+            return null; // Caso a porcentagem esteja fora do intervalo
+        }
+        lightnessSlider.addEventListener("input", (event) => {
+            document.getElementById("value").innerHTML = event.target.value;
+            document.getElementById("value_edit").innerHTML = calcularValorProporcional(event.target.value);
+
+            desenharGradiente(event.target.value, colorTextInput.value);
+        });
+
+        colorTextInput.addEventListener("input", (event) => {
+            desenharGradiente(lightnessSlider.value, event.target.value);
+        });
+
+        desenharGradiente(lightnessSlider.value, colorTextInput.value);
+        desenharGradienteFixo(colorTextInput.value);
+    </script>
+</body>
+
+</html>

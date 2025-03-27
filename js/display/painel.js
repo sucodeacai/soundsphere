@@ -76,17 +76,16 @@ class Painel {
         this.reMake();
     }
     actionMouseEnter(event) {
-        var _a, _b, _c, _d, _e;
-        console.log(`---Button SelctedId ${(_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.idSelectedIcomAlbum} isDeleteButton  ${(_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.isDeleteButtonActive()}`);
-        if ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.isDeleteButtonActive()) {
+        var _a, _b, _c;
+        if ((_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.isDeleteButtonActive()) {
             this.setCursorTrash();
         }
-        else if (((_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum) == undefined) {
+        else if (((_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.idSelectedIcomAlbum) == undefined) {
             this.setCursorEdit();
             // console.log("set cursor lixo");
         }
         else {
-            (_e = document.getElementById("canva_painel_mixagem")) === null || _e === void 0 ? void 0 : _e.classList.add("default");
+            (_c = document.getElementById("canva_painel_mixagem")) === null || _c === void 0 ? void 0 : _c.classList.add("default");
         }
     }
     actionMouseDown(event) {
@@ -150,7 +149,7 @@ class Painel {
                 }
             }
             else if (((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.idSelectedIcomAlbum) != undefined) {
-                console.warn("Inserir dentro do painel");
+                // console.warn("Inserir dentro do painel");
                 // console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
                 // console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);
                 this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor, this.pageSoundSphereHome.getSlicerVolume());
@@ -402,7 +401,7 @@ class Painel {
         }
     }
     moveAction(e) {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b, _c, _d;
         //Verifica a mudança do cursor
         if (this.deltaX != 0 || this.deltaY != 0) {
             this.changeCursorCanvas(e);
@@ -450,18 +449,17 @@ class Painel {
         else {
             this.removeClassCanvas();
             this.lastClassCursor = "";
-            console.log(`---Button SelctedId ${(_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.idSelectedIcomAlbum} isDeleteButton  ${(_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.isDeleteButtonActive()}`);
-            if ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.isDeleteButtonActive()) {
+            if ((_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.isDeleteButtonActive()) {
                 this.setCursorTrash();
             }
-            else if (((_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum) == undefined) {
-                console.log((_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idSelectedIcomAlbum);
+            else if (((_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.idSelectedIcomAlbum) == undefined) {
+                console.log((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.idSelectedIcomAlbum);
                 this.setCursorEdit();
                 // console.log("set cursor lixo");
             }
             else {
-                (_f = document
-                    .getElementById("canva_painel_mixagem")) === null || _f === void 0 ? void 0 : _f.classList.add("default");
+                (_d = document
+                    .getElementById("canva_painel_mixagem")) === null || _d === void 0 ? void 0 : _d.classList.add("default");
             }
         }
     }

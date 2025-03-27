@@ -96,11 +96,6 @@ class Painel {
     this.reMake();
   }
   actionMouseEnter(event: any) {
-    console.log(
-      `---Button SelctedId ${
-        this.pageSoundSphereHome?.idSelectedIcomAlbum
-      } isDeleteButton  ${this.pageSoundSphereHome?.isDeleteButtonActive()}`
-    );
     if (this.pageSoundSphereHome?.isDeleteButtonActive()) {
       this.setCursorTrash();
     } else if (this.pageSoundSphereHome?.idSelectedIcomAlbum == undefined) {
@@ -173,7 +168,7 @@ class Painel {
           this.reMake();
         }
       } else if (this.pageSoundSphereHome?.idSelectedIcomAlbum != undefined) {
-        console.warn("Inserir dentro do painel");
+        // console.warn("Inserir dentro do painel");
 
         // console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
         // console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);
@@ -514,11 +509,7 @@ class Painel {
     } else {
       this.removeClassCanvas();
       this.lastClassCursor = "";
-      console.log(
-        `---Button SelctedId ${
-          this.pageSoundSphereHome?.idSelectedIcomAlbum
-        } isDeleteButton  ${this.pageSoundSphereHome?.isDeleteButtonActive()}`
-      );
+
       if (this.pageSoundSphereHome?.isDeleteButtonActive()) {
         this.setCursorTrash();
       } else if (this.pageSoundSphereHome?.idSelectedIcomAlbum == undefined) {
