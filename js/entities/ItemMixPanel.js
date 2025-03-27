@@ -254,7 +254,7 @@ class ItemMixPanel {
                 console.log(`valor ${lightnessFinal}`);
                 const gradiente = painel.ctxCanvas.createLinearGradient(this.x + this.width / 2, y, this.x + this.width / 2, y + height);
                 gradiente.addColorStop(0, `hsl(${hue}, ${saturation}%, ${lightnessFinal}%)`);
-                gradiente.addColorStop(0.5, `hsl(${hue}, ${saturation}%, ${50}%)`);
+                gradiente.addColorStop(1, `hsl(${hue}, ${saturation}%, ${50}%)`);
                 painel.ctxCanvas.fillStyle = gradiente;
                 gradiente.addColorStop(1, `${this.color}`);
                 painel.ctxCanvas.fillStyle = gradiente;

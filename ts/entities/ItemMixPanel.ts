@@ -277,7 +277,7 @@ class ItemMixPanel {
           0,
           `hsl(${hue}, ${saturation}%, ${lightnessFinal}%)`
         );
-        gradiente.addColorStop(0.5, `hsl(${hue}, ${saturation}%, ${50}%)`);
+        gradiente.addColorStop(1, `hsl(${hue}, ${saturation}%, ${50}%)`);
 
         painel.ctxCanvas.fillStyle = gradiente;
 
