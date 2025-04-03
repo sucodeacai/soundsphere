@@ -24,12 +24,57 @@
             margin-top: 10px;
             width: 300px;
         }
+
+        .slider-gray {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 300px;
+            background: transparent;
+            /* Mantém a aparência original */
+        }
+
+        .slider-gray::-webkit-slider-runnable-track {
+            background: #ccc;
+            /* Cor cinza */
+            height: 4px;
+            /* Mantém a espessura original */
+            border-radius: 4px;
+        }
+
+        .slider-gray::-moz-range-track {
+            background: #ccc;
+            height: 4px;
+            border-radius: 4px;
+        }
+
+        /* Personaliza o botão (thumb) do slider */
+        .slider-gray::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #666;
+            /* Cor do botão */
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -6px;
+            /* Ajuste fino para alinhar com a trilha */
+        }
+
+        .slider-gray::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #666;
+            border-radius: 50%;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="meuCanvas" width="500" height="500"></canvas>
-    <input type="range" id="lightnessSlider" min="0" max="200" value="100">
+    <input type="range" id="lightnessSlider" class="slider-gray" min="0" max="200" value="100">
+
     <p id="value">0</p>
     <input type="text" id="colorTextInput" value="ff0000" placeholder="Digite a cor base (ex: ff0000)">
     <script>

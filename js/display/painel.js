@@ -117,66 +117,147 @@ class Painel {
     //O movimento do painel só e realizado enquanto se esitver preciosando a tecla
     //ao soltar é desfeita a ação independente se ele soltar no canvas ou não
     actionMouseUp(event) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+        //Se moveu não vai inserir nenhum item de mixagem
         this.deltaX = 0;
         this.deltaY = 0;
         this.mouseDown = false;
-        console.log("dentro action mouse up");
-        let itemMixTemp = this.getItemMix();
-        //Ele só vai verificar as opções no painel se não houver um movimento
-        if (!this.moved) {
-            // console.log("Mouse up " + this.pageSoundSphereHome.idSelectedIcomAlbum);
-            //Se o botão de exclusão estiver ativado
-            if ((_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.isDeleteButtonActive()) {
-                console.warn("Excluir dentro painel.");
-                if (itemMixTemp) {
-                    this.deleteItemMixPanel(itemMixTemp);
-                    this.reMake();
-                }
-                else {
-                    this.notifyStatus("Nenhum ítem de mixagem selecionado para exclusão. ");
-                }
-                //Se as opções estiverem ativadas
-            }
-            else if ((_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.isPauseButtonActive()) {
-                console.warn("pause dentro painel.");
-                let seconds = this.getSecondsByXPosition(this.getPositionX(event) + this.displacingXAxis);
-                if (seconds <= this.totalTime) {
-                    this.xMarker = this.getPositionX(event) + this.displacingXAxis;
-                    this.lastMakerX = this.xMarker;
-                    this.sequenciador.continueFrom = seconds;
-                    this.reMake();
-                }
-            }
-            else if (((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.idSelectedIcomAlbum) != undefined) {
-                // console.warn("Inserir dentro do painel");
-                // console.log("Mouse up remove descriptiveIcon idSelectedIcomAlbum");
-                // console.error(this.pageSoundSphereHome.idActionDescriptiveIcon);
-                this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor, this.pageSoundSphereHome.getSlicerVolume());
-            }
-            else if (itemMixTemp) {
-                itemMixTemp.descriptiveIcon =
-                    (_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idActionDescriptiveIcon;
-                itemMixTemp.tag_dimension = (_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idDimension;
-                itemMixTemp.tag_intensity = (_f = this.pageSoundSphereHome) === null || _f === void 0 ? void 0 : _f.idIntensity;
-                itemMixTemp.setIdSemanticDescriptor((_g = this.pageSoundSphereHome) === null || _g === void 0 ? void 0 : _g.idSemanticDescriptor);
-                itemMixTemp.setCodeSemanticDescriptor((_h = this.pageSoundSphereHome) === null || _h === void 0 ? void 0 : _h.codeSemanticDescriptor);
-                if (((_j = this.pageSoundSphereHome) === null || _j === void 0 ? void 0 : _j.getSlicerVolume()) !== undefined ||
-                    ((_k = this.pageSoundSphereHome) === null || _k === void 0 ? void 0 : _k.getSlicerVolume()) === 0) {
-                    // console.error("volume", volume);
-                    itemMixTemp.setVolume((_l = this.pageSoundSphereHome) === null || _l === void 0 ? void 0 : _l.getSlicerVolume());
-                }
-                this.updateItemMixPanel(itemMixTemp);
+        console.log(`dentro action mouse up moved: ${this.moved}`);
+        console.log(`this.pageSoundSphereHome?.hasActivePanelMenuButton(): ${(_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.hasActivePanelMenuButton()}`);
+        console.log((_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.listButtonActiveModificadorPainel);
+        if (this.moved) {
+            this.endMove();
+            return;
+        }
+        //Se o pause estiver ativo
+        if ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.isPauseButtonActive()) {
+            console.warn("pause dentro painel.");
+            let seconds = this.getSecondsByXPosition(this.getPositionX(event) + this.displacingXAxis);
+            if (seconds <= this.totalTime) {
+                this.xMarker = this.getPositionX(event) + this.displacingXAxis;
+                this.lastMakerX = this.xMarker;
+                this.sequenciador.continueFrom = seconds;
                 this.reMake();
-                // this.pageSoundSphereHome.showModalOptions();
-                this.notifyStatus("Item de mixagem alterado.");
             }
-            else {
-                console.warn("Nem excluir, nem pause, nem inserir amostra");
-                this.notifyStatus("Nenhuma amostra de audio selecionada.");
-            }
+            return;
+        }
+        //Se Tem um item de amostra selecionado é inserir e nennhum botao do menu painel ativo
+        console.log(` this.pageSoundSphereHome?.idSelectedIcomAlbum  ${(_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idSelectedIcomAlbum}`);
+        if (((_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idSelectedIcomAlbum) != undefined &&
+            !((_f = this.pageSoundSphereHome) === null || _f === void 0 ? void 0 : _f.hasActivePanelMenuButton())) {
+            this.insertItemMixPanel(this.pageSoundSphereHome.idSelectedIcomAlbum, this.pageSoundSphereHome.idActionDescriptiveIcon, this.pageSoundSphereHome.idDimension, this.pageSoundSphereHome.idIntensity, this.pageSoundSphereHome.idSemanticDescriptor, this.pageSoundSphereHome.codeSemanticDescriptor, this.pageSoundSphereHome.getSlicerVolume());
+            return;
+        }
+        //Tenta pegar um item de mixagem do painel, de acordo com as informacoes de onde foi clicado
+        let itemMixTemp = this.getItemMix();
+        if (!itemMixTemp) {
+            console.warn("Nem excluir, nem pause, nem inserir amostra");
+            this.notifyStatus("Nenhuma amostra de audio selecionada.");
+            return;
+        }
+        //Se tem item mix e nenhum item do menu painel selecionado
+        if (itemMixTemp && !((_g = this.pageSoundSphereHome) === null || _g === void 0 ? void 0 : _g.hasActivePanelMenuButton())) {
+            this.editItemMix(itemMixTemp);
+        }
+        //Se Não tem nenhum item mis selecionado
+        //Se o delete estiver ativo
+        if ((_h = this.pageSoundSphereHome) === null || _h === void 0 ? void 0 : _h.isDeleteButtonActive()) {
+            this.deleteItemMixPanel(itemMixTemp);
+            this.reMake();
+        }
+        //Se o eraser está ativado
+        if (itemMixTemp && ((_j = this.pageSoundSphereHome) === null || _j === void 0 ? void 0 : _j.isEraserButtonActive())) {
+            this.eraserItemMix(itemMixTemp);
+            this.reMake();
         }
         this.endMove();
+    }
+    eraserItemMix(itemMixTemp) {
+        let hasChanged = false;
+        if (itemMixTemp.descriptiveIcon != undefined) {
+            console.log("descriptive");
+            hasChanged = true;
+            itemMixTemp.descriptiveIcon = undefined;
+        }
+        if (itemMixTemp.tag_dimension != undefined) {
+            hasChanged = true;
+            console.log("tag_dimension");
+            itemMixTemp.tag_dimension = undefined;
+        }
+        if (itemMixTemp.tag_intensity != undefined) {
+            console.log("tag_intensity");
+            hasChanged = true;
+            itemMixTemp.tag_intensity = undefined;
+        }
+        if (itemMixTemp.getidSemanticDescriptor() != undefined) {
+            console.log("getidSemanticDescriptor");
+            hasChanged = true;
+            itemMixTemp.setIdSemanticDescriptor(undefined);
+            itemMixTemp.setCodeSemanticDescriptor(undefined);
+        }
+        if (itemMixTemp.getVolume() != 100) {
+            console.log(`Get volume : ${itemMixTemp.getVolume}`);
+            hasChanged = true;
+            itemMixTemp.setVolume(100);
+        }
+        if (hasChanged) {
+            this.DAOHome.eraseModifiers(itemMixTemp);
+            this.sequenciador.needGenerateBuffer = true;
+            this.reMake();
+            this.notifyStatus("Apagado modificadores do Item de Mixagem.");
+        }
+        else {
+            this.notifyStatus("Nenhuma alteração realizada.");
+        }
+    }
+    editItemMix(itemMixTemp) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+        let hasChanged = false;
+        if (itemMixTemp.descriptiveIcon !=
+            ((_a = this.pageSoundSphereHome) === null || _a === void 0 ? void 0 : _a.idActionDescriptiveIcon)) {
+            // console.log("1");
+            hasChanged = true;
+            itemMixTemp.descriptiveIcon =
+                (_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.idActionDescriptiveIcon;
+        }
+        if (itemMixTemp.tag_dimension != ((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.idDimension)) {
+            // console.log("2");
+            hasChanged = true;
+            itemMixTemp.tag_dimension = (_d = this.pageSoundSphereHome) === null || _d === void 0 ? void 0 : _d.idDimension;
+        }
+        if (itemMixTemp.tag_intensity != ((_e = this.pageSoundSphereHome) === null || _e === void 0 ? void 0 : _e.idIntensity)) {
+            // console.log("3");
+            hasChanged = true;
+            itemMixTemp.tag_intensity = (_f = this.pageSoundSphereHome) === null || _f === void 0 ? void 0 : _f.idIntensity;
+        }
+        if (itemMixTemp.getIdSemanticDescriptor() !=
+            ((_g = this.pageSoundSphereHome) === null || _g === void 0 ? void 0 : _g.idSemanticDescriptor)) {
+            // console.log(
+            //   `${itemMixTemp.getIdSemanticDescriptor} ${this.pageSoundSphereHome?.idSemanticDescriptor}`
+            // );
+            hasChanged = true;
+            itemMixTemp.setIdSemanticDescriptor((_h = this.pageSoundSphereHome) === null || _h === void 0 ? void 0 : _h.idSemanticDescriptor);
+            itemMixTemp.setCodeSemanticDescriptor((_j = this.pageSoundSphereHome) === null || _j === void 0 ? void 0 : _j.codeSemanticDescriptor);
+        }
+        if (itemMixTemp.getVolume() != ((_k = this.pageSoundSphereHome) === null || _k === void 0 ? void 0 : _k.getSlicerVolume())) {
+            hasChanged = true;
+            if (((_l = this.pageSoundSphereHome) === null || _l === void 0 ? void 0 : _l.getSlicerVolume()) !== undefined ||
+                ((_m = this.pageSoundSphereHome) === null || _m === void 0 ? void 0 : _m.getSlicerVolume()) === 0) {
+                // console.log("6");
+                // console.error("volume", volume);
+                itemMixTemp.setVolume((_o = this.pageSoundSphereHome) === null || _o === void 0 ? void 0 : _o.getSlicerVolume());
+            }
+        }
+        if (hasChanged) {
+            this.DAOHome.updateItemMixPane(itemMixTemp);
+            this.sequenciador.needGenerateBuffer = true;
+            this.reMake();
+            // this.pageSoundSphereHome.showModalOptions();
+            this.notifyStatus("Item de mixagem alterado.");
+        }
+        else {
+            this.notifyStatus("Nenhuma alteração realizada.");
+        }
     }
     //Função para setar um item mix temporario
     setItemMixTemp(itemMixTemp) {
@@ -401,7 +482,7 @@ class Painel {
         }
     }
     moveAction(e) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         //Verifica a mudança do cursor
         if (this.deltaX != 0 || this.deltaY != 0) {
             this.changeCursorCanvas(e);
@@ -453,13 +534,13 @@ class Painel {
                 this.setCursorTrash();
             }
             else if (((_b = this.pageSoundSphereHome) === null || _b === void 0 ? void 0 : _b.idSelectedIcomAlbum) == undefined) {
-                console.log((_c = this.pageSoundSphereHome) === null || _c === void 0 ? void 0 : _c.idSelectedIcomAlbum);
+                // console.log(this.pageSoundSphereHome?.idSelectedIcomAlbum);
                 this.setCursorEdit();
                 // console.log("set cursor lixo");
             }
             else {
-                (_d = document
-                    .getElementById("canva_painel_mixagem")) === null || _d === void 0 ? void 0 : _d.classList.add("default");
+                (_c = document
+                    .getElementById("canva_painel_mixagem")) === null || _c === void 0 ? void 0 : _c.classList.add("default");
             }
         }
     }
@@ -763,18 +844,10 @@ class Painel {
         var seconds = xCoordate / this.pixelPerSecond;
         return seconds;
     }
-    updateItemMixPanel(itemMixPanel) {
-        var linha = this.getNumberTrailByHeight(itemMixPanel.y) - 1;
-        itemMixPanel.x = this.getXbySeconds(itemMixPanel.startTime);
-        if (this.changeToValidItem(itemMixPanel)) {
-            console.log("Item valido");
-            if (this.DAOHome.updateItemMixPane(itemMixPanel, linha, this.getNumberTrailByHeight(itemMixPanel.y) - 1, this.sizeTrail)) {
-                this.sequenciador.needGenerateBuffer = true;
-                this.reMake();
-                // console.log("------------------------TEVE ALTERAÇÂO")
-            }
-        }
-    }
+    //Antes como tinha a edicao do tempo direto no Painel, tinha que veriicar se a alteracao do tempo resultava em um
+    //item valido, pois ele ia jogando o item para baixo, porém poderia resultar no limite de trilhas
+    //Então por isso ele chamava a funcao changeToValidItem, para ver se era possivel alterar o item.
+    //Mas como por enquanto a alteração nao muda o tempo, n se faz mais necessario verificar o changeToValidItem
     restartMixing() {
         this.DAOHome.restartMixing();
     }

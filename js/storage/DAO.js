@@ -100,9 +100,13 @@ class DAO {
     getListNameOfBuffers() {
         let listName = [];
         for (let index = 0; index < this.listItemBuffer.length; index++) {
-            console.log("this.listItemBuffer[index].name: " + this.listItemBuffer[index].name);
-            console.log("this.listItemBuffer[index].amount: " +
-                this.listItemBuffer[index].amount);
+            // console.log(
+            //   "this.listItemBuffer[index].name: " + this.listItemBuffer[index].name
+            // );
+            // console.log(
+            //   "this.listItemBuffer[index].amount: " +
+            //     this.listItemBuffer[index].amount
+            // );
             if (this.listItemBuffer[index].amount != 0) {
                 listName.push(this.listItemBuffer[index].name);
             }

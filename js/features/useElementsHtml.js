@@ -32,3 +32,12 @@ function sec2time(timeInSeconds) {
 function pad(num, size) {
     return ("000" + num).slice(size * -1);
 }
+function removeAllEvents(elemento) {
+    const novoElemento = elemento.cloneNode(true); // Clona sem eventos
+    elemento.replaceWith(novoElemento); // Substitui o antigo pelo novo
+    return novoElemento; // Retorna o novo para que possamos usá-lo
+}
+function formateDateBr(date) {
+    const stringDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} `;
+    return stringDate;
+}

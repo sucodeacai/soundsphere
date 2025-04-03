@@ -24,6 +24,84 @@
             margin-top: 10px;
             width: 300px;
         }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            /* Remove a aparência padrão do input */
+            appearance: none;
+            /* Remove a aparência padrão do input */
+            width: 100%;
+            /* Ajusta a largura da barra */
+            height: 8px;
+            /* Ajusta a altura da barra */
+            background: #ddd;
+            /* Cor do fundo da barra */
+            border-radius: 5px;
+            /* Bordas arredondadas */
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: red;
+            /* Cor da barra de progresso */
+            height: 8px;
+            /* Altura da barra */
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            background: red;
+            /* Cor da barra de progresso */
+            height: 8px;
+            /* Altura da barra */
+            border-radius: 5px;
+        }
+
+        input[type="range"]::-ms-track {
+            background: red;
+            /* Cor da barra de progresso */
+            height: 8px;
+            /* Altura da barra */
+            border-radius: 5px;
+            border-color: transparent;
+            /* Remove a borda do lado */
+            color: transparent;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            /* Remove a aparência padrão do thumb */
+            appearance: none;
+            width: 20px;
+            /* Largura do thumb */
+            height: 20px;
+            /* Altura do thumb */
+            background: red;
+            /* Cor do thumb */
+            border-radius: 50%;
+            /* Thumb arredondado */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            /* Largura do thumb */
+            height: 20px;
+            /* Altura do thumb */
+            background: red;
+            /* Cor do thumb */
+            border-radius: 50%;
+            /* Thumb arredondado */
+        }
+
+        input[type="range"]::-ms-thumb {
+            width: 20px;
+            /* Largura do thumb */
+            height: 20px;
+            /* Altura do thumb */
+            background: red;
+            /* Cor do thumb */
+            border-radius: 50%;
+            /* Thumb arredondado */
+        }
     </style>
 </head>
 

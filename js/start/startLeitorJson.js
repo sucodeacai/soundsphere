@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let sessionControl = new SessionControl();
     let daoHome = new DAOHome(soundSphereInfo, listSemanticDescriptors, audioCtx, controlFiles, sessionControl);
     let sequenciador = new Sequenciador(controlFiles, daoHome, audioCtx);
-    let pageLeitor = new PageLeitor(soundSphereInfo);
-    let fileHomeJson = new FileLeitorJson(sequenciador, daoHome, tooltip, pageLeitor);
+    let pageLeitor = new PageLeitorJson(soundSphereInfo);
+    let fileHomeJson = new FileJsonLeitorJson(sequenciador, daoHome, tooltip, pageLeitor);
+    pageLeitor.dao = daoHome;
 });

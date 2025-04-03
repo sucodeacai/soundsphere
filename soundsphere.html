@@ -64,10 +64,11 @@
   <script src="js/sequencer/sequenciador.js"></script>
   <script src="js/storage/FileAPI.js"></script>
   <script src="js/storage/FileWav.js"></script>
-
-  <script src="js/storage/FileSoundSphere.js"></script>
-
-  <!-- <script src="js/storage/FileJson.js"></script>
+  <script src="js/storage/FileWavSoundSphereNew.js"></script>
+  <script src="js/storage/FileWavSoundSphereContinue.js"></script>
+  <script src="js/storage/FileJson.js"></script>
+  <script src="js/storage/FileJsonSoundSphere.js"></script>
+  <!-- 
   <script src="js/storage/FileWav.js"></script>
   <script src="js/storage/FileSemanticJson.js"></script>
   <script src="js/storage/FileSemanticWav.js"></script>
@@ -170,9 +171,9 @@
     }
 
     .btn-secondary.active {
-      background-color: #ff6f00;
+      background-color: #ff6f00 !important;
       /* Cor laranja vibrante */
-      border-color: #e65100;
+      border-color: #e65100 !important;
       /* Cor de borda mais escura */
     }
 
@@ -258,7 +259,7 @@
     .layers-options {
       display: block;
       padding: 0px 10px 10px 10px;
-      border-radius: 5px;
+      /* border-radius: 5px; */
     }
 
     .layers-options input {
@@ -346,11 +347,7 @@
       transition: fill 0.3s ease;
     }
 
-    .svg-item.active .circle-svg {
-      fill: black;
-      /* Interior do círculo preto quando ativo */
-    }
-
+    .svg-item.active .circle-svg,
     .svg-item.active .play-icon {
       fill: black;
       /* Interior do círculo preto quando ativo */
@@ -361,9 +358,11 @@
       /* Adiciona a borda preta quando ativo */
     }
 
+
+
     /* Estilo de hover */
     .svg-item.playing_audio .circle-svg {
-      fill: transparent;
+      fill: transparent !important;
     }
 
     .svg-item.playing_audio .play-icon {
@@ -388,10 +387,12 @@
       border: 2px solid black !important;
       /* Borda preta */
       border-radius: 12px;
-      background-color: #c5c7c9;
+      background-color: #C5C7C9 !important;
       /* Bordas arredondadas */
       /* Cor de fundo similar ao exemplo */
     }
+
+
 
 
 
@@ -406,6 +407,7 @@
 
     .itemMenuDescriptiveIcon.active img {
       background-color: #c5c7c9;
+      background-clip: #C5C7C9;
       ;
     }
 
@@ -447,7 +449,6 @@
       margin: 8;
 
     }
-
 
 
     .volume-container {
@@ -496,6 +497,46 @@
     /* estilio do placeholder do salvar/exportar */
     ::placeholder {
       color: gray !important;
+    }
+
+    /* Deabilitar itens cumulativos */
+
+
+    .svg-item.disabled_ .circle-svg,
+    .svg-item.disabled_ .play-icon {
+      fill: #E0E0E0;
+    }
+
+    .itemMenuDescriptiveIcon.disabled_,
+    .svg-item.disabled_,
+    .button-edit.disabled_,
+    .semantic-item.disabled_,
+    .dimension-item.disabled_,
+    .intensity-item.disabled_,
+    .volume-container.disabled_ {
+      border: 2px solid #B2B2B2 !important;
+      border-radius: 12px;
+    }
+
+    .itemMenuDescriptiveIcon.disabled_,
+    .itemMenuDescriptiveIcon.active.disabled_ img,
+    .itemMenuDescriptiveIcon.active.disabled_,
+    .button-edit.disabled_,
+    .semantic-item.disabled_,
+    .dimension-item.disabled_,
+    .intensity-item.disabled_,
+    .itemMenuDescriptiveIcon.disabled_ {
+      background-color: #E0E0E0 !important;
+    }
+
+    /* estilizacao das mensagens de erro */
+    .error-message {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 3px;
     }
   </style>
 </head>
@@ -554,7 +595,7 @@
                 </div>
                 <div class="input-layer">
                   <input type="checkbox" id="checkboxDescriptor" data-name="showDescriptor" checked />
-                  <label for="descritor">Operadores timbrísticos </label>
+                  <label for="descritor">Timbrísticos </label>
                 </div>
                 <div class="input-layer">
                   <input type="checkbox" id="checkboxFood" data-name="showFood" checked />
@@ -592,14 +633,14 @@
       <button data-action="pause" type="button" id="buttonPause" class="btn btn-secondary">
         <i class="fas fa-pause"></i>
       </button>
-      <button data-action="stop" type="button" id="buttonStop" class="btn btn-secondary active">
+      <button data-action="stop" type="button" id="buttonStop" class="btn btn-secondary ">
         <i class="fas fa-stop"></i>
       </button>
       <button data-action="remove" id="modificador-excluir" class="btn btn-secondary">
         <i class="fas fa-trash"></i>
       </button>
-      <button data-action="move" id="modificador-mover" class="btn btn-secondary">
-        <i class="fas  fa-arrows-alt"></i>
+      <button data-action="eraser" id="modificador-eraser" class="btn btn-secondary">
+        <i class="fas fa-eraser"></i>
       </button>
     </div>
   </div>
@@ -654,9 +695,11 @@
 
 
 
-  <!-- Input do arquivo wav -->
-  <!-- <input style="display: none" type="file" id="filesWav" name="files[]" multiple /> -->
-  <input style="display: none" type="file" id="filesWav" name="files[]" multiple />
+  <!-- Inputs-->
+  <input style="display: none" type="file" id="filesWavStart" name="files[]" multiple />
+  <input style="display: none" type="file" id="filesWavContinue" name="files[]" multiple />
+
+  <input style="display: none" type="file" id="fileJSON" />
 
   <!-- Modal de Loading -->
 
@@ -672,32 +715,7 @@
 
     </div>
   </div>
-  <!-- Modal Iniciar -->
-  <div class="modal fade" id="welcomeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="welcomeModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <!-- Cabeçalho do Modal -->
-        <div class="modal-header">
-          <h5 class="modal-title" id="welcomeModalLabel">Bem-vindo!</h5>
-        </div>
-        <!-- Corpo do Modal -->
-        <div class="modal-body">
-          <!-- Card para "Iniciar novo projeto" como botão -->
-          <div id="button_iniciar_upload" class="card bg-success text-white">
-            <i class="fas fa-file-alt btn-large"></i>
-            <p>Iniciar novo projeto</p>
-          </div>
 
-          <!-- Card para "Continuar" como botão -->
-          <div class="card bg-secondary text-white">
-            <i class="fas fa-upload btn-large"></i>
-            <p>Continuar</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- modal de error -->
   <div class="modal fade" id="errorModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="errorModalLabel"
     aria-hidden="true">
@@ -783,6 +801,84 @@
       </div>
     </div>
   </div>
+  <!-- modal reiniciar painel-->
+  <div class="modal fade" id="modalResetPainel" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="errormodalResetPainel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">Limpar Painel</h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+          <div class="d-flex flex-column gap-2 w-100">
+            <div class="mb-3 w-100">
+              <p>Você tem certeza que deseja reiniciar a mixagem?</p>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer d-flex flex-column gap-2 w-100">
+          <button type="button" class="btn btn-primary w-100" id="buttonReiniciarMixagem">Reiniciar</button>
+          <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Iniciar -->
+  <div class="modal fade" id="welcomeModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="welcomeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Cabeçalho do Modal -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="welcomeModalLabel">Bem-vindo!</h5>
+        </div>
+        <!-- Corpo do Modal -->
+        <div class="modal-body">
+          <!-- Card para "Iniciar novo projeto" como botão -->
+          <div id="button_start_upload_wav" class="card bg-success text-white">
+            <i class="fas fa-file-alt btn-large"></i>
+            <p>Iniciar novo projeto</p>
+          </div>
+
+          <!-- Card para "Continuar" como botão -->
+          <div id="show_modal_Continue_by_json" class="card bg-secondary text-white">
+            <i class="fas fa-upload btn-large"></i>
+            <p>Continuar</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal continuar projeto modalContinue_1_3 -->
+  <div class="modal fade" id="modalContinueByJson" data-bs-backdrop=" static" tabindex="-1"
+    aria-labelledby="errormodalResetPainel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="continueJsonTitle">Passo 1 de 3 - Enviar arquivo Json</h5>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+          <div class="d-flex flex-column gap-2 w-100">
+            <div class="mb-3 w-100">
+
+              <p id="p_continue">Carregue o arquivo JSON do seu projeto Soundsphere</p>
+              <div id="errorContainer" class="mt-3">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex flex-column gap-2 w-100">
+          <button type="button" class="btn btn-primary w-100" id="buttonOkModalContinue">Enviar</button>
+          <button type="button" class="btn btn-secondary w-100" id="buttonCancelarModalContinue"
+            data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- Área onde os Tooltips serão exibidos -->
@@ -853,6 +949,13 @@
     window.addEventListener("resize", resizeCanvas);
 
 
+
+    //Mensagem para evitar clicar no X de forma acidental
+    // window.addEventListener('beforeunload', (event) => {
+    //   const message = "Tem certeza que deseja sair? Você pode perder dados não salvos.";
+    //   event.returnValue = message;  // A mensagem é exibida em navegadores que suportam isso.
+    //   return message; // Alguns navegadores ainda necessitam dessa linha.
+    // });
 
   </script>
 

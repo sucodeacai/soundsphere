@@ -1,4 +1,4 @@
-class PageLeitor {
+class PageLeitor_bkp {
   containerElement: JQuery;
   titulo: string;
   soundSphereInfo: SoundSphereInfo;
@@ -200,7 +200,7 @@ class PageLeitor {
     `;
 
     this.dao.listItemBuffer.forEach((element) => {
-      dadosAmostras += `
+      dadosAmostras += `a
       <tr>
       <td>${element.name}</td>
     

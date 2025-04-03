@@ -22,7 +22,7 @@ html {
   text-align: left;
 }
 
-.option-itens-itens {
+.option-itens {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -33,7 +33,7 @@ html {
   /* Reduzi o espaço acima */
 }
 
-.option-itens-itens button {
+.option-itens button {
   flex-shrink: 0;
   margin: 2px;
   /* Mantive o margin, mas pode ser ajustado conforme necessário */

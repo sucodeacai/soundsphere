@@ -1,4 +1,4 @@
-class FileSoundSphere extends FileWav {
+class FileWavSoundSphereNew extends FileWav {
   simplePage: PageSoundSphereHome;
   // simplapage2:PageSoundSphereHome;
 
@@ -12,7 +12,7 @@ class FileSoundSphere extends FileWav {
     // this.simplapage2 = simplePage;
     this.simplePage = simplePage;
     document
-      .getElementById("filesWav")
+      .getElementById("filesWavStart")
       ?.addEventListener("change", (evt: Event) => {
         "use strict";
 
@@ -64,7 +64,7 @@ class FileSoundSphere extends FileWav {
   }
 
   onReaderWav(bufferList: any[]): void {
-    let callBackToLoadWav = function (this: FileSoundSphere) {
+    let callBackToLoadWav = function (this: FileWavSoundSphereNew) {
       this.showMessageErrorWav();
     }.bind(this);
     this.dao.loadBufferList(bufferList, callBackToLoadWav);

@@ -10,37 +10,19 @@ class PageSoundSphereHome extends SimplePage {
       this.addEventsVolume();
       this.addEventsMenuNav();
       this.addTooltipEvents();
+
       this.updatePageWithLayers();
       this.firstRender = false;
     }
+    this.addClickEventsToCumulativeItens();
   }
 
-  generateActions(): string {
-    throw new Error("Method not implemented.");
-  }
-
-  setSettingsAttributes(): void {
-    throw new Error("Method not implemented.");
-  }
-  getNameClass(): string {
-    throw new Error("Method not implemented.");
-  }
-  generateHTML(): void {
-    throw new Error("Method not implemented.");
-  }
-  generateAttributes(): string {
-    throw new Error("Method not implemented.");
-  }
-
-  startTemplate(): void {
-    throw new Error("Method not implemented.");
-  }
   canvas: any = [];
   contextCanvas: any = [];
   // stopActived = true;
   reloadPainel = false;
   firstRender = true;
-
+  modalContinueByJson: any = undefined;
   listActionDescriptiveIcons: ActionDescriptiveIcon[] = [];
   listDimension: Dimension[] = [];
   listIntensity: Intensity[] = [];
@@ -60,6 +42,9 @@ class PageSoundSphereHome extends SimplePage {
   //pauseActived = false
   voiceCommandMenuBar?: VoiceCommand;
   voiceCommandModalOptions?: VoiceCommand;
+
+  //Controla o Status do menu Painel
+  selectedPanelMenu = false;
 
   painel: Painel;
 
@@ -87,7 +72,6 @@ class PageSoundSphereHome extends SimplePage {
     this.tooltip = tooltip;
     this.setVersionSoundSphere();
     this.startWelcomeModal();
-    this.setSettingsActions();
 
     this.painel = painel;
     this.dependencyInjection();
@@ -111,6 +95,13 @@ class PageSoundSphereHome extends SimplePage {
         this.listLayerShow[key] = defaultValues[key];
       }
     });
+
+    this.modalContinueByJson = new (window as any).bootstrap.Modal(
+      document.getElementById("modalContinueByJson"),
+      {
+        keyboard: false,
+      }
+    );
   }
   setVersionSoundSphere(): void {
     // console.log("Teste....");
@@ -129,27 +120,17 @@ class PageSoundSphereHome extends SimplePage {
 
   addEventsMenuNav() {
     // botão de limpar painel
-    document
-      .querySelector<HTMLAnchorElement>("#buttonClearPanel")
-      ?.addEventListener("click", (event) => {
-        event.preventDefault(); // Evita que o link tente navegar para "#"
-        console.log("Botão Limpar Painel clicado!");
-        event.preventDefault(); // Evita o comportamento padrão do link
-        document.getElementById;
-        this.sequenciador.stop(function () {});
-        this.painel.restartMixing();
-        this.painel.reMake();
-        this.tooltip?.showMessage("Painel de mixagem reiniciado.");
-      });
+
     document
       .querySelector<HTMLAnchorElement>("#buttonUploadFileWav")
       ?.addEventListener("click", (event) => {
         event.preventDefault(); // Evita que o link tente navegar para "#"
         console.log("Botão upload file Wav clicado!");
-        document.getElementById("filesWav")!.click();
+        document.getElementById("filesWavStart")!.click();
       });
     this.onHideNavMenu();
     this.addEventsModalSalvarProjectSoundSphere();
+    this.addEventsModalResetPainel();
     this.addEventModalExportWavFile();
     this.addEventLayers();
   }
@@ -160,7 +141,7 @@ class PageSoundSphereHome extends SimplePage {
     if (navMenu) {
       // Adiciona o evento de "transitionend" que será disparado quando a animação de transição terminar
       navMenu.addEventListener("hidden.bs.collapse", () => {
-        this.disableItensCumulative();
+        this.clearSelecionCumulativeItems();
 
         console.log("O menu foi ocultado!");
         this.updatePageWithLayers();
@@ -260,6 +241,7 @@ class PageSoundSphereHome extends SimplePage {
         keyboard: false,
       }
     );
+
     document
       .querySelector<HTMLAnchorElement>("#buttonExportWavFile")
       ?.addEventListener("click", (event) => {
@@ -283,7 +265,37 @@ class PageSoundSphereHome extends SimplePage {
         // this.generateHTML();
       });
   }
+  addEventsModalResetPainel() {
+    //Abre modal e seta os valores padrões de input
+    const modal = new (window as any).bootstrap.Modal(
+      document.getElementById("modalResetPainel"),
+      {
+        keyboard: false,
+      }
+    );
+    document
+      .querySelector<HTMLAnchorElement>("#buttonClearPanel")
+      ?.addEventListener("click", (event) => {
+        event.preventDefault(); // Evita que o link tente navegar para "#"
+        console.log("Botão Reset painel");
 
+        modal.show();
+      });
+    //Abribui funcao dos botoes
+    document
+      .querySelector<HTMLAnchorElement>("#buttonReiniciarMixagem")
+      ?.addEventListener("click", (event) => {
+        event.preventDefault(); // Evita que o link tente navegar para "#"
+        console.log("Botão Limpar Painel clicado!");
+        event.preventDefault(); // Evita o comportamento padrão do link
+        document.getElementById;
+        this.sequenciador.stop(function () {});
+        this.painel.restartMixing();
+        this.painel.reMake();
+        this.tooltip?.showMessage("Painel de mixagem reiniciado.");
+        modal.hide();
+      });
+  }
   addEventsModalSalvarProjectSoundSphere() {
     //Abre modal e seta os valores padrões de input
     const modal = new (window as any).bootstrap.Modal(
@@ -325,26 +337,122 @@ class PageSoundSphereHome extends SimplePage {
           )?.value
         );
         modal.hide();
+        this.showMessage("Download iniciado.");
       });
 
     document;
   }
 
   startWelcomeModal() {
-    const modal = new (window as any).bootstrap.Modal(
+    const modalWelcome = new (window as any).bootstrap.Modal(
       document.getElementById("welcomeModal"),
       {
         keyboard: false,
       }
     );
+
     document
-      .getElementById("button_iniciar_upload")
+      .getElementById("button_start_upload_wav")
       ?.addEventListener("click", () => {
         this.sequenciador.stop(function () {});
-        modal.hide();
-        document.getElementById("filesWav")!.click();
+        modalWelcome.hide();
+        document.getElementById("filesWavStart")!.click();
       });
-    modal.show();
+
+    document
+      .getElementById("buttonCancelarModalContinue")
+      ?.addEventListener("click", () => {
+        this.modalContinueByJson!.hide();
+        modalWelcome.show();
+      });
+
+    document
+      .getElementById("show_modal_Continue_by_json")
+      ?.addEventListener("click", () => {
+        modalWelcome.hide();
+        this.modalContinueByJson.show();
+      });
+
+    document
+      .getElementById("buttonOkModalContinue")
+      ?.addEventListener("click", () => {
+        document.getElementById("fileJSON")!.click();
+      });
+    modalWelcome.show();
+  }
+  showErrorContinueJsonSoundSphereVersion(version_required: string) {
+    const errorModalBody = document.getElementById("p_continue") as HTMLElement;
+    errorModalBody.innerHTML = `Arquivo incompatível. Carregue arquivos gerados pela versão SoundSphere - ${version_required}.`;
+  }
+  updateModalContinueErrorJsonFile(message: string) {
+    document.getElementById("p_continue")!.innerHTML = message;
+  }
+  showContinueLastMessage(erros: string[]) {
+    console.log("updateModalContnueEnterWavFiles");
+    document.getElementById("continueJsonTitle")!.innerHTML =
+      "Passo 3 de 3 - Mensagens";
+    const errorContainer = document.getElementById("errorContainer");
+    errorContainer!.innerHTML = "";
+    const errorMessage = document.createElement("div");
+    errorMessage.classList.add("alert", "alert-warning");
+    errorMessage.innerHTML =
+      "<h6> Arquivos não carregados pois não estão na composição original: </h6>";
+    erros.forEach((erro) => {
+      errorMessage.innerHTML += erro + "<br>";
+    });
+    errorContainer!.appendChild(errorMessage);
+    const botaoContinuar = document.getElementById("buttonOkModalContinue");
+    const botaoCancelar = document.getElementById(
+      "buttonCancelarModalContinue"
+    );
+    botaoCancelar!.style.display = "none";
+    const novoBotao = removeAllEvents(botaoContinuar);
+    novoBotao.innerHTML = "Continuar";
+    novoBotao.addEventListener("click", () => {
+      this.modalContinueByJson.hide();
+      this.render();
+      this.painel.reMake();
+    });
+  }
+  showErrorContineWavProblem(erros: string[]) {
+    const errorContainer = document.getElementById("errorContainer");
+    errorContainer!.innerHTML = "";
+    const errorMessage = document.createElement("div");
+    errorMessage.classList.add("alert", "alert-warning");
+    if (erros.length > 0) {
+      errorMessage.innerHTML =
+        "<h6> Arquivos não carregados pois não estão na composição original: </h6>";
+      erros.forEach((erro) => {
+        errorMessage.innerHTML += erro + "<br>";
+      });
+    } else {
+      errorMessage.innerHTML =
+        "Você deve enviar todos os arquivos solicitados.";
+    }
+
+    errorContainer!.appendChild(errorMessage);
+  }
+  updateModalContinueEnterWavFiles(fileNames: string[]) {
+    console.log("updateModalContnueEnterWavFiles");
+    console.warn(fileNames);
+    document.getElementById("continueJsonTitle")!.innerHTML =
+      "Passo 2 de 3 - Enviar arquivo(s) Wav";
+    console.warn("updateModalContnueEnterWavFiles");
+    const paragrafo = document.getElementById("p_continue");
+
+    if (fileNames.length > 0) {
+      // Define o texto com quebras de linha interpretadas corretamente
+      paragrafo!.textContent = fileNames.join("\n");
+      paragrafo!.style.whiteSpace = "pre-line"; // Garante a interpretação das quebras de linha
+    } else {
+      paragrafo!.textContent = "Faça upload de Arquivos Wav para iniciar.";
+    }
+
+    const botao = document.getElementById("buttonOkModalContinue");
+    const novoBotao = removeAllEvents(botao);
+    novoBotao.addEventListener("click", () => {
+      document.getElementById("filesWavContinue")!.click();
+    });
   }
   showMessage(message: string): void {
     console.log(message);
@@ -372,8 +480,6 @@ class PageSoundSphereHome extends SimplePage {
     modalElement.show();
   }
 
-  //Seta as configuracoes padroes da aplicacao
-  setSettingsActions(): void {}
   addEventsVolume(): void {
     //Slicer
     const volumeSlider = document.getElementById(
@@ -402,18 +508,16 @@ class PageSoundSphereHome extends SimplePage {
     });
     const containerVolume = document.getElementById("container-volume");
 
-    const volume_slider = document.getElementById(
-      "inputVolumeSlider"
-    ) as HTMLInputElement;
-
     containerVolume?.addEventListener("click", () => {
       const isActive = containerVolume.classList.contains("active");
+
       if (isActive) {
+        if (this.selectedPanelMenu) return;
         containerVolume?.classList.remove("active");
-        volume_slider.disabled = true;
+        volumeSlider.disabled = true;
       } else {
         containerVolume?.classList.add("active");
-        volume_slider.disabled = false;
+        volumeSlider.disabled = false;
       }
     });
   }
@@ -423,7 +527,13 @@ class PageSoundSphereHome extends SimplePage {
       const botao = document.createElement("button");
 
       // Adicionando classes do Bootstrap
-      botao.classList.add("btn", "btn-light", "m-2", "btn-rounded");
+      botao.classList.add(
+        "btn",
+        "semantic-item",
+        "btn-light",
+        "m-2",
+        "btn-rounded"
+      );
       botao.style.border = "2px solid white";
 
       // Definindo o texto do botão
@@ -451,17 +561,22 @@ class PageSoundSphereHome extends SimplePage {
     }
     dimensionSemanticDescriptor.forEach((button) => {
       button.addEventListener("click", () => {
-        this.idSemanticDescriptor = undefined;
-        this.codeSemanticDescriptor = undefined;
+        // console.warn("clicou no botao");
+
         // console.log("Semantic clicada:", button.textContent);
         if (button.classList.contains("active")) {
+          if (this.selectedPanelMenu) return;
+
+          console.log("11111");
           button.classList.remove("active");
+          this.idSemanticDescriptor = undefined;
+          this.codeSemanticDescriptor = undefined;
         } else {
           dimensionSemanticDescriptor.forEach((otherButton) => {
             otherButton.classList.remove("active");
           });
           button.classList.add("active");
-          this.disableItensModificadoresPanel();
+
           this.codeSemanticDescriptor =
             button.getAttribute("data-tag") ?? undefined;
 
@@ -490,6 +605,13 @@ class PageSoundSphereHome extends SimplePage {
   isPauseButtonActive(): boolean | undefined {
     return this.listButtonActiveModificadorPainel?.includes("pause");
   }
+  isEraserButtonActive(): boolean | undefined {
+    return this.listButtonActiveModificadorPainel?.includes("eraser");
+  }
+  hasActivePanelMenuButton(): boolean | undefined {
+    return this.listButtonActiveModificadorPainel.length > 0;
+  }
+
   loadContainerIntensity(): void {
     let conteudo = "";
     this.listIntensity = generatorIntensity();
@@ -497,7 +619,13 @@ class PageSoundSphereHome extends SimplePage {
       const botao = document.createElement("button");
 
       // Adicionando classes do Bootstrap
-      botao.classList.add("btn", "btn-light", "m-2", "btn-rounded");
+      botao.classList.add(
+        "intensity-item",
+        "btn",
+        "btn-light",
+        "m-2",
+        "btn-rounded"
+      );
       botao.style.border = "2px solid white";
 
       // Definindo o texto do botão
@@ -512,25 +640,24 @@ class PageSoundSphereHome extends SimplePage {
     this.addClickEventToInensity();
   }
   addClickEventToInensity(): void {
-    const dimensionIntensity = document.querySelectorAll(
-      "#container-intensity .btn"
-    );
+    const intensity = document.querySelectorAll("#container-intensity .btn");
 
-    if (dimensionIntensity.length === 0) {
+    if (intensity.length === 0) {
       // console.warn("Nenhum botão de dimensão encontrado.");
       return;
     }
-    dimensionIntensity.forEach((button) => {
+    intensity.forEach((button) => {
       button.addEventListener("click", () => {
-        this.idIntensity = undefined;
         // console.log("Dimensão clicada:", button.textContent);
         if (button.classList.contains("active")) {
+          if (this.selectedPanelMenu) return;
+          this.idIntensity = undefined;
           button.classList.remove("active");
         } else {
-          dimensionIntensity.forEach((otherButton) => {
+          intensity.forEach((otherButton) => {
             otherButton.classList.remove("active");
           });
-          this.disableItensModificadoresPanel();
+
           button.classList.add("active");
           this.idIntensity = button.getAttribute("data-tag") ?? undefined;
 
@@ -546,7 +673,13 @@ class PageSoundSphereHome extends SimplePage {
       const botao = document.createElement("button");
 
       // Adicionando classes do Bootstrap
-      botao.classList.add("btn", "btn-light", "m-2", "btn-rounded");
+      botao.classList.add(
+        "dimension-item",
+        "btn",
+        "btn-light",
+        "m-2",
+        "btn-rounded"
+      );
       botao.style.border = "2px solid white";
 
       // Definindo o texto do botão
@@ -572,15 +705,16 @@ class PageSoundSphereHome extends SimplePage {
     }
     dimensionButtons.forEach((button) => {
       button.addEventListener("click", () => {
-        this.idDimension = undefined;
         // console.log("Dimensão clicada:", button.textContent);
         if (button.classList.contains("active")) {
+          if (this.selectedPanelMenu) return;
+          this.idDimension = undefined;
           button.classList.remove("active");
         } else {
           dimensionButtons.forEach((otherButton) => {
             otherButton.classList.remove("active");
           });
-          this.disableItensModificadoresPanel();
+
           button.classList.add("active");
           this.idDimension = button.getAttribute("data-tag") ?? undefined;
 
@@ -651,7 +785,7 @@ class PageSoundSphereHome extends SimplePage {
     const linkElement = document.createElement("a");
     linkElement.addEventListener("click", () => {
       if (!linkElement.classList.contains("active")) {
-        linkElement.classList.toggle("active");
+        linkElement.classList.add("active");
         this.disableAmostraAudio();
       }
     });
@@ -762,7 +896,7 @@ class PageSoundSphereHome extends SimplePage {
     return svgItemDiv;
   }
   //Remove todos os itens ativos dos que podem ser  combinados
-  disableItensCumulative() {
+  clearSelecionCumulativeItems() {
     const alimentosItems = document.querySelectorAll(
       "#container-dimensions .btn, .itemMenuDescriptiveIcon, .svg-item, #container-semaits-descriptors .btn, #container-intensity .btn"
     );
@@ -772,6 +906,7 @@ class PageSoundSphereHome extends SimplePage {
       }
     });
     document.getElementById("button-edit")?.classList.add("active");
+    console.warn("chamou oclearSelecionCumulativeItems");
     this.idSelectedIcomAlbum = undefined;
     this.idActionDescriptiveIcon = undefined;
     this.idDimension = undefined;
@@ -780,11 +915,11 @@ class PageSoundSphereHome extends SimplePage {
     this.codeSemanticDescriptor = undefined;
   }
 
-  disableItensModificadoresPanel() {
+  disableMenuPanel() {
     const botoesModificadores = document.querySelectorAll(
       "#container-modificadores .btn"
     );
-    document.getElementById("buttonStop")?.classList.add("active");
+    //document.getElementById("buttonStop")?.classList.add("active");
     botoesModificadores.forEach((button) => {
       if (
         button.classList.contains("active") &&
@@ -797,6 +932,7 @@ class PageSoundSphereHome extends SimplePage {
     if (this.sequenciador.activePlay) {
       this.stopMixagem();
     }
+    this.selectedPanelMenu = false;
 
     this.listButtonActiveModificadorPainel = [];
   }
@@ -812,16 +948,15 @@ class PageSoundSphereHome extends SimplePage {
 
     alimentosItems.forEach((item) => {
       item.addEventListener("click", () => {
-        this.idActionDescriptiveIcon = undefined;
-
         // console.log("Item clicado:", item); // Teste para ver se o evento está funcionando
         const dataId: string | null = item.getAttribute("data-id");
         const data_tag: string | null = item.getAttribute("data-tag");
 
         if (item.classList.contains("active")) {
+          if (this.selectedPanelMenu) return;
+          this.idActionDescriptiveIcon = undefined;
           item.classList.remove("active");
         } else {
-          this.disableItensModificadoresPanel();
           alimentosItems.forEach((otherItem) => {
             otherItem.classList.remove("active");
           });
@@ -845,6 +980,58 @@ class PageSoundSphereHome extends SimplePage {
       new (window as any).bootstrap.Tooltip(tooltipEl);
     });
   }
+  disableCumulativeItems() {
+    // Alimentos;
+    const items = document.querySelectorAll(
+      "#button-edit, #container-volume, #container-dimensions .btn, .itemMenuDescriptiveIcon, .svg-item, #container-semaits-descriptors .btn, #container-intensity .btn"
+    );
+    items.forEach((item) => {
+      item.classList.add("disabled_");
+    });
+
+    const containerVolume = document.getElementById("container-volume");
+    let volume_ativo = containerVolume?.classList.contains("active");
+    const volume_slider = document.getElementById(
+      "inputVolumeSlider"
+    ) as HTMLInputElement;
+    if (volume_ativo) {
+      volume_slider.disabled = true;
+    }
+  }
+  addClickEventsToCumulativeItens() {
+    const items = document.querySelectorAll(
+      "#button-edit, #container-volume, #container-dimensions .btn, .itemMenuDescriptiveIcon, .svg-item, #container-semaits-descriptors .btn, #container-intensity .btn"
+    );
+    items.forEach((item) => {
+      item.addEventListener("click", () => {
+        if (this.selectedPanelMenu) {
+          console.log("222");
+
+          this.disableMenuPanel();
+          this.enableCumulativeItems();
+        }
+      });
+    });
+  }
+  enableCumulativeItems() {
+    const items = document.querySelectorAll(
+      "#button-edit, #container-volume, #container-dimensions .btn, .itemMenuDescriptiveIcon, .svg-item, #container-semaits-descriptors .btn, #container-intensity .btn"
+    );
+    items.forEach((item) => {
+      item.classList.remove("disabled_");
+    });
+
+    const containerVolume = document.getElementById("container-volume");
+    let volume_ativo = containerVolume?.classList.contains("active");
+    const volume_slider = document.getElementById(
+      "inputVolumeSlider"
+    ) as HTMLInputElement;
+    if (volume_ativo) {
+      volume_slider.disabled = false;
+    }
+
+    //Botão de Editar
+  }
   addClickEventToItensModificadoresPanel() {
     const botoesModificadoresPanel = document.querySelectorAll(
       "#container-modificadores .btn"
@@ -853,36 +1040,34 @@ class PageSoundSphereHome extends SimplePage {
 
     botoesModificadoresPanel.forEach((button) => {
       button.addEventListener("click", () => {
-        if (button.classList.contains("active")) {
-          if (
-            !this.sequenciador.activePlay &&
-            button.getAttribute("data-action") != "play"
-          ) {
-            console.warn(
-              "Removendo todas os botoes modificadores painel na funcaobotoesModificadoresPanel"
-            );
-            button.classList.remove("active");
-            this.listButtonActiveModificadorPainel = [];
-          }
-        } else {
-          botoesModificadoresPanel.forEach((otherButton) => {
-            otherButton.classList.remove("active");
-          });
-          this.listButtonActiveModificadorPainel = [];
-          const action = button.getAttribute("data-action");
-
-          if (action) {
-            if (!this.listButtonActiveModificadorPainel?.includes(action)) {
-              this.listButtonActiveModificadorPainel?.push(action);
+        //Se o botão de play estiver ativo e e estiver tocando a mixagem
+        if (button.getAttribute("data-action") != "stop") {
+          if (button.classList.contains("active")) {
+            if (
+              !this.sequenciador.activePlay &&
+              button.getAttribute("data-action") != "play"
+            ) {
+              button.classList.remove("active");
+              this.listButtonActiveModificadorPainel = [];
             }
+            this.enableCumulativeItems();
+            this.selectedPanelMenu = false;
+          } else {
+            botoesModificadoresPanel.forEach((otherButton) => {
+              otherButton.classList.remove("active");
+            });
+            this.listButtonActiveModificadorPainel = [];
+            const action = button.getAttribute("data-action");
+
+            if (action) {
+              if (!this.listButtonActiveModificadorPainel?.includes(action)) {
+                this.listButtonActiveModificadorPainel?.push(action);
+              }
+            }
+            button.classList.add("active");
+            this.disableCumulativeItems();
+            this.selectedPanelMenu = true;
           }
-
-          console.log(
-            `Ação Modificadora: ${this.listButtonActiveModificadorPainel}`
-          );
-          button.classList.add("active");
-
-          this.disableItensCumulative();
         }
       });
     });
@@ -895,50 +1080,74 @@ class PageSoundSphereHome extends SimplePage {
             // this.pauseActived = false;
           },
           () => {
-            //console.log("Terminou de executar")
-            console.warn("callback do botão play");
-            console.log(this.listButtonActiveModificadorPainel);
             document.getElementById("buttonPlay")!.classList.remove("active");
 
             if (!this.isPauseButtonActive()) {
-              this.stopMixagem();
-              this.listButtonActiveModificadorPainel = [];
+              this.stopSimple();
+              console.log(this.listButtonActiveModificadorPainel);
+              if (this.isPlayButtonActive()) {
+                this.enableCumulativeItems();
+                this.listButtonActiveModificadorPainel = [];
+              }
+
+              // this.listButtonActiveModificadorPainel = [];
             }
           }
         );
-      } else {
-        // console.warn("Play já está ativo");
       }
     });
     document.getElementById("buttonPause")?.addEventListener("click", () => {
       console.warn(`Dentro do pause do page: ${this.isPauseButtonActive()}`);
-      this.sequenciador.pause(
-        () => {},
-        () => {
-          this.stopMixagem();
-        }
-      );
+      if (this.sequenciador.activePlay) {
+        this.sequenciador.pause(
+          () => {},
+          () => {
+            this.stopMixagem();
+          }
+        );
+      }
     });
+    // document.getElementById("buttonStop")?.addEventListener("mousedown", () => {
+    //   console.log("mouse up stop");
+    //   document.getElementById("buttonStop")?.classList.add("active");
+    // });
+    // document.getElementById("buttonStop")?.addEventListener("mouseup", () => {
+    //   console.log("mouse up stop");
+    //   document.getElementById("buttonStop")?.classList.remove("active");
+    // });
     document.getElementById("buttonStop")?.addEventListener("click", () => {
+      document.getElementById("buttonStop")?.classList.add("active");
       this.stopMixagem();
     });
     document
       .getElementById("modificador-excluir")
       ?.addEventListener("click", () => {
-        this.stopMixagem();
-        console.log("this.listButtonActiveModificadorPainel");
-        document.getElementById("buttonStop")!.classList.add("active");
-        console.log(this.listButtonActiveModificadorPainel);
+        this.stopSimple();
+      });
+    document
+      .getElementById("modificador-eraser")
+      ?.addEventListener("click", () => {
+        this.stopSimple();
       });
   }
   stopMixagem() {
+    // this.stopActived = true;
+
+    this.sequenciador.stop(() => {
+      // $('img').attr('draggable');
+      document.getElementById("buttonPlay")!.classList.remove("active")!;
+      document.getElementById("buttonPause")!.classList.remove("active");
+      document.getElementById("buttonStop")?.classList.remove("active");
+      this.enableCumulativeItems();
+    });
+  }
+  stopSimple() {
     // this.stopActived = true;
 
     this.sequenciador.stopSimple(() => {
       // $('img').attr('draggable');
       document.getElementById("buttonPlay")!.classList.remove("active")!;
       document.getElementById("buttonPause")!.classList.remove("active");
-      document.getElementById("buttonStop")!.classList.add("active");
     });
   }
   //Adiciona os eventos aos itens musicais
@@ -949,23 +1158,23 @@ class PageSoundSphereHome extends SimplePage {
         item.classList.remove("active");
       }
     });
+    console.warn("disableAmostraAudio");
     this.idSelectedIcomAlbum = undefined;
   }
   addClickEventToAmostraAudio() {
     const svgItems = document.querySelectorAll(".svg-item");
-    const containerVoume = document.getElementById("container-volume");
-    const volume_slider = document.getElementById(
-      "inputVolumeSlider"
-    ) as HTMLInputElement;
+
     console.log("Svg Itens");
     console.log(svgItems);
     svgItems.forEach((item) => {
       //Configuração para selecionar e remover selecao dos itens svg-musicais
       item.addEventListener("click", () => {
-        this.idSelectedIcomAlbum = undefined;
         if (item.classList.contains("active")) {
-          document.getElementById("button-edit")?.classList.add("active");
+          if (this.selectedPanelMenu) return;
 
+          document.getElementById("button-edit")?.classList.add("active");
+          console.warn("add event amostra");
+          this.idSelectedIcomAlbum = undefined;
           item.classList.remove("active");
           //E desabilita tbm o volume
           // containerVoume?.classList.remove("active");
@@ -977,7 +1186,6 @@ class PageSoundSphereHome extends SimplePage {
             otherItem.classList.remove("active");
           });
 
-          this.disableItensModificadoresPanel();
           item.classList.add("active");
           document.getElementById("button-edit")?.classList.remove("active");
 
@@ -1044,8 +1252,9 @@ class PageSoundSphereHome extends SimplePage {
       });
       //Tocar ao passar o mouse por cima
       item.addEventListener("mouseleave", () => {
-        item.classList.remove("playing_audio");
-        this.sequenciador.stopOneSound();
+        this.sequenciador.stopOneSound(function () {
+          item.classList.remove("playing_audio");
+        });
       });
     });
   }

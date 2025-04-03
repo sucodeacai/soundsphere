@@ -46,7 +46,8 @@ class SessionControl {
         return this.listEventSession[this.listEventSession.length - 1].name;
     }
     getLastStartWork() {
-        return this.listEventSession[this.listEventSession.length - 1].dateStartWork;
+        return this.listEventSession[this.listEventSession.length - 1]
+            .dateStartWork;
     }
     addEventItemMixPanel(item) {
         this.listEventSession[this.listEventSession.length - 1].listEventItemMixPanel.push(item);
@@ -54,10 +55,11 @@ class SessionControl {
     getAllEventItemMixPanel() {
         //Pegar o id dentro da lista
         //Pegar todos os itens dentro da lista
-        const getListItens = list => list.listEventItemMixPanel;
-        Array.prototype.flatMap = function (callback) {
-            return Array.prototype.concat.apply([], this.map(callback));
-        };
-        return this.listEventSession.flatMap(getListItens);
+        // const getListItens = list => list.listEventItemMixPanel
+        // Array.prototype.flatMap = function (callback) {
+        //     return Array.prototype.concat.apply([], this.map(callback))
+        // }
+        // return this.listEventSession.flatMap(getListItens)
+        return this.listEventSession.flatMap((list) => list.listEventItemMixPanel);
     }
 }

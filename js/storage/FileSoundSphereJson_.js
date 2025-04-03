@@ -3,7 +3,7 @@
 Registrado sob a licença  Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
 */
-class FileJson extends FileAPI {
+class FileSoundSphereJson extends FileAPI {
     /**
      * @param  {any} sequenciador
      * @param  {DAO} dao
@@ -24,7 +24,7 @@ class FileJson extends FileAPI {
                         reader.readAsText(target.files[0]);
                     }
                     else {
-                        this.showMessageErrorJson("Envie um arquivo Soundsphere Json.");
+                        this.showMessageErrorJson("O arquivo enviado não é do formato JSON");
                     }
                 }
             });

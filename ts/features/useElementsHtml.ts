@@ -35,3 +35,15 @@ function sec2time(timeInSeconds: any) {
 function pad(num: any, size: any) {
   return ("000" + num).slice(size * -1);
 }
+function removeAllEvents(elemento: any) {
+  const novoElemento = elemento.cloneNode(true); // Clona sem eventos
+  elemento.replaceWith(novoElemento); // Substitui o antigo pelo novo
+  return novoElemento; // Retorna o novo para que possamos usá-lo
+}
+function formateDateBr(date: any) {
+  const stringDate = `${date.getDate()}/${
+    date.getMonth() + 1
+  }/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} `;
+
+  return stringDate;
+}

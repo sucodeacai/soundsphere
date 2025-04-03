@@ -60,6 +60,7 @@ class Sequenciador {
             this.activePlay = false;
             this.activePause = false;
             this.painel.stopDrawLoopMarker();
+            callback();
         }
         // }
     }
@@ -455,23 +456,12 @@ class Sequenciador {
                 onStartDownload();
             };
             this.mix(callback);
+            this.notifyStatus("Download iniciado.");
         }
         else {
             this.notifyStatus("Nenhum item carregado na mixagem.");
             onStartDownload();
         }
-    }
-    stopOneSound() {
-        // this.tooltip.removeMessageFixed();
-        //  if (this.activecurrentAudio) {
-        //console.log("chamou stop one sound")
-        //console.log(this.currentAudio.buffer)
-        if (this.currentAudio.buffer) {
-            this.gainNodeAlbum.gain.linearRampToValueAtTime(0, this.audioCtx.currentTime + 0.4);
-            //this.currentAudio.stop(0);
-        }
-        this.activecurrentAudio = false;
-        //}
     }
     fomateFilters(filters, ctx) {
         let filtersList_1 = [];
@@ -610,12 +600,32 @@ class Sequenciador {
             // this.currentAudio.connect(this.gainNodeAlbum);
             // this.gainNodeAlbum.connect(this.audioCtx.destination);
             this.currentAudio.onended = (e) => {
-                callBack();
-                this.activecurrentAudio = false;
+                if (this.activecurrentAudio) {
+                    callBack();
+                    this.activecurrentAudio = false;
+                }
             };
             this.currentAudio.start(0);
             this.activecurrentAudio = true;
         }
+    }
+    stopOneSound(callBack) {
+        if (this.currentAudio) {
+            this.currentAudio.stop(); // Parar o áudio
+            callBack();
+        }
+        // this.tooltip.removeMessageFixed();
+        //  if (this.activecurrentAudio) {
+        //console.log("chamou stop one sound")
+        //console.log(this.currentAudio.buffer)
+        // if (this.currentAudio.buffer) {
+        //   // this.gainNodeAlbum.gain.linearRampToValueAtTime(
+        //   //   0,
+        //   //   this.audioCtx.currentTime + 0
+        //   // );
+        //   this.currentAudio.stop(0);
+        // }
+        //}
     }
     playOneSoundOption(itemMixOption) {
         if (!this.activecurrentAudio) {

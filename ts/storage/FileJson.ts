@@ -30,9 +30,7 @@ abstract class FileJson extends FileAPI {
             };
             reader.readAsText(target.files[0]);
           } else {
-            this.showMessageErrorJson(
-              "O arquivo enviado não é do formato JSON"
-            );
+            this.showMessageErrorJson("Envie um arquivo Soundsphere Json.");
           }
         }
       });

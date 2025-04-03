@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Language" content="pt-br">
+  <title>SoundSphere </title>
+
+  <script src="js/entities/SemanticDescriptor.js"></script>
+  <script src="js/display/SimplePage.js"></script>
+  <script src="js/entities/Filter.js"></script>
+  <script src="js/entities/SoundSphereInfo.js"></script>
+  <script src="js/entities/SessionControl.js"></script>
+  <script src="js/entities/EventItemMixPanel.js"></script>
+  <script src="js/entities/EventSession.js"></script>
+  <script src="js/display/ControlFiles.js"></script>
+  <script src="js/display/ControlFilters.js"></script>
+  <script src="js/display/painel.js"></script>
+  <script src="js/display/PageAdminDescriptors.js"></script>
+  <script src="js/display/PageLeitor.js"></script>
+  <script src="js/display/Tooltip.js"></script>
+  <script src="js/vos/vos.js"></script>
+  <script src="js/vos/VoiceMenuBar.js"></script>
+  <script src="js/vos/VoiceModalOptions.js"></script>
+  <script src="js/entities/ItemMixPanel.js"></script>
+  <!-- <script src="js/display/controlSoundIcon.js"></script> -->
+  <script src="js/display/touchFunctions.js"></script>
+  <script src="js/recorderjs/recorderWorker.js"></script>
+
+  <!-- Materialize
+  <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
+  <script src="materialize/js/materialize.js"></script> -->
+  <!-- <script src="js/semantic/popup.js"></script> -->
+  <script src="js/sequencer/sequenciador.js"></script>
+  <script src="js/storage/FileAPI.js"></script>
+  <script src="js/storage/FileJson.js"></script>
+  <script src="js/storage/FileWav.js"></script>
+  <script src="js/storage/FileLeitorJson.js"></script>
+  <script src="js/storage/FileSemanticJson.js"></script>
+  <script src="js/storage/FileSemanticWav.js"></script>
+  <script src="js/storage/FileMenuBar.js"></script>
+  <script src="js/storage/FileHomeJson.js"></script>
+  <script src="js/storage/FileHomeWav.js"></script>
+
+
+  <script src="js/entities/ItemBuffer.js"></script>
+  <script src="js/storage/DAO.js"></script>
+  <script src="js/storage/DAOAdminDescriptors.js"></script>
+  <script src="js/storage/DAOHome.js"></script>
+  <script src="js/storage/SoundSphereBD.js"></script>
+  <script src="js/semantic/jquery-3.1.1.min.js"></script>
+
+
+
+  <script src="js/start/startLeitor.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/soundsphere.css">
+
+  <link rel="stylesheet" type="text/css" href="css/semantic/semantic.min.css">
+
+  <script src="js/semantic/semantic.min.js"></script>
+  <style>
+    #sink .simpleTheme.container {
+       background-color: #FFFFFF;
+   width: 1300px;
+   border: 1px solid #DDDDDD;
+   padding: 0 10px;
+   margin: 0px auto;
+   box-shadow: 0 0 .25em #CCC;
+   moz-box-shadow: 0 0 .25em #CCC; /* Implementação Mozilla */
+   webkit-box-shadow: 0 0 .25em #CCC; /* Implementação para browsers que renderizam via webkit */
+   behavior: url(PIE.htc); /* Comportamento adicionado para renderização das propriedades acima no IE 7 e IE 8 */
+
+}
+    .center {
+      width: 800px;
+      margin: 0 auto;
+    }
+
+    .canvas {
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+    }
+    body, html {
+    -webkit-touch-callout: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+  </style>
+</head>
+
+<body id="sink">
+
+
+  <!-- Google Analytics -->
+  <script>
+
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-XXXXX-XX', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <!-- Google Analytics -->
+  <br>
+  <div id="bodyAplication">
+    <div style="display:none" id="content" class="simpleTheme container ">
+   
+
+    </div>
+  </div>
+  <!-- Div de carregamento  -->
+  <div id="divLoading" class="ui inverted dimmer">
+    <div class="ui text loader">Por favor aguarde...</div>
+  </div>
+  <!-- Fim  -->
+  <!-- Inputs para carregamento de arquivos  -->
+  <input style="display: none" type="file" id="fileJSON" />
+  <div id="messageInitial" class="ui modal"></div>
+  <div id="step1" class="ui small third coupled modal transition"></div>
+
+
+</body>
+
+</html>

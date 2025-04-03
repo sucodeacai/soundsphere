@@ -208,7 +208,6 @@ class ControlFiles {
     "#00bcd4",
     "#9c27b0",
     "#ffeb3b",
-    // Continue até completar 1000 cores
   ];
   //Verifica se o arquivoo já foi carregado
   // fileLoaded(name: string): boolean {

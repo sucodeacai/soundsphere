@@ -210,7 +210,6 @@ class ControlFiles {
             "#00bcd4",
             "#9c27b0",
             "#ffeb3b",
-            // Continue até completar 1000 cores
         ];
         //Funções para ordenação
     }

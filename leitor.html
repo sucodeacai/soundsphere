@@ -1,135 +1,271 @@
-﻿<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="pt">
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="Content-Language" content="pt-br">
-  <title>SoundSphere </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundSphere V.15</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/storage/DAO.js"></script>
+    <script src="js/storage/DAOHome.js"></script>
+    <script src="js/entities/ItemBuffer.js"></script>
 
-  <script src="js/entities/SemanticDescriptor.js"></script>
-  <script src="js/display/SimplePage.js"></script>
-  <script src="js/entities/Filter.js"></script>
-  <script src="js/entities/SoundSphereInfo.js"></script>
-  <script src="js/entities/SessionControl.js"></script>
-  <script src="js/entities/EventItemMixPanel.js"></script>
-  <script src="js/entities/EventSession.js"></script>
-  <script src="js/display/ControlFiles.js"></script>
-  <script src="js/display/ControlFilters.js"></script>
-  <script src="js/display/painel.js"></script>
-  <script src="js/display/PageAdminDescriptors.js"></script>
-  <script src="js/display/PageLeitor.js"></script>
-  <script src="js/display/Tooltip.js"></script>
-  <script src="js/vos/vos.js"></script>
-  <script src="js/vos/VoiceMenuBar.js"></script>
-  <script src="js/vos/VoiceModalOptions.js"></script>
-  <script src="js/entities/ItemMixPanel.js"></script>
-  <!-- <script src="js/display/controlSoundIcon.js"></script> -->
-  <script src="js/display/touchFunctions.js"></script>
-  <script src="js/recorderjs/recorderWorker.js"></script>
+    <script src="js/entities/EventItemMixPanel.js"></script>
+    <script src="js/entities/EventSession.js"></script>
+    <script src="js/entities/ItemMixPanel.js"></script>
+    <script src="js/display/ControlFiles.js"></script>
+    <script src="js/start/startLeitorJson.js"></script>
+    <script src="js/display/PageLeitorJson.js"> </script>
+    <script src="js/entities/SoundSphereInfo.js"></script>
 
-  <!-- Materialize
-  <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css">
-  <script src="materialize/js/materialize.js"></script> -->
-  <!-- <script src="js/semantic/popup.js"></script> -->
-  <script src="js/sequencer/sequenciador.js"></script>
-  <script src="js/storage/FileAPI.js"></script>
-  <script src="js/storage/FileJson.js"></script>
-  <script src="js/storage/FileWav.js"></script>
-  <script src="js/storage/FileLeitorJson.js"></script>
-  <script src="js/storage/FileSemanticJson.js"></script>
-  <script src="js/storage/FileSemanticWav.js"></script>
-  <script src="js/storage/FileMenuBar.js"></script>
-  <script src="js/storage/FileHomeJson.js"></script>
-  <script src="js/storage/FileHomeWav.js"></script>
+    <script src="js/display/Tooltip.js"></script>
 
+    <script src="js/entities/SemanticDescriptor.js"></script>
 
-  <script src="js/entities/ItemBuffer.js"></script>
-  <script src="js/storage/DAO.js"></script>
-  <script src="js/storage/DAOAdminDescriptors.js"></script>
-  <script src="js/storage/DAOHome.js"></script>
-  <script src="js/storage/SoundSphereBD.js"></script>
-  <script src="js/semantic/jquery-3.1.1.min.js"></script>
+    <script src="js/entities/Filter.js"></script>
 
+    <script src="js/entities/SessionControl.js"></script>
 
+    <script src="js/sequencer/sequenciador.js"></script>
+    <script src="js/storage/FileAPI.js"></script>
+    <script src="js/storage/FileJson.js"></script>
+    <script src="js/storage/FileJsonLeitorJson.js"></script>
 
-  <script src="js/start/startLeitor.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
-  <link rel="stylesheet" type="text/css" href="css/soundsphere.css">
+        .container {
+            margin-top: 20px;
+        }
 
-  <link rel="stylesheet" type="text/css" href="css/semantic/semantic.min.css">
+        .table-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
 
-  <script src="js/semantic/semantic.min.js"></script>
-  <style>
-    #sink .simpleTheme.container {
-       background-color: #FFFFFF;
-   width: 1300px;
-   border: 1px solid #DDDDDD;
-   padding: 0 10px;
-   margin: 0px auto;
-   box-shadow: 0 0 .25em #CCC;
-   moz-box-shadow: 0 0 .25em #CCC; /* Implementação Mozilla */
-   webkit-box-shadow: 0 0 .25em #CCC; /* Implementação para browsers que renderizam via webkit */
-   behavior: url(PIE.htc); /* Comportamento adicionado para renderização das propriedades acima no IE 7 e IE 8 */
+        .table {
+            background: #fff;
+            min-width: 600px;
+        }
 
-}
-    .center {
-      width: 800px;
-      margin: 0 auto;
-    }
-
-    .canvas {
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-    }
-    body, html {
-    -webkit-touch-callout: text;
-    -webkit-user-select: text;
-    -khtml-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-}
-  </style>
+        .table-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
 </head>
 
-<body id="sink">
+<body>
+    <div class="container d-none" id="mainContainer">
+        <h1 class="text-center text-primary" id="title"></h1>
+
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="text-secondary mb-0">Amostras de Audio</h3>
+                <button class="btn btn-success" style="margin-bottom: 10px;"
+                    onclick="exportTableToCSV('tableAudioSampleTable', 'tableAudioSampleTable')">Exportar para
+                    CSV</button>
+            </div>
+            <div class="table-responsive">
+                <table id="tableAudioSampleTable" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tempo da Amostra</th>
+                            <th>Número de Canais</th>
+                            <th>Quantidade de Vezes Utilizados</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyAudioSampleTable">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
 
-  <!-- Google Analytics -->
-  <script>
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="text-secondary mb-0">Dados da sessão</h3>
+                <button class="btn btn-success" style="margin-bottom: 10px;"
+                    onclick="exportTableToCSV('tableSessionTable', 'tableSessionTable')">Exportar para
+                    CSV</button>
+            </div>
+            <div class="table-responsive">
+                <table id="tableSessionTable" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Nome do Arquivo</th>
+                            <th>Autor</th>
+                            <th>Data de Inicio da Sessão</th>
+                            <th>Data de Download da Sessão</th>
+                            <th>Duração da sessão</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodySessionTable">
 
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    ga('create', 'UA-XXXXX-XX', 'auto');
-    ga('send', 'pageview');
-  </script>
-  <!-- Google Analytics -->
-  <br>
-  <div id="bodyAplication">
-    <div style="display:none" id="content" class="simpleTheme container ">
-   
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="text-secondary mb-0">Histórico</h3>
+                <button class="btn btn-success" style="margin-bottom: 10px;"
+                    onclick="exportTableToCSV('tableHistoric', 'tableHistoric')">Exportar para
+                    CSV</button>
+            </div>
+            <div class="table-responsive">
+                <table id="tableHistoric" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Sessão</th>
+                            <th>Data</th>
+                            <th>Action</th>
+                            <th>IdItem</th>
+                            <th>Amostra</th>
+                            <th>Cor</th>
+                            <th>Linha</th>
+                            <th>Inicio</th>
+                            <th>Fim</th>
+                            <!-- <th>Solo/Mute</th> -->
+                            <th>Excluida</th>
+                            <th>Volume</th>
+                            <th>Ícone descritivo</th>
+
+                            <th>Descritor</th>
+                            <th>Dimensão</th>
+                            <th>Intensidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyHistoric">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="text-secondary mb-0">Mixagem</h3>
+                <button class="btn btn-success" style="margin-bottom: 10px;"
+                    onclick="exportTableToCSV('tableMixing', 'tableMixing')">Exportar para
+                    CSV</button>
+            </div>
+            <div class="table-responsive">
+                <table id="tableMixing" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Identificador</th>
+                            <th>Amostra</th>
+                            <th>Cor</th>
+                            <th>Início</th>
+                            <th>Fim</th>
+                            <!-- <th>Solo/Mute</th>
+                            <th>Excluída</th> -->
+                            <th>Volume</th>
+                            <th>Ícone Descritivo</th>
+                            <th>Linha</th>
+                            <th>Descritor</th>
+                            <th>Dimensão</th>
+                            <th>Intensidade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyMixing">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="text-secondary mb-0">Dados gerais</h3>
+                <button class="btn btn-success" style="margin-bottom: 10px;"
+                    onclick="exportTableToCSV('tableGeneralData', 'tableGeneralData')">Exportar para
+                    CSV</button>
+            </div>
+            <div class="table-responsive">
+                <table id="tableGeneralData" class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Quantidade de Amostras Carregadas em Todas as Sessões</th>
+                            <th>Quantidade de Amostras Diferentes Utilizadas Contando Excluídas</th>
+                            <th>Quantidade de Amostras Diferentes na Mixagem Final</th>
+                            <th>Tempo Total da Mixagem</th>
+                            <th>Quantidade de Itens de Mixagens no Painel</th>
+                            <th>Quantidade de Itens de Mixagens Inseridos</th>
+                            <th>Quantidade de Itens de Mixagens Alterados</th>
+                            <th>Quantidade de Itens de Mixagens Excluídos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyGeneralData">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
 
     </div>
-  </div>
-  <!-- Div de carregamento  -->
-  <div id="divLoading" class="ui inverted dimmer">
-    <div class="ui text loader">Por favor aguarde...</div>
-  </div>
-  <!-- Fim  -->
-  <!-- Inputs para carregamento de arquivos  -->
-  <input style="display: none" type="file" id="fileJSON" />
-  <div id="messageInitial" class="ui modal"></div>
-  <div id="step1" class="ui small third coupled modal transition"></div>
 
 
+
+    <div class="modal fade" id="modalStart" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="errormodalResetPainel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="continueJsonTitle">Enviar arquivo Json - SoundSphere</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-column gap-2 w-100">
+                        <div class="mb-3 w-100">
+                            <p id="p_message">Envie o arquivo SoundSphere Json que deseja analisar.</p>
+                            <div id="errorContainer" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex flex-column gap-2 w-100">
+                    <button type="button" class="btn btn-primary w-100" id="buttonEnviar">Enviar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input style="display: none" type="file" id="fileJSON" />
+
+    <script>
+        function exportTableToCSV(tableID, filename) {
+            let table = document.getElementById(tableID);
+            let rows = table.querySelectorAll('tr');
+            let csv = [];
+
+            for (let row of rows) {
+                let cols = row.querySelectorAll('th, td');
+                let rowData = [];
+                for (let col of cols) {
+                    rowData.push(col.innerText);
+                }
+                csv.push(rowData.join(','));
+            }
+
+            let csvFile = new Blob([csv.join('\n')], { type: 'text/csv' });
+            let downloadLink = document.createElement('a');
+            downloadLink.download = filename + ".csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
